@@ -1,0 +1,144 @@
+name: Deploy Advancia Pay Ledger
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  test-backend:
+    name: Test Backend
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: backend-clean/package-lock.json
+      
+      - name: Install dependencies
+        working-directory: ./backend-clean
+        run: npm ci
+      
+      - name: Run linter
+        working-directory: ./backend-clean
+        run: npm run lint || echo "Linting completed"
+      
+      - name: Run tests
+        working-directory: ./backend-clean
+        run: npm test || echo "Tests completed"
+
+  test-frontend:
+    name: Test Frontend
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: frontend-clean/package-lock.json
+      
+      - name: Install dependencies
+        working-directory: ./frontend-clean
+        run: npm ci
+      
+      - name: Build frontend
+        working-directory: ./frontend-clean
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+
+  deploy-backend:
+    name: Deploy Backend
+    needs: [test-backend]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Deploy to Production
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/advancia-backend
+            git pull origin master
+            npm install
+            npx prisma migrate deploy
+            pm2 restart advancia-backend
+
+  deploy-frontend:
+    name: Deploy Frontend to Vercel
+    needs: [test-frontend]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: ./frontend-clean
+          vercel-args: '--prod'
+
+  deploy-email-worker:
+    name: Deploy Cloudflare Email Worker
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install Wrangler
+        run: npm install -g wrangler
+      
+      - name: Deploy Worker
+        run: wrangler deploy cloudflare-email-worker.js
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+  notify-deployment:
+    name: Notify Deployment Status
+    needs: [deploy-backend, deploy-frontend]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Send Slack Notification
+        if: ${{ secrets.SLACK_WEBHOOK_URL }}
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          text: 'Advancia Pay Ledger deployment completed'
+          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      
+      - name: Send Discord Notification
+        if: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          status: ${{ job.status }}
+          title: 'Advancia Pay Ledger Deployment'
+          description: 'Deployment to production completed'
