@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advancia Pay Ledger - Investor One-Pager</title>
+    <style>
+        @page {
+            size: Letter;
+            margin: 0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.5;
+            color: #1a1a1a;
+            background: white;
+            width: 8.5in;
+            height: 11in;
+            margin: 0 auto;
+            padding: 0.5in 0.6in;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #2563eb;
+        }
+        
+        .company-name {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2563eb;
+            margin-bottom: 5px;
+        }
+        
+        .tagline {
+            font-size: 14px;
+            color: #4b5563;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .funding-round {
+            display: inline-block;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-top: 15px;
+        }
+        
+        .section {
+            background: #f8fafc;
+            padding: 12px 14px;
+            border-radius: 8px;
+            border-left: 4px solid #2563eb;
+        }
+        
+        .section.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .section-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .section-content {
+            font-size: 11px;
+            color: #374151;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            padding: 12px;
+            border-radius: 6px;
+            margin: 8px 0;
+            border: 1px solid #93c5fd;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 8px 0;
+        }
+        
+        .stat-box {
+            background: white;
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+            border: 2px solid #e5e7eb;
+        }
+        
+        .stat-number {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2563eb;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 9px;
+            color: #6b7280;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 3px;
+        }
+        
+        .bullet-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .bullet-list li {
+            padding-left: 16px;
+            position: relative;
+            margin-bottom: 5px;
+            font-size: 11px;
+        }
+        
+        .bullet-list li:before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: #2563eb;
+            font-size: 8px;
+        }
+        
+        .revenue-projection {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin: 8px 0;
+            padding: 10px 0;
+            border-bottom: 2px solid #cbd5e1;
+        }
+        
+        .year-col {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .year-bar {
+            background: linear-gradient(to top, #2563eb, #60a5fa);
+            border-radius: 4px 4px 0 0;
+            margin: 0 auto 4px;
+            width: 30px;
+        }
+        
+        .year-label {
+            font-size: 9px;
+            font-weight: 600;
+            color: #1e40af;
+        }
+        
+        .year-amount {
+            font-size: 10px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 2px;
+        }
+        
+        .competitive-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+        
+        .competitive-item {
+            background: white;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #e5e7eb;
+            font-size: 10px;
+        }
+        
+        .competitive-title {
+            font-weight: 700;
+            color: #2563eb;
+            margin-bottom: 3px;
+        }
+        
+        .footer {
+            margin-top: 15px;
+            padding-top: 12px;
+            border-top: 2px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .contact-info {
+            font-size: 10px;
+            color: #4b5563;
+        }
+        
+        .contact-info strong {
+            color: #1f2937;
+        }
+        
+        .cta {
+            background: #2563eb;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        .confidential {
+            text-align: center;
+            font-size: 9px;
+            color: #9ca3af;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        @media print {
+            body {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="company-name">ADVANCIA PAY LEDGER</div>
+        <div class="tagline">Revolutionizing Healthcare Payments with Blockchain Technology</div>
+        <div class="funding-round">💰 SEED ROUND: $1.5M at $10M Pre-Money Valuation</div>
+    </div>
+
+    <div class="content-grid">
+        <!-- Problem Section -->
+        <div class="section">
+            <div class="section-title">🎯 The Problem</div>
+            <div class="section-content">
+                <ul class="bullet-list">
+                    <li><strong>$496B wasted annually</strong> on payment processing inefficiencies</li>
+                    <li><strong>68% of patients</strong> struggle with medical bill payments</li>
+                    <li><strong>45-90 days average</strong> for claim processing and settlement</li>
+                    <li>Complex multi-blockchain management barriers</li>
+                    <li>No unified crypto payment platform for healthcare</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Solution Section -->
+        <div class="section">
+            <div class="section-title">✨ Our Solution</div>
+            <div class="section-content">
+                <ul class="bullet-list">
+                    <li><strong>6 blockchain networks:</strong> Ethereum, Polygon, BSC, Arbitrum, Optimism, Stellar</li>
+                    <li><strong>Instant settlement</strong> vs 45-90 days traditional</li>
+                    <li><strong>0.5% fees</strong> vs 2.9% for Stripe</li>
+                    <li>Multi-signature wallet security</li>
+                    <li>Complete facility management suite</li>
+                    <li>HIPAA-compliant infrastructure</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Market Opportunity -->
+        <div class="section full-width">
+            <div class="section-title">📈 Market Opportunity</div>
+            <div class="section-content">
+                <div class="stats">
+                    <div class="stat-box">
+                        <span class="stat-number">$68B</span>
+                        <span class="stat-label">TAM</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">$12B</span>
+                        <span class="stat-label">SAM</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">$850M</span>
+                        <span class="stat-label">Year 5 Target</span>
+                    </div>
+                </div>
+                <div style="margin-top: 8px;">
+                    <strong style="color: #1e40af;">Target Segments:</strong> 6,090 US hospitals • 1.2M+ physicians in private practice • Medical tourism sector • 15+ countries by Year 3
+                </div>
+            </div>
+        </div>
+
+        <!-- Business Model -->
+        <div class="section">
+            <div class="section-title">💼 Revenue Streams</div>
+            <div class="section-content">
+                <ul class="bullet-list">
+                    <li><strong>Transaction Fees:</strong> 0.5% per crypto transaction</li>
+                    <li><strong>SaaS Subscriptions:</strong> $199-$1,999/month (3 tiers)</li>
+                    <li><strong>AI Features:</strong> $0.10 per task for predictive analytics</li>
+                    <li><strong>White-Label:</strong> $50K+ setup + revenue share</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Traction & Metrics -->
+        <div class="section">
+            <div class="section-title">🚀 Production Status</div>
+            <div class="section-content">
+                <div class="highlight-box">
+                    <strong style="color: #1e40af; font-size: 12px;">✅ PRODUCTION-READY PLATFORM</strong>
+                    <ul class="bullet-list" style="margin-top: 6px;">
+                        <li>Multi-blockchain payment processing live</li>
+                        <li>Real-time bed tracking & scheduling</li>
+                        <li>Multi-role access control system</li>
+                        <li>HIPAA-compliant audit trails</li>
+                        <li>Ready for immediate deployment</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Financial Projections -->
+        <div class="section full-width">
+            <div class="section-title">💰 5-Year Financial Projections</div>
+            <div class="section-content">
+                <div class="revenue-projection">
+                    <div class="year-col">
+                        <div class="year-bar" style="height: 25px;"></div>
+                        <div class="year-amount">$0.5M</div>
+                        <div class="year-label">Year 1</div>
+                    </div>
+                    <div class="year-col">
+                        <div class="year-bar" style="height: 50px;"></div>
+                        <div class="year-amount">$3.2M</div>
+                        <div class="year-label">Year 2</div>
+                    </div>
+                    <div class="year-col">
+                        <div class="year-bar" style="height: 75px;"></div>
+                        <div class="year-amount">$12.5M</div>
+                        <div class="year-label">Year 3</div>
+                    </div>
+                    <div class="year-col">
+                        <div class="year-bar" style="height: 95px;"></div>
+                        <div class="year-amount">$35M</div>
+                        <div class="year-label">Year 4</div>
+                    </div>
+                    <div class="year-col">
+                        <div class="year-bar" style="height: 110px;"></div>
+                        <div class="year-amount">$78M</div>
+                        <div class="year-label">Year 5</div>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-around; margin-top: 8px;">
+                    <div><strong>Gross Margin:</strong> 62% → 75%</div>
+                    <div><strong>Customers:</strong> 25 → 2,500</div>
+                    <div><strong>Break-even:</strong> 18 months</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Competitive Advantages -->
+        <div class="section">
+            <div class="section-title">🏆 Competitive Advantages</div>
+            <div class="section-content">
+                <div class="competitive-grid">
+                    <div class="competitive-item">
+                        <div class="competitive-title">Multi-Chain Support</div>
+                        Only platform with 6 blockchains integrated
+                    </div>
+                    <div class="competitive-item">
+                        <div class="competitive-title">Healthcare-First</div>
+                        Built specifically for medical facilities
+                    </div>
+                    <div class="competitive-item">
+                        <div class="competitive-title">Cost Efficiency</div>
+                        82% lower fees than traditional processors
+                    </div>
+                    <div class="competitive-item">
+                        <div class="competitive-title">Speed</div>
+                        Instant settlement vs 45-90 days
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Use of Funds -->
+        <div class="section">
+            <div class="section-title">💵 Use of Funds ($1.5M)</div>
+            <div class="section-content">
+                <ul class="bullet-list">
+                    <li><strong>Engineering (40% - $600K):</strong> Scale infrastructure, mobile apps, AI features</li>
+                    <li><strong>Sales & Marketing (30% - $450K):</strong> Partnerships, campaigns, sales team</li>
+                    <li><strong>Compliance (15% - $225K):</strong> SOC 2, HIPAA audit, licensing</li>
+                    <li><strong>Operations (15% - $225K):</strong> Support, working capital, reserves</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="contact-info">
+            <strong>📧 Email:</strong> contact@advanciapayledger.com<br>
+            <strong>🌐 Website:</strong> advanciapayledger.com
+        </div>
+        <a href="mailto:contact@advanciapayledger.com?subject=Investment%20Inquiry" class="cta">Schedule Demo →</a>
+    </div>
+
+    <div class="confidential">
+        Confidential & Proprietary - January 2026 - Do Not Distribute
+    </div>
+</body>
+</html>

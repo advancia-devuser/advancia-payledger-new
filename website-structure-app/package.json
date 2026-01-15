@@ -1,0 +1,24 @@
+{
+  "name": "website-structure-builder",
+  "version": "1.0.0",
+  "description": "A visual tool for creating, managing, and exporting website architectures with support for multiple templates and hierarchical page structures",
+  "main": "public/index.html",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "website",
+    "structure",
+    "sitemap",
+    "architecture",
+    "planning",
+    "visualization"
+  ],
+  "author": "Advancia",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/website-structure-builder"
+  }
+}

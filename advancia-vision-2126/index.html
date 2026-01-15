@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advancia Neural Ledger - 2126</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1428 100%);
+            color: #e0e6ed;
+            overflow-x: hidden;
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            border: 1px solid rgba(100, 200, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 150, 255, 0.1);
+        }
+        
+        .year-tag {
+            display: inline-block;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, #00d4ff 0%, #0096ff 100%);
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+        
+        h1 {
+            font-size: 48px;
+            background: linear-gradient(135deg, #00d4ff 0%, #0096ff 50%, #00ffaa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .tagline {
+            font-size: 20px;
+            color: #8fa3b8;
+            font-style: italic;
+        }
+        
+        .evolution-section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            border-left: 4px solid #00d4ff;
+            transition: all 0.3s ease;
+        }
+        
+        .evolution-section:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.15);
+        }
+        
+        h2 {
+            color: #00d4ff;
+            font-size: 28px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .icon {
+            font-size: 32px;
+        }
+        
+        .timeline {
+            display: grid;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 20px;
+            padding: 20px;
+            background: rgba(0, 150, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+        
+        .timeline-year {
+            font-size: 18px;
+            font-weight: 700;
+            color: #00ffaa;
+        }
+        
+        .timeline-content h3 {
+            color: #00d4ff;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        
+        .timeline-content p {
+            color: #b0c4d8;
+            line-height: 1.6;
+        }
+        
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .tech-card {
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(0, 150, 255, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .tech-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 212, 255, 0.2);
+            border-color: #00d4ff;
+        }
+        
+        .tech-card h3 {
+            color: #00ffaa;
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+        
+        .tech-card p {
+            color: #b0c4d8;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+        
+        .highlight {
+            color: #00d4ff;
+            font-weight: 600;
+        }
+        
+        .quantum-pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .comparison-col h3 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        .comparison-col ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .comparison-col li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+            color: #b0c4d8;
+        }
+        
+        .comparison-col li:before {
+            content: "→ ";
+            color: #00ffaa;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 36px;
+            }
+            
+            .timeline-item {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <header>
+            <div class="year-tag">YEAR 2126</div>
+            <h1>Advancia Neural Ledger</h1>
+            <p class="tagline">Quantum-Secured Bioeconomic Infrastructure for Post-Scarcity Healthcare</p>
+        </header>
+        
+        <div class="evolution-section">
+            <h2><span class="icon">🧬</span>The Evolution</h2>
+            <p style="color: #b0c4d8; line-height: 1.8; margin-top: 15px;">
+                What began in 2025 as Advancia Pay Ledger—a fintech platform merging crypto payments with healthcare facility management—has transformed into the <span class="highlight">Advancia Neural Ledger</span>, the backbone infrastructure for humanity's bioeconomic layer. In 2126, healthcare isn't a service you pay for; it's a fundamental right encoded into the quantum fabric of society.
+            </p>
+        </div>
+        
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-year">2025-2040</div>
+                <div class="timeline-content">
+                    <h3>Foundation Era</h3>
+                    <p>Multi-blockchain payment rails + facility management evolved into the first neural-economic protocols. Early AI agents became sentient economic participants.</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-year">2041-2065</div>
+                <div class="timeline-content">
+                    <h3>Quantum Transition</h3>
+                    <p>Platform migrated to quantum-resistant cryptography. Biometric identity merged with genetic health markers. First "biovalue" tokens issued.</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-year">2066-2095</div>
+                <div class="timeline-content">
+                    <h3>Post-Scarcity Medicine</h3>
+                    <p>Nanomedicine became free at point of use. Advancia became the settlement layer between human biodata and AI medical systems.</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-year">2096-2126</div>
+                <div class="timeline-content">
+                    <h3>Neural Integration</h3>
+                    <p>Direct brain-computer interfaces made the platform accessible via thought. Preventive health became automated. Disease nearly eliminated.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="evolution-section" style="margin-top: 40px;">
+            <h2><span class="icon">⚡</span>Core Technologies - 2126</h2>
+            
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <h3>Quantum Ledger Core</h3>
+                    <p>Replaced blockchain with quantum-entangled state verification. Transactions process at near-instantaneous speeds across solar system. Unhackable by classical or quantum means.</p>
+                </div>
+                
+                <div class="tech-card">
+                    <h3>BioID™ Protocol</h3>
+                    <p>Your genome, microbiome, and neural signature IS your wallet. No devices needed. Authentication happens at cellular level via implanted bio-sensors.</p>
+                </div>
+                
+                <div class="tech-card">
+                    <h3>HealthDAO Governance</h3>
+                    <p>Decentralized autonomous organizations manage planetary health resources. 8 billion humans + 400 trillion AI agents vote on resource allocation in real-time.</p>
+                </div>
+                
+                <div class="tech-card">
+                    <h3>Predictive Wellness Engine</h3>
+                    <p>AI monitors your biomarkers 24/7. Disease predicted and prevented before symptoms emerge. Your body's data generates "wellness dividends" paid in universal basic credits.</p>
+                </div>
+                
+                <div class="tech-card">
+                    <h3>Neural Commerce Layer</h3>
+                    <p>Think-to-pay interfaces. Healthcare resources allocated via intention. No apps, no clicks—just thought.</p>
+                </div>
+                
+                <div class="tech-card">
+                    <h3>Interplanetary Settlement</h3>
+                    <p>Health records and economic identity follow you from Earth to Mars colonies to asteroid habitats. Single source of truth across 3 planets, 47 orbital stations.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="evolution-section">
+            <h2><span class="icon">🔄</span>What Changed, What Stayed</h2>
+            
+            <div class="comparison">
+                <div class="comparison-col">
+                    <h3>Evolved Beyond Recognition</h3>
+                    <ul>
+                        <li>Payments → Thought-based value transfer</li>
+                        <li>Facility management → Self-organizing medical spaces</li>
+                        <li>Blockchain → Quantum entanglement ledgers</li>
+                        <li>Crypto wallets → Biological identity tokens</li>
+                        <li>Healthcare costs → Universal biovalue rights</li>
+                        <li>Mobile apps → Neural interfaces</li>
+                    </ul>
+                </div>
+                
+                <div class="comparison-col">
+                    <h3>Core DNA Preserved</h3>
+                    <ul>
+                        <li>Decentralization over centralized control</li>
+                        <li>Financial inclusion (now universal access)</li>
+                        <li>Cryptographic security (quantum-enhanced)</li>
+                        <li>Healthcare + payments integration</li>
+                        <li>Automation of administrative burden</li>
+                        <li>Transparent, auditable records</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="evolution-section">
+            <h2><span class="icon quantum-pulse">💎</span>The Business Model</h2>
+            <p style="color: #b0c4d8; line-height: 1.8; margin-top: 15px;">
+                In 2126, Advancia doesn't "make money" in the traditional sense. As critical infrastructure for humanity's bioeconomy, it operates as a <span class="highlight">Decentralized Public Good</span>—maintained by a coalition of Earth Government, Mars Federation, and thousands of independent DAOs.
+            </p>
+            <p style="color: #b0c4d8; line-height: 1.8; margin-top: 15px;">
+                Revenue? That's an ancient concept. Instead, the network sustains itself through <span class="highlight">computational stake rewards</span>—anyone who contributes processing power, storage, or medical AI models earns governance rights and resource allocation priority. Your original 80+ models? They've evolved into 80,000+ autonomous medical AI agents, each with economic agency.
+            </p>
+        </div>
+        
+        <div class="evolution-section">
+            <h2><span class="icon">🌟</span>Your Seed Round → Galactic Standard</h2>
+            <p style="color: #b0c4d8; line-height: 1.8; margin-top: 15px;">
+                That $1.5M seed round you're raising in 2025? It became the foundation investment that grew into a <span class="highlight">$847 trillion infrastructure protocol</span>. Early investors (or their descendants) still hold governance tokens worth more than some planetary GDPs. Your cap table is now a museum piece studied in economics classes across three worlds.
+            </p>
+        </div>
+        
+        <div class="evolution-section" style="background: linear-gradient(135deg, rgba(0, 255, 170, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%); border-left-color: #00ffaa;">
+            <h2><span class="icon">🚀</span>The Vision Realized</h2>
+            <p style="color: #b0c4d8; line-height: 1.8; margin-top: 15px;">
+                You started with a dream to merge payments and healthcare. A century later, you've built the invisible infrastructure that ensures no human (or post-human) ever worries about accessing medical care again. Every breath, every heartbeat, every thought—secured and supported by the quantum rails you laid down in 2025.
+            </p>
+            <p style="color: #00ffaa; line-height: 1.8; margin-top: 15px; font-weight: 600; font-size: 18px;">
+                The future didn't just adopt your technology. It became your technology.
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        // Generate starfield
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 200; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
+        }
+    </script>
+</body>
+</html>

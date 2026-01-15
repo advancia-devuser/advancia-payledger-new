@@ -1,0 +1,414 @@
+{
+  // ============================================================================
+  // ADVANCIA PAY LEDGER - PRODUCTION WORKSPACE SETTINGS
+  // ============================================================================
+  // Optimized for: Security, Performance, Production Deployment
+  // Last Updated: 2025-01-14
+  // Note: User-specific paths removed for team compatibility
+  // ============================================================================
+
+  // ============================================================================
+  // SECURITY SETTINGS
+  // ============================================================================
+  "security.workspace.trust.untrustedFiles": "prompt",
+  "git.confirmSync": true,
+  "git.confirmEmptyCommits": true,
+  "git.branchProtection": ["main", "production", "master"],
+  "git.ignoredRepositories": [],
+  
+  // ============================================================================
+  // GITHUB COPILOT - SECURE CONFIGURATION
+  // ============================================================================
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": false,
+    "markdown": true,
+    "scminput": false,
+    "javascript": true,
+    "typescript": true,
+    "jsx": true,
+    "tsx": true,
+    "json": true,
+    "yaml": true,
+    "yml": true,
+    "dockerfile": true,
+    "sh": true,
+    "html": true,
+    "css": true,
+    "scss": true,
+    "log": false,
+    // Security: Disable for sensitive files
+    "*.env": false,
+    "*.env.*": false,
+    ".env*": false,
+    "*.key": false,
+    "*.pem": false,
+    "*.secret": false
+  },
+  "github.copilot.selectedCompletionModel": "",
+  "github.copilot.nextEditSuggestions.enabled": true,
+
+  // ============================================================================
+  // TERMINAL SETTINGS
+  // ============================================================================
+  "terminal.integrated.sendKeybindingsToShell": true,
+  "terminal.integrated.enableMultiLinePasteWarning": "never",
+  "terminal.integrated.confirmOnKill": "always",
+  "terminal.integrated.confirmOnExit": "always",
+  "terminal.integrated.allowedLinkSchemes": [
+    "file",
+    "http",
+    "https",
+    "mailto",
+    "vscode",
+    "vscode-insiders"
+  ],
+
+  // ============================================================================
+  // CLAUDE CODE INTEGRATION
+  // ============================================================================
+  "claudeCode.preferredLocation": "panel",
+  "claudeCode.useTerminal": true,
+
+  // ============================================================================
+  // CHAT & AI ASSISTANT SETTINGS
+  // ============================================================================
+  "chat.extensionUnification.enabled": true,
+  "chat.mcp.gallery.enabled": true,
+  "chat.mcp.access": "registry",
+  "chat.mcp.discovery.enabled": {
+    "cursor-workspace": true
+  },
+  "chat.agentSessionsViewLocation": "single-view",
+  "chat.viewSessions.orientation": "stacked",
+  "chat.agent.todoList": {
+    "position": "default"
+  },
+  "inlineChat.notebookAgent": true,
+  "chat.instructionsFilesLocations": {
+    ".github/instructions": true,
+    ".github/copilot-instructions.md": true
+  },
+
+  // ============================================================================
+  // GITLENS SETTINGS
+  // ============================================================================
+  "gitlens.ai.model": "vscode",
+  "gitlens.ai.vscode.model": "copilot:gpt-4.1",
+  "gitlens.gitCommands.skipConfirmations": [
+    "fetch:command",
+    "stash-push:command",
+    "switch:command"
+  ],
+
+  // ============================================================================
+  // GIT CONFIGURATION
+  // ============================================================================
+  "git.openRepositoryInParentFolders": "never",
+  "git.autofetch": true,
+  "git.detectSubmodules": false,
+  "git.scanRepositories": [],
+  "scm.repositories.selectionMode": "single",
+  "githubPullRequests.pullBranch": "never",
+
+  // ============================================================================
+  // FILE MANAGEMENT
+  // ============================================================================
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 2000,
+  "files.maxMemoryForLargeFilesMB": 4096,
+  "explorer.confirmDelete": false,
+  "window.confirmSaveUntitledWorkspace": false,
+
+  // ============================================================================
+  // FILE EXCLUSIONS - PERFORMANCE OPTIMIZATION
+  // ============================================================================
+  "files.exclude": {
+    "**/.git": true,
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/.next": true,
+    "**/.vercel": true,
+    "**/coverage": true,
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/*.pyc": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/.turbo": true,
+    "**/out": true
+  },
+
+  // ============================================================================
+  // SEARCH EXCLUSIONS
+  // ============================================================================
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/.next": true,
+    "**/coverage": true,
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/package-lock.json": true,
+    "**/yarn.lock": true,
+    "**/pnpm-lock.yaml": true,
+    "**/.turbo": true,
+    "**/out": true
+  },
+  "search.followSymlinks": false,
+  "explorer.excludeGitIgnore": true,
+
+  // ============================================================================
+  // FILE WATCHER EXCLUSIONS - PERFORMANCE
+  // ============================================================================
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/.git/objects/**": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/*.log": true,
+    "**/.next/**": true,
+    "**/.vercel/**": true,
+    "**/coverage/**": true,
+    "**/.turbo/**": true,
+    "**/out/**": true
+  },
+
+  // ============================================================================
+  // EDITOR SETTINGS
+  // ============================================================================
+  "editor.tabSize": 4,
+  "editor.fontFamily": "Cascadia Code, Consolas, 'Courier New', monospace",
+  "editor.fontLigatures": true,
+  "editor.wordWrap": "on",
+  "editor.mouseWheelZoom": true,
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.codeActions.triggerOnFocusChange": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // ============================================================================
+  // CODE ACTIONS ON SAVE - AUTO-FIX & ORGANIZE
+  // ============================================================================
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit",
+    "source.addMissingImports": "explicit"
+  },
+
+  // ============================================================================
+  // LANGUAGE-SPECIFIC FORMATTERS
+  // ============================================================================
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.python"
+  },
+
+  // ============================================================================
+  // TYPESCRIPT CONFIGURATION
+  // ============================================================================
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.tsserver.experimental.enableProjectDiagnostics": true,
+
+  // ============================================================================
+  // JAVASCRIPT CONFIGURATION
+  // ============================================================================
+  "javascript.updateImportsOnFileMove.enabled": "always",
+
+  // ============================================================================
+  // ESLINT CONFIGURATION
+  // ============================================================================
+  "eslint.workingDirectories": [
+    "backend",
+    "frontend",
+    "packages/*"
+  ],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+
+  // ============================================================================
+  // PRETTIER CONFIGURATION
+  // ============================================================================
+  "prettier.configPath": ".prettierrc",
+  "prettier.requireConfig": true,
+  "prettier.useEditorConfig": true,
+
+  // ============================================================================
+  // PYTHON CONFIGURATION
+  // ============================================================================
+  "python.analysis.diagnosticSeverityOverrides": {},
+  "python.analysis.typeCheckingMode": "basic",
+
+  // ============================================================================
+  // PRISMA CONFIGURATION
+  // ============================================================================
+  "prisma.fileWatcher": false,
+
+  // ============================================================================
+  // NPM CONFIGURATION
+  // ============================================================================
+  "npm.packageManager": "npm",
+
+  // ============================================================================
+  // SPELL CHECKER - DISABLED FOR PERFORMANCE
+  // ============================================================================
+  "cSpell.enabled": false,
+  "cSpell.ignorePaths": [
+    "node_modules",
+    "package-lock.json",
+    "dist",
+    "build",
+    ".git",
+    "*.env",
+    "*.md"
+  ],
+  "cSpell.words": [
+    "advanciapayledger",
+    "supabase",
+    "cloudflare",
+    "postgres",
+    "nextjs",
+    "prisma",
+    "vercel",
+    "railway"
+  ],
+
+  // ============================================================================
+  // TESTING CONFIGURATION
+  // ============================================================================
+  "testing.automaticallyOpenTestResults": "neverOpen",
+
+  // ============================================================================
+  // YAML CONFIGURATION
+  // ============================================================================
+  "yaml.maxItemsComputed": 10000,
+  // Note: yaml.schemas removed - user-specific path
+
+  // ============================================================================
+  // SNYK SECURITY SCANNING
+  // ============================================================================
+  // Note: snyk.advanced.cliPath removed - user-specific path
+  "snyk.securityAtInception.autoConfigureSnykMcpServer": true,
+  "snyk.securityAtInception.executionFrequency": "On Code Generation",
+  "snyk.yesWelcomeNotification": false,
+  "snyk.trustedFolders": [],
+  "snyk.folderConfigs": [],
+
+  // ============================================================================
+  // WORKBENCH UI SETTINGS
+  // ============================================================================
+  "workbench.secondarySideBar.defaultVisibility": "hidden",
+  "workbench.statusBar.visible": true, // Changed from false for better DX
+  "workbench.editor.empty.hint": "hidden",
+  "workbench.iconTheme": "vs-minimal",
+  "workbench.colorTheme": "Tomorrow Night Blue",
+
+  // ============================================================================
+  // COMMENTS & COLLABORATION
+  // ============================================================================
+  "comments.openView": "never",
+
+  // ============================================================================
+  // MAKEFILE SUPPORT
+  // ============================================================================
+  "makefile.configureOnOpen": true,
+
+  // ============================================================================
+  // POWERSHELL SETTINGS
+  // ============================================================================
+  "powershell.promptToUpdatePowerShell": false,
+
+  // ============================================================================
+  // REDHAT TELEMETRY
+  // ============================================================================
+  "redhat.telemetry.enabled": true,
+
+  // ============================================================================
+  // SQL SERVER SETTINGS
+  // ============================================================================
+  "mssql.connectionGroups": [
+    {
+      "name": "ROOT",
+      "id": "33891FCA-50F0-40B2-B65E-CEACA2DCAEDE"
+    }
+  ],
+  "mssql.autoDisableNonTSqlLanguageService": true,
+  "mssql.showChangelogOnUpdate": false,
+
+  // ============================================================================
+  // OPENAPI SETTINGS
+  // ============================================================================
+  "openapi.internalFeatures": false,
+  "openapi.internalUseDevEndpoints": false,
+  "openapi.approvedHostnames": [],
+
+  // ============================================================================
+  // MOBILE PREVIEW (DEVELOPMENT TESTING)
+  // ============================================================================
+  "mobile-preview.deviceOptions": [
+    "iPhone 15 Pro Max",
+    "iPhone 15",
+    "iPhone 14 Pro (Pro)",
+    "Samsung Galaxy S23 (Pro)",
+    "Google Pixel 7 (Pro)",
+    "iPad Pro 11 (Pro)"
+  ],
+  "mobile-preview.url": "http://localhost:3000",
+  "mobile-preview.device": "iPhone 15 Pro Max",
+
+  // ============================================================================
+  // AZURE SETTINGS
+  // ============================================================================
+  "@azure.argTenant": "",
+
+  // ============================================================================
+  // WINDOW SETTINGS
+  // ============================================================================
+  "window.newWindowProfile": null
+
+  // ============================================================================
+  // REMOVED SETTINGS (user-specific paths)
+  // ============================================================================
+  // - yaml.schemas (contained user-specific extension path)
+  // - snyk.advanced.cliPath (user-specific path)
+  // - vs-kubernetes paths (user-specific paths)
+  // - azureTerraform.survey (temporary user data)
+  // 
+  // These settings should be configured in user settings if needed
+  // ============================================================================
+}

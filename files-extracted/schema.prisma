@@ -1,0 +1,490 @@
+// ============================================================================
+// ADVANCIA PAY LEDGER - PRODUCTION DATABASE SCHEMA
+// Launch Date: January 14, 2026
+// ============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// USER MANAGEMENT - WITH ADMIN APPROVAL SYSTEM
+// ============================================================================
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  firstName String
+  lastName  String
+  phone     String?
+  
+  // CRITICAL: Admin Approval System
+  status    UserStatus @default(PENDING_APPROVAL)
+  approvedBy String?  // Admin ID who approved
+  approvedAt DateTime?
+  rejectedBy String?
+  rejectedAt DateTime?
+  rejectionReason String?
+  
+  // Auto-approval tracking
+  registeredAt DateTime @default(now())
+  autoApproved Boolean @default(false)
+  
+  role      UserRole @default(USER)
+  
+  // Verification
+  emailVerified Boolean @default(false)
+  emailVerificationToken String?
+  
+  // KYC
+  kycStatus KYCStatus @default(NOT_STARTED)
+  kycSubmittedAt DateTime?
+  kycApprovedAt DateTime?
+  
+  // Relations
+  wallet    Wallet?
+  cards     VirtualCard[]
+  transactions Transaction[]
+  appointments Appointment[]
+  bookings  MedicalBooking[]
+  notifications Notification[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([email])
+  @@index([status])
+  @@index([role])
+  @@index([registeredAt]) // For auto-approval cron
+}
+
+enum UserStatus {
+  PENDING_APPROVAL  // Waiting for admin approval
+  ACTIVE            // Approved and can use platform
+  REJECTED          // Admin rejected
+  SUSPENDED         // Admin suspended
+  DELETED           // Soft deleted
+}
+
+enum UserRole {
+  USER              // Regular user
+  DOCTOR            // Medical professional
+  MEDICAL_STAFF     // Healthcare worker
+  FACILITY_ADMIN    // Manages medical facility
+  ADMIN             // Platform admin
+  SUPER_ADMIN       // Full system access (hidden)
+}
+
+enum KYCStatus {
+  NOT_STARTED
+  DOCUMENTS_UPLOADED
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  RESUBMIT_REQUIRED
+}
+
+// ============================================================================
+// WALLET SYSTEM - MULTI-BLOCKCHAIN
+// ============================================================================
+
+model Wallet {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Blockchain addresses
+  ethereumAddress  String @unique
+  polygonAddress   String @unique
+  bscAddress       String @unique
+  arbitrumAddress  String @unique
+  optimismAddress  String @unique
+  stellarAddress   String @unique
+  
+  // Private keys (ENCRYPTED in production)
+  ethereumPrivateKey  String
+  polygonPrivateKey   String
+  bscPrivateKey       String
+  arbitrumPrivateKey  String
+  optimismPrivateKey  String
+  stellarPrivateKey   String
+  
+  // Balances (cached from blockchain)
+  ethereumBalance  Decimal @default(0)
+  polygonBalance   Decimal @default(0)
+  bscBalance       Decimal @default(0)
+  arbitrumBalance  Decimal @default(0)
+  optimismBalance  Decimal @default(0)
+  stellarBalance   Decimal @default(0)
+  
+  usdValue         Decimal @default(0)
+  
+  lastSyncedAt     DateTime @default(now())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  
+  @@index([userId])
+}
+
+// ============================================================================
+// VIRTUAL CARDS
+// ============================================================================
+
+model VirtualCard {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  cardNumber    String   @unique
+  cardholderName String
+  expiryMonth   Int
+  expiryYear    Int
+  cvv           String
+  
+  balance       Decimal  @default(0)
+  currency      String   @default("USD")
+  
+  status        CardStatus @default(ACTIVE)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@index([userId])
+  @@index([status])
+}
+
+enum CardStatus {
+  ACTIVE
+  FROZEN
+  EXPIRED
+  CANCELLED
+}
+
+// ============================================================================
+// TRANSACTIONS
+// ============================================================================
+
+model Transaction {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  type            TransactionType
+  amount          Decimal
+  currency        String   @default("USD")
+  
+  // Blockchain details
+  chain           String?  // ethereum, polygon, bsc, etc.
+  txHash          String?  @unique
+  fromAddress     String?
+  toAddress       String?
+  gasUsed         Decimal?
+  gasFee          Decimal?
+  
+  status          TransactionStatus @default(PENDING)
+  
+  description     String?
+  metadata        Json?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([userId])
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  SEND
+  RECEIVE
+  PAYMENT
+  REFUND
+  FEE
+}
+
+enum TransactionStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+// ============================================================================
+// MEDICAL FACILITIES & BOOKINGS
+// ============================================================================
+
+model MedicalFacility {
+  id          String   @id @default(cuid())
+  name        String
+  address     String
+  city        String
+  state       String
+  zipCode     String
+  phone       String
+  email       String?
+  
+  // Bed availability (real-time)
+  generalBeds     Int @default(0)
+  icuBeds         Int @default(0)
+  emergencyBeds   Int @default(0)
+  maternityBeds   Int @default(0)
+  pediatricBeds   Int @default(0)
+  surgicalBeds    Int @default(0)
+  
+  // Available beds
+  generalAvailable     Int @default(0)
+  icuAvailable         Int @default(0)
+  emergencyAvailable   Int @default(0)
+  maternityAvailable   Int @default(0)
+  pediatricAvailable   Int @default(0)
+  surgicalAvailable    Int @default(0)
+  
+  // Pricing (USD per day)
+  generalPrice     Decimal
+  icuPrice         Decimal
+  emergencyPrice   Decimal
+  maternityPrice   Decimal
+  pediatricPrice   Decimal
+  surgicalPrice    Decimal
+  
+  acceptsCrypto    Boolean @default(true)
+  acceptsFiat      Boolean @default(false)
+  
+  bookings         MedicalBooking[]
+  appointments     Appointment[]
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  
+  @@index([city, state])
+}
+
+model MedicalBooking {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  facilityId      String
+  facility        MedicalFacility @relation(fields: [facilityId], references: [id])
+  
+  bedType         BedType
+  patientName     String
+  patientAge      Int
+  condition       String
+  
+  checkInDate     DateTime
+  checkOutDate    DateTime
+  durationDays    Int
+  
+  pricePerDay     Decimal
+  totalCost       Decimal
+  
+  paymentMethod   String   // crypto or fiat
+  paymentCurrency String?  // ETH, USDT, USD, etc.
+  paymentTxHash   String?
+  paymentStatus   PaymentStatus @default(PENDING)
+  
+  status          BookingStatus @default(PENDING)
+  
+  confirmationNumber String @unique
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([userId])
+  @@index([facilityId])
+  @@index([status])
+}
+
+enum BedType {
+  GENERAL
+  ICU
+  EMERGENCY
+  MATERNITY
+  PEDIATRIC
+  SURGICAL
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CHECKED_IN
+  CHECKED_OUT
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+// ============================================================================
+// APPOINTMENTS
+// ============================================================================
+
+model Appointment {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  facilityId      String
+  facility        MedicalFacility @relation(fields: [facilityId], references: [id])
+  
+  patientName     String
+  patientPhone    String
+  department      String
+  doctorName      String?
+  
+  appointmentDate DateTime
+  appointmentTime String
+  
+  reason          String
+  notes           String?
+  
+  cost            Decimal
+  paymentStatus   PaymentStatus @default(PENDING)
+  paymentTxHash   String?
+  
+  status          AppointmentStatus @default(SCHEDULED)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([userId])
+  @@index([facilityId])
+  @@index([appointmentDate])
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+// ============================================================================
+// ADMIN SYSTEM
+// ============================================================================
+
+model AdminAction {
+  id          String   @id @default(cuid())
+  adminId     String
+  adminEmail  String
+  
+  action      AdminActionType
+  targetId    String?  // User ID, transaction ID, etc.
+  targetType  String?  // user, transaction, booking, etc.
+  
+  details     Json?
+  ipAddress   String?
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([adminId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+enum AdminActionType {
+  APPROVE_USER
+  REJECT_USER
+  APPROVE_WITHDRAWAL
+  REJECT_WITHDRAWAL
+  SUSPEND_USER
+  ACTIVATE_USER
+  UPDATE_BALANCE
+  MANUAL_TRANSACTION
+  SYSTEM_CONFIG
+}
+
+// ============================================================================
+// NOTIFICATIONS
+// ============================================================================
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  type      NotificationType
+  title     String
+  message   String
+  link      String?
+  
+  read      Boolean  @default(false)
+  
+  createdAt DateTime @default(now())
+  
+  @@index([userId])
+  @@index([read])
+  @@index([createdAt])
+}
+
+enum NotificationType {
+  SYSTEM
+  TRANSACTION
+  APPROVAL
+  BOOKING
+  APPOINTMENT
+  PAYMENT
+  SECURITY
+}
+
+// ============================================================================
+// EMAIL LOGS (For tracking Resend emails)
+// ============================================================================
+
+model EmailLog {
+  id          String   @id @default(cuid())
+  to          String
+  subject     String
+  template    String
+  
+  resendId    String?  // Resend email ID
+  status      EmailStatus @default(SENT)
+  
+  sentAt      DateTime @default(now())
+  openedAt    DateTime?
+  clickedAt   DateTime?
+  
+  @@index([to])
+  @@index([template])
+  @@index([sentAt])
+}
+
+enum EmailStatus {
+  SENT
+  DELIVERED
+  OPENED
+  CLICKED
+  BOUNCED
+  FAILED
+}
+
+// ============================================================================
+// SYSTEM CONFIG (For maintenance mode, etc.)
+// ============================================================================
+
+model SystemConfig {
+  id              String   @id @default(cuid())
+  key             String   @unique
+  value           String
+  description     String?
+  
+  updatedBy       String?  // Admin ID
+  updatedAt       DateTime @updatedAt
+  
+  @@index([key])
+}

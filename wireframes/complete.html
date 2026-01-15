@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advancia Pay Ledger - Complete Wireframes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.3s;
+        }
+
+        .nav-tab:hover {
+            color: #333;
+        }
+
+        .nav-tab.active {
+            color: #2563eb;
+            border-bottom-color: #2563eb;
+            font-weight: 500;
+        }
+
+        .wireframe {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .wireframe.active {
+            display: block;
+        }
+
+        .wireframe-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .wireframe-section {
+            border: 2px dashed #d0d0d0;
+            padding: 20px;
+            border-radius: 6px;
+            background: #fafafa;
+        }
+
+        .wireframe-section h3 {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .placeholder-box {
+            background: #e8e8e8;
+            border: 1px solid #d0d0d0;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .placeholder-box:last-child {
+            margin-bottom: 0;
+        }
+
+        .placeholder-text {
+            color: #999;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 2px solid #d0d0d0;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-label {
+            color: #999;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            color: #333;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .button-wireframe {
+            background: #e8e8e8;
+            border: 2px solid #d0d0d0;
+            padding: 12px 24px;
+            border-radius: 6px;
+            color: #666;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .button-wireframe:hover {
+            background: #d8d8d8;
+        }
+
+        .button-wireframe.primary {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        .button-wireframe.primary:hover {
+            background: #1d4ed8;
+        }
+
+        .form-field {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            background: white;
+            border: 2px solid #d0d0d0;
+            border-radius: 4px;
+            padding: 10px;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .sidebar {
+            background: #fafafa;
+            border: 2px dashed #d0d0d0;
+            border-radius: 6px;
+            padding: 20px;
+        }
+
+        .sidebar-item {
+            background: #e8e8e8;
+            border: 1px solid #d0d0d0;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .table-wireframe {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-wireframe th,
+        .table-wireframe td {
+            background: #e8e8e8;
+            border: 1px solid #d0d0d0;
+            padding: 12px;
+            text-align: left;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .table-wireframe th {
+            background: #d8d8d8;
+            font-weight: 600;
+        }
+
+        .chart-placeholder {
+            background: #e8e8e8;
+            border: 2px dashed #d0d0d0;
+            border-radius: 6px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .annotation {
+            background: #fff9e6;
+            border-left: 3px solid #f59e0b;
+            padding: 10px 15px;
+            margin-top: 15px;
+            border-radius: 4px;
+        }
+
+        .annotation-text {
+            color: #92400e;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .layout-sidebar {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+        }
+
+        .stepper {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e8e8e8;
+            border: 2px solid #d0d0d0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .step.active .step-number {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: white;
+        }
+
+        .step.completed .step-number {
+            background: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+
+        .step-label {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .step.active .step-label {
+            color: #2563eb;
+            font-weight: 500;
+        }
+
+        .notification-item {
+            background: white;
+            border: 1px solid #d0d0d0;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            gap: 15px;
+            align-items: start;
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .notification-text {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .notification-time {
+            color: #999;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .progress-bar {
+            background: #e8e8e8;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            background: #2563eb;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4, .layout-sidebar {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 Advancia Pay Ledger - Complete UI/UX Wireframes</h1>
+            <p style="color: #666; margin-top: 5px;">Interactive wireframe prototype - Full platform coverage</p>
+            
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="showWireframe('onboarding')">Onboarding</button>
+                <button class="nav-tab" onclick="showWireframe('dashboard')">Dashboard</button>
+                <button class="nav-tab" onclick="showWireframe('payment')">Payments</button>
+                <button class="nav-tab" onclick="showWireframe('wallet')">Wallet</button>
+                <button class="nav-tab" onclick="showWireframe('facility')">Facilities</button>
+                <button class="nav-tab" onclick="showWireframe('analytics')">Analytics</button>
+                <button class="nav-tab" onclick="showWireframe('transactions')">Transactions</button>
+                <button class="nav-tab" onclick="showWireframe('users')">Users</button>
+                <button class="nav-tab" onclick="showWireframe('notifications')">Notifications</button>
+                <button class="nav-tab" onclick="showWireframe('settings')">Settings</button>
+            </div>
+        </div>
+
+        <!-- Onboarding Wireframe -->
+        <div id="onboarding" class="wireframe active">
+            <div class="stepper">
+                <div class="step completed">
+                    <div class="step-number">✓</div>
+                    <div class="step-label">Account</div>
+                </div>
+                <div class="step completed">
+                    <div class="step-number">✓</div>
+                    <div class="step-label">Company</div>
+                </div>
+                <div class="step active">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Wallets</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Facilities</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <div class="step-label">Complete</div>
+                </div>
+            </div>
+
+            <div class="wireframe-section">
+                <h3>Step 3: Connect Your Crypto Wallets</h3>
+                <p style="color: #666; margin-bottom: 25px;">Connect wallets to start accepting crypto payments</p>
+
+                <div class="grid-2">
+                    <div class="placeholder-box" style="padding: 30px; text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: 15px;">₿</div>
+                        <div style="font-weight: 600; color: #333; margin-bottom: 10px;">Bitcoin Wallet</div>
+                        <div class="placeholder-text" style="margin-bottom: 20px;">Connect your BTC wallet to receive payments</div>
+                        <button class="button-wireframe primary">Connect Wallet</button>
+                    </div>
+
+                    <div class="placeholder-box" style="padding: 30px; text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: 15px;">Ξ</div>
+                        <div style="font-weight: 600; color: #333; margin-bottom: 10px;">Ethereum Wallet</div>
+                        <div class="placeholder-text" style="margin-bottom: 20px;">Connect your ETH wallet to receive payments</div>
+                        <button class="button-wireframe primary">Connect Wallet</button>
+                    </div>
+                </div>
+
+                <div class="placeholder-box" style="margin-top: 20px; padding: 20px; background: #f0f9ff; border-color: #3b82f6;">
+                    <div style="color: #1e40af; font-weight: 500; margin-bottom: 8px;">💡 Why connect wallets?</div>
+                    <div style="color: #1e40af; font-size: 13px; line-height: 1.5;">
+                        Connecting wallets enables instant crypto payment processing with multi-blockchain support. Your keys remain secure - we only need your public address.
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px; display: flex; justify-content: space-between;">
+                    <button class="button-wireframe">← Back</button>
+                    <button class="button-wireframe">Skip for Now</button>
+                    <button class="button-wireframe primary">Continue →</button>
+                </div>
+            </div>
+
+            <div class="annotation">
+                <div class="annotation-text">
+                    <strong>💡 Design Notes:</strong> Progressive onboarding with clear steps. Users can skip optional steps. Visual progress indicator reduces abandonment. Education embedded inline.
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Wireframe -->
+        <div id="dashboard" class="wireframe">
+            <div class="layout-sidebar">
+                <div class="sidebar">
+                    <div style="margin-bottom: 20px;">
+                        <div class="placeholder-box" style="height: 60px;">
+                            <div class="placeholder-text">ADVANCIA LOGO</div>
+                        </div>
+                    </div>
+                    <div class="sidebar-item" style="background: #2563eb; color: white;">📊 Dashboard</div>
+                    <div class="sidebar-item">💰 Payments</div>
+                    <div class="sidebar-item">👛 Wallets</div>
+                    <div class="sidebar-item">🏥 Facilities</div>
+                    <div class="sidebar-item">📈 Analytics</div>
+                    <div class="sidebar-item">📝 Transactions</div>
+                    <div class="sidebar-item">👥 Users</div>
+                    <div class="sidebar-item">🔔 Notifications</div>
+                    <div class="sidebar-item">⚙️ Settings</div>
+                </div>
+
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <div>
+                            <h2 style="color: #333; font-size: 28px;">Welcome back, Admin</h2>
+                            <p style="color: #666; margin-top: 5px;">Here's what's happening with your payments today</p>
+                        </div>
+                        <button class="button-wireframe primary">+ New Payment</button>
+                    </div>
+
+                    <div class="wireframe-section">
+                        <h3>Key Metrics</h3>
+                        <div class="grid-4">
+                            <div class="stat-card">
+                                <div class="stat-label">Total Revenue (30d)</div>
+                                <div class="stat-value">$247,892</div>
+                                <div style="color: #10b981; font-size: 12px; margin-top: 8px;">↑ 12.5%</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Active Facilities</div>
+                                <div class="stat-value">24</div>
+                                <div style="color: #10b981; font-size: 12px; margin-top: 8px;">↑ 2 new</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Pending Payments</div>
+                                <div class="stat-value">7</div>
+                                <div style="color: #f59e0b; font-size: 12px; margin-top: 8px;">→ Action needed</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Crypto Balance</div>
+                                <div class="stat-value">2.45 BTC</div>
+                                <div style="color: #666; font-size: 12px; margin-top: 8px;">≈ $98,420</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2" style="margin-top: 20px;">
+                        <div class="wireframe-section">
+                            <h3>Revenue Trends</h3>
+                            <div class="chart-placeholder">
+                                📈 Line Chart - 30 Day Revenue
+                            </div>
+                        </div>
+
+                        <div class="wireframe-section">
+                            <h3>Payment Distribution</h3>
+                            <div class="chart-placeholder">
+                                🥧 Pie Chart - Crypto 68% | Fiat 32%
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="wireframe-section" style="margin-top: 20px;">
+                        <h3>Recent Activity</h3>
+                        <table class="table-wireframe">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Facility</th>
+                                    <th>Amount</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2 min ago</td>
+                                    <td>Memorial Health Center</td>
+                                    <td>$4,250.00</td>
+                                    <td>BTC</td>
+                                    <td style="color: #10b981;">✓ Complete</td>
+                                </tr>
+                                <tr>
+                                    <td>15 min ago</td>
+                                    <td>City Medical Plaza</td>
+                                    <td>$1,890.50</td>
+                                    <td>ETH</td>
+                                    <td style="color: #f59e0b;">⏳ Pending</td>
+                                </tr>
+                                <tr>
+                                    <td>1 hour ago</td>
+                                    <td>Riverside Clinic</td>
+                                    <td>$3,120.00</td>
+                                    <td>USD</td>
+                                    <td style="color: #10b981;">✓ Complete</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="annotation">
+                <div class="annotation-text">
+                    <strong>💡 Design Notes:</strong> Dashboard emphasizes actionable insights. Real-time activity feed keeps users informed. Trends show growth indicators. Quick actions accessible from top right.
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Processing Wireframe -->
+        <div id="payment" class="wireframe">
+            <div class="wireframe-section">
+                <h3>New Payment</h3>
+                <div class="grid-2">
+                    <div>
+                        <div class="form-field">
+                            <label class="form-label">Select Facility</label>
+                            <input type="text" class="form-input" placeholder="Search facilities...">
+                        </div>
+
+                        <div class="form-field">
+                            <label class="form-label">Payment Amount</label>
+                            <input type="text" class="form-input" placeholder="$0.00">
+                        </div>
+
+                        <div class="form-field">
+                            <label class="form-label">Payment Method</label>
+                            <div class="grid-3" style="margin-top: 10px;">
+                                <div class="placeholder-box" style="padding: 20px; cursor: pointer; border: 2px solid #2563eb; background: #eff6ff;">
+                                    <div style="text-align: center; color: #2563eb; font-weight: 600;">₿ Bitcoin</div>
+                                </div>
+                                <div class="placeholder-box" style="padding: 20px; cursor: pointer;">
+                                    <div class="placeholder-text">Ξ Ethereum</div>
+                                </div>
+                                <div class="placeholder-box" style="padding: 20px; cursor: pointer;">
+                                    <div class="placeholder-text">💵 USD</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <label class="form-label">Description (Optional)</label>
+                            <input type="text" class="form-input" placeholder="Medical supplies - Q1 2026">
+                        </div>
+
+                        <div class="form-field">
+                            <label class="form-label">Attach Invoice (Optional)</label>
+                            <div class="placeholder-box" style="padding: 30px; border-style: dashed; text-align: center; cursor: pointer;">
+                                <div class="placeholder-text">📎 Click to upload or drag file here</div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 25px; display: flex; gap: 10px;">
+                            <button class="button-wireframe primary">Process Payment</button>
+                            <button class="button-wireframe">Save as Draft</button>
+                            <button class="button-wireframe">Cancel</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="wireframe-section">
+                            <h3>Payment Summary</h3>
+                            <div style="padding: 15px; background: white; border-radius: 4px; margin-bottom: 15px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                    <span style="color: #666;">Facility:</span>
+                                    <span style="color: #333; font-weight: 500;">Memorial Health Center</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                    <span style="color: #666;">Amount (USD):</span>
+                                    <span style="color: #333; font-weight: 500;">$5,000.00</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                    <span style="color: #666;">Conversion Rate:</span>
+                                    <span style="color: #333; font-weight: 500;">1 BTC = $40,250</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                    <span style="color: #666;">BTC Amount:</span>
+                                    <span style="color: #333; font-weight: 500;">0.1242 BTC</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px dashed #d0d0d0;">
+                                    <span style="color: #666;">Network Fee:</span>
+                                    <span style="color: #333; font-weight: 500;">$2.50</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="color: #333; font-weight: 600; font-size: 16px;">Total:</span>
+                                    <span style="color: #2563eb; font-weight: 600; font-size: 18px;">$5,002.50</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="wireframe-section" style="margin-top: 15px;">
+                            <h3>Security & Compliance</h3>
+                            <div class="placeholder-box" style="padding: 15px; background: #f0fdf4; border-color: #10b981;">
+                                <div style="color: #166534; display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                    <span>✓</span>
+                                    <span style="font-weight: 500;">Multi-blockchain verified</span>
+                                </div>
+                                <div style="color: #166534; display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                    <span>✓</span>
+                                    <span style="font-weight: 500;">AML/KYC compliance passed</span>
+                                </div>
+                                <div style="color: #166534; display: flex; align-items: center; gap: 8px;">
+                                    <span>✓</span>
+                                    <span style="font-weight: 500;">Transaction encrypted</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="wireframe-section" style="margin-top: 15px;">
+                            <h3>Estimated Completion</h3>
+                            <div class="placeholder-box" style="padding: 20px; text-align: center;">
+                                <div style="color: #333; font-size: 24px; font-weight: 600; margin-bottom: 5px;">~15 min</div>
+                                <div class="placeholder-text">Blockchain confirmation time</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="annotation">
+                <div class="annotation-text">
+                    <strong>💡 Design Notes:</strong> Real-time conversion rates build transparency. Security checks visible before payment. Draft saves prevent data loss. Invoice attachment supports record-keeping.
+                </div>
+            </div>
+        </div>
+
+        <!-- Wallet Management Wireframe -->
+        <div id="wallet" class="wireframe">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div>
+                    <h2 style="color: #333; font-size: 24px;">Wallet Management</h2>
+                    <p style="color: #666; margin-top: 5px;">Manage your crypto wallets and balances</p>
+                </div>
+                <button class="button-wireframe primary">+ Add Wallet</button>
+            </div>
+
+            <div class="wireframe-section">
+                <h3>Total Portfolio Value</h3>
+                <div style="text-align: center; padding: 30px;">
+                    <div style="color: #333; font-size: 48px; font-weight: 600; margin-bottom: 10px;">$142,890.45</div>
+                    <div style="color: #10b981; font-size: 18px;">↑ $8,420.12 (6.3%) today</div>
+                </div>
+            </div>
+
+            <div class="grid-2" style="margin-top: 20px;">
+                <div class="wireframe-section">
+                    <h3>Bitcoin Wallet</h3>
+                    <div style="background: white; padding: 20px; border-radius: 6px; margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <div style="font-size: 36px;">₿</div>
+                            <div style="text-align: right;">
+                                <div style="color: #333; font-size: 24px; font-weight: 600;">2.45 BTC</div>
+                                <div style="color: #666; font-size: 14px;">≈ $98,612.50</div>
+                            </div>
+                        </div>
+                        <div class="placeholder-box" style="padding: 10px; background: #fafafa;">
+                            <div class="placeholder-text">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="button-wireframe primary" style="flex: 1;">Send</button>
+                        <button class="button-wireframe" style="flex: 1;">Receive</button>
+                        <button class="button-wireframe" style="flex: 1;">History</button>
+                    </div>
+                </div>
+
+                <div class="wireframe-section">
+                    <h3>Ethereum Wallet</h3>
+                    <div style="background: white; padding: 20px; border-radius: 6px; margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <div style="font-size: 36px;">Ξ</div>
+                            <div style="text-align: right;">
+                                <div style="color: #333; font-size: 24px; font-weight: 600;">18.73 ETH</div>
+                                <div style="color: #666; font-size: 14px;">≈ $44,277.95</div>
+                            </div>
+                        </div>
+                        <div class="placeholder-box" style="padding: 10px; background: #fafafa;">
+                            <div class="placeholder-text">0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="button-wireframe primary" style="flex: 1;">Send</button>
+                        <button class="button-wireframe" style="flex: 1;">Receive</button>
+                        <button class="button-wireframe" style="flex: 1;">History</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wireframe-section" style="margin-top: 20px;">
+                <h3>Recent Wallet Activity</h3>
+                <table class="table-wireframe">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Wallet</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>TX Hash</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>01/14 10:24 AM</td>
+                            <td>Received</td>
+                            <td>Bitcoin</td>
+                            <td>+0.105 BTC</td>
+                            <td style="color: #10b981;">✓ Confirmed (6)</td>
+                            <td><button class="button-wireframe" style="padding: 4px 8px; font-size: 11px;">View</button></td>
+                        </tr>
+                        <tr>
+                            <td>01/14 09:15 AM</td>
+                            <td>Sent</td>
+                            <td>Ethereum</td>
+                            <td>-2.5 ETH</td>
+                            <td style="color: #10b981;">✓ Confirmed (12)</td>
+                            <td><button class="button-wireframe" style="padding: 4px 8px; font-size: 11px;">View</button></td>
+                        </tr>
+                        <tr>
+                            <td>01/14 08:42 AM</td>
+                            <td>Received</td>
+                            <td>Bitcoin</td>
+                            <td>+0.250 BTC</td>
+                            <td style="color: #f59e0b;">⏳ Pending (2)</td>
+                            <td><button class="button-wireframe" style="padding: 4px 8px; font-size: 11px;">View</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="annotation">
+                <div class="annotation-text">
+                    <strong>💡 Design Notes:</strong> Portfolio overview shows total value across chains. Individual wallet cards enable quick actions. Transaction confirmations visible for transparency. Copy-friendly wallet addresses.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showWireframe(id) {
+            document.querySelectorAll('.wireframe').forEach(w => {
+                w.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.nav-tab').forEach(t => {
+                t.classList.remove('active');
+            });
+            
+            document.getElementById(id).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

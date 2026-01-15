@@ -1,0 +1,71 @@
+# GitLab CI/CD Configuration Example
+# Copy to .gitlab-ci.yml and customize
+
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  NODE_VERSION: "20.x"
+  NPM_CONFIG_CACHE: "$CI_PROJECT_DIR/.npm"
+
+cache:
+  paths:
+    - node_modules/
+    - .npm/
+
+build:
+  stage: build
+  image: node:${NODE_VERSION}
+  script:
+    - cd backend
+    - npm ci
+    - npm run build
+    - npx prisma generate
+  artifacts:
+    paths:
+      - backend/dist/
+    expire_in: 1 hour
+  only:
+    - main
+    - develop
+
+test:
+  stage: test
+  image: node:${NODE_VERSION}
+  script:
+    - cd backend
+    - npm ci
+    - npm run test
+  only:
+    - main
+    - develop
+    - merge_requests
+
+deploy_production:
+  stage: deploy
+  image: node:${NODE_VERSION}
+  script:
+    - echo "Deploying to Railway..."
+    # Add Railway deployment commands here
+    # railway up --service backend
+  environment:
+    name: production
+    url: https://your-backend-url.railway.app
+  only:
+    - main
+  when: manual
+
+deploy_staging:
+  stage: deploy
+  image: node:${NODE_VERSION}
+  script:
+    - echo "Deploying to Railway staging..."
+    # Add Railway deployment commands here
+  environment:
+    name: staging
+    url: https://staging-backend-url.railway.app
+  only:
+    - develop
+  when: manual

@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advancia Pay Ledger - Investor-Ready Wireframes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .investor-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.3s;
+        }
+
+        .nav-tab:hover {
+            color: #333;
+        }
+
+        .nav-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            font-weight: 500;
+        }
+
+        .wireframe {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .wireframe.active {
+            display: block;
+        }
+
+        .wireframe-section {
+            border: 2px dashed #d0d0d0;
+            padding: 20px;
+            border-radius: 6px;
+            background: #fafafa;
+        }
+
+        .wireframe-section h3 {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .placeholder-box {
+            background: #e8e8e8;
+            border: 1px solid #d0d0d0;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .placeholder-text {
+            color: #999;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 2px solid #d0d0d0;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-card-large {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 30px;
+        }
+
+        .stat-label {
+            color: #999;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            color: #333;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .button-wireframe {
+            background: #e8e8e8;
+            border: 2px solid #d0d0d0;
+            padding: 12px 24px;
+            border-radius: 6px;
+            color: #666;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .button-wireframe.primary {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .form-field {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            background: white;
+            border: 2px solid #d0d0d0;
+            border-radius: 4px;
+            padding: 10px;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .table-wireframe {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-wireframe th,
+        .table-wireframe td {
+            background: #e8e8e8;
+            border: 1px solid #d0d0d0;
+            padding: 12px;
+            text-align: left;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .table-wireframe th {
+            background: #d8d8d8;
+            font-weight: 600;
+        }
+
+        .chart-placeholder {
+            background: #e8e8e8;
+            border: 2px dashed #d0d0d0;
+            border-radius: 6px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .annotation {
+            background: #f0f9ff;
+            border-left: 3px solid #667eea;
+            padding: 10px 15px;
+            margin-top: 15px;
+            border-radius: 4px;
+        }
+
+        .annotation-text {
+            color: #1e3a8a;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .metric-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .metric-title {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-value {
+            color: #333;
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .metric-change {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .metric-change.positive {
+            color: #10b981;
+        }
+
+        .metric-change.negative {
+            color: #dc2626;
+        }
+
+        .progress-ring {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(#667eea 0% 75%, #e8e8e8 75% 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .progress-ring-inner {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .progress-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .progress-label {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .status-healthy {
+            background: #10b981;
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+        }
+
+        .status-warning {
+            background: #f59e0b;
+            box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+        }
+
+        .status-critical {
+            background: #dc2626;
+            box-shadow: 0 0 8px rgba(220, 38, 38, 0.5);
+        }
+
+        .timeline-mini {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .timeline-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #d0d0d0;
+        }
+
+        .timeline-dot.active {
+            background: #667eea;
+        }
+
+        .timeline-line {
+            flex: 1;
+            height: 2px;
+            background: #e0e0e0;
+        }
+
+        .ai-insight-card {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .ai-badge {
+            background: #667eea;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div style="display: flex; align-items: center;">
+                <h1>🎨 Advancia Pay Ledger - Investor-Ready Wireframes</h1>
+                <span class="investor-badge">SEED ROUND READY</span>
+            </div>
+            <p style="color: #666; margin-top: 5px;">Strategic screens designed to demonstrate platform maturity and business metrics</p>
+            
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="showWireframe('financial-reporting')">Financial Reporting</button>
+                <button class="nav-tab" onclick="showWireframe('system-health')">System Health</button>
+                <button class="nav-tab" onclick="showWireframe('ai-insights')">AI Insights</button>
+            </div>
+        </div>
+
+        <!-- Financial Reporting Dashboard -->
+        <div id="financial-reporting" class="wireframe active">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div>
+                    <h2 style="color: #333; font-size: 24px;">Financial Reporting Dashboard</h2>
+                    <p style="color: #666; margin-top: 5px;">CFO-level metrics and investor-ready reports</p>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="button-wireframe">📅 Select Period</button>
+                    <button class="button-wireframe primary">📊 Export for Investors</button>
+                </div>
+            </div>
+
+            <!-- Key Financial Metrics -->
+            <div class="grid-4" style="margin-bottom: 20px;">
+                <div class="stat-card-large">
+                    <div style="font-size: 12px; margin-bottom: 8px; opacity: 0.9;">Monthly Recurring Revenue</div>
+                    <div style="font-size: 36px; font-weight: 600; margin-bottom: 8px;">$247K</div>
+                    <div style="font-size: 14px; opacity: 0.9;">↑ 42% MoM</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-title">Annual Run Rate</div>
+                    <div class="metric-value">$2.96M</div>
+                    <div class="metric-change positive">↑ 38% growth rate</div>
+                    <div style="color: #666; font-size: 12px; margin-top: 8px;">Based on Q4 2025</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-title">Gross Margin</div>
+                    <div class="metric-value">78.4%</div>
+                    <div class="metric-change positive">↑ 2.1% vs last quarter</div>
+                    <div style="color: #666; font-size: 12px; margin-top: 8px;">Industry avg: 65%</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-title">Burn Rate</div>
+                    <div class="metric-value">$42K</div>
+                    <div class="metric-change positive">↓ 18% reduction</div>
+                    <div style="color: #666; font-size: 12px; margin-top: 8px;">18 months runway</div>
+                </div>
+            </div>
+
+            <!-- Revenue Breakdown -->
+            <div class="grid-2" style="margin-bottom: 20px;">
+                <div class="wireframe-section">
+                    <h3>Revenue Recognition</h3>
+                    <div style="background: white; padding: 20px; border-radius: 6px; margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                            <div>
+                                <div style="color: #666; font-size: 12px; margin-bottom: 5px;">Accrual Basis</div>
+                                <div style="color: #333; font-size: 28px; font-weight: 600;">$247,892</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="color: #666; font-size: 12px; margin-bottom: 5px;">Cash Basis</div>
+                                <div style="color: #333; font-size: 28px; font-weight: 600;">$238,450</div>
+                            </div>
+                        </div>
+                        <div class="chart-placeholder" style="height: 150px;">
+                            📊 Revenue Recognition Comparison (12 months)
+                        </div>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 6px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span style="color: #666; font-size: 13px;">Transaction Fees (68%)</span>
+                            <span style="color: #333; font-size: 13px; font-weight: 600;">$168,566</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span style="color: #666; font-size: 13px;">Subscription Revenue (22%)</span>
+                            <span style="color: #333; font-size: 13px; font-weight: 600;">$54,536</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #666; font-size: 13px;">API & Integration (10%)</span>
+                            <span style="color: #333; font-size: 13px; font-weight: 600;">$24,790</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wireframe-section">
+                    <h3>Unit Economics</h3>
+                    <div class="grid-2" style="margin-bottom: 15px;">
+                        <div style="background: white; padding: 20px; border-radius: 6px; text-align: center;">
+                            <div style="color: #666; font-size: 12px; margin-bottom: 8px;">Customer Acquisition Cost</div>
+                            <div style="color: #333; font-size: 32px; font-weight: 600; margin-bottom: 5px;">$840</div>
+                            <div style="color: #10b981; font-size: 12px;">↓ 24% vs Q3</div>
+                        </div>
+                        <div style="background: white; padding: 20px; border-radius: 6px; text-align: center;">
+                            <div style="color: #666; font-size: 12px; margin-bottom: 8px;">Lifetime Value</div>
+                            <div style="color: #333; font-size: 32px; font-weight: 600; margin-bottom: 5px;">$12,400</div>
+                            <div style="color: #10b981; font-size: 12px;">↑ 18% vs Q3</div>
+                        </div>
+                    </div>
+                    <div style="background: white; padding: 20px; border-radius: 6px; margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <span style="color: #666; font-size: 13px;">LTV:CAC Ratio</span>
+                            <span style="color: #667eea; font-size: 24px; font-weight: 600;">14.8x</span>
+                        </div>
+                        <div style="background: #e8e8e8; height: 8px; border-radius: 4px; overflow: hidden;">
+                            <div style="background: linear-gradient(90deg, #667eea, #764ba2); height: 100%; width: 93%;"></div>
+                        </div>
+                        <div style="color: #666; font-size: 11px; margin-top: 5px;">Target: 3x minimum (achieving 14.8x)</div>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 6px;">
+                        <div style="color: #666; font-size: 12px; margin-bottom: 10px; font-weight: 500;">Payback Period</div>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div class="progress-ring" style="width: 80px; height: 80px; background: conic-gradient(#667eea 0% 25%, #e8e8e8 25% 100%);">
+                                <div class="progress-ring-inner" style="width: 60px; height: 60px;">
+                                    <div class="progress-value" style="font-size: 18px;">3.2</div>
+                                    <div class="progress-label">months</div>
+                                </div>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="color: #333; font-size: 14px; margin-bottom: 4px;">Industry leading payback</div>
+                                <div style="color: #666; font-size: 12px;">SaaS avg: 12-18 months</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Growth Metrics -->
+            <div class="wireframe-section" style="margin-bottom: 20px;">
+                <h3>Growth & Retention Metrics</h3>
+                <div class="grid-3">
+                    <div style="background: white; padding: 20px; border-radius: 6px;">
+                        <div style="color: #666; font-size: 12px; margin-bottom: 10px;">Active Facilities Growth</div>
+                        <div style="color: #333; font-size: 28px; font-weight: 600; margin-bottom: 10px;">24</div>
+                        <div class="chart-placeholder" style="height: 100px;">
+                            📈 +8 facilities this month
+                        </div>
+                        <div style="color: #10b981; font-size: 13px; margin-top: 10px;">↑ 50% QoQ growth</div>
+                    </div>
+
+                    <div style="background: white; padding: 20px; border-radius: 6px;">
+                        <div style="color: #666; font-size: 12px; margin-bottom: 10px;">Net Revenue Retention</div>
+                        <div style="color: #333; font-size: 28px; font-weight: 600; margin-bottom: 10px;">127%</div>
+                        <div class="chart-placeholder" style="height: 100px;">
+                            📊 Expansion revenue strong
+                        </div>
+                        <div style="color: #10b981; font-size: 13px; margin-top: 10px;">Best-in-class (>120%)</div>
+                    </div>
+
+                    <div style="background: white; padding: 20px; border-radius: 6px;">
+                        <div style="color: #666; font-size: 12px; margin-bottom: 10px;">Churn Rate</div>
+                        <div style="color: #333; font-size: 28px; font-weight: 600; margin-bottom: 10px;">2.1%</div>
+                        <div class="chart-placeholder" style="height: 100px;">
+                            📉 Below industry avg
+                        </div>
+                        <div style="color: #10b981; font-size: 13px; margin-top: 10px;">↓ 0.8% vs last quarter</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cohort Analysis -->
+            <div class="wireframe-section" style="margin-bottom: 20px;">
+                <h3>Cohort Revenue Retention</h3>
+                <div style="background: white; padding: 20px; border-radius: 6px;">
+                    <table class="table-wireframe">
+                        <thead>
+                            <tr>
+                                <th>Cohort</th>
+                                <th>Month 0</th>
+                                <th>Month 1</th>
+                                <th>Month 3</th>
+                                <th>Month 6</th>
+                                <th>Month 12</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Jan 2025</td>
+                                <td style="background: #10b981; color: white;">100%</td>
+                                <td style="background: #34d399; color: white;">105%</td>
+                                <td style="background: #6ee7b7; color: white;">112%</td>
+                                <td style="background: #a7f3d0;">118%</td>
+                                <td style="background: #d1fae5;">124%</td>
+                            </tr>
+                            <tr>
+                                <td>Jul 2024</td>
+                                <td style="background: #10b981; color: white;">100%</td>
+                                <td style="background: #34d399; color: white;">98%</td>
+                                <td style="background: #6ee7b7; color: white;">104%</td>
+                                <td style="background: #a7f3d0;">110%</td>
+                                <td style="background: #d1fae5;">127%</td>
+                            </tr>
+                            <tr>
+                                <td>Jan 2024</td>
+                                <td style="background: #10b981; color: white;">100%</td>
+                                <td style="background: #34d399; color: white;">96%</td>
+                                <td style="background: #6ee7b7; color: white;">102%</td>
+                                <td style="background: #a7f3d0;">115%</td>
+                                <td style="background: #d1fae5;">138%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div style="color: #666; font-size: 12px; margin-top: 15px;">
+                        💡 Green shading indicates revenue expansion. All cohorts show >100% retention by month 12.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Financial Projections -->
+            <div class="wireframe-section">
+                <h3>Financial Projections (Next 18 Months)</h3>
+                <div style="background: white; padding: 20px; border-radius: 6px;">
+                    <div class="chart-placeholder" style="height: 250px; margin-bottom: 20px;">
+                        📈 Revenue, EBITDA, and Cash Flow Projections
+                    </div>
+                    <table class="table-wireframe">
+                        <thead>
+                            <tr>
+                                <th>Period</th>
+                                <th>MRR</th>
+                                <th>New Facilities</th>
+                                <th>Total Revenue</th>
+                                <th>EBITDA</th>
+                                <th>Cash Position</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Q1 2026 (Actual)</td>
+                                <td>$247K</td>
+                                <td>24</td>
+                                <td>$741K</td>
+                                <td>$142K</td>
+                                <td>$1.2M</td>
+                            </tr>
+                            <tr>
+                                <td>Q2 2026 (Forecast)</td>
+                                <td>$380K</td>
+                                <td>38</td>
+                                <td>$1.14M</td>
+                                <td>$245K</td>
+                                <td>$1.8M</td>
+                            </tr>
+                            <tr>
+                                <td>Q3 2026 (Forecast)</td>
+                                <td>$540K</td>
+                                <td>54</td>
+                                <td>$1.62M</td>
+                                <td>$380K</td>
+                                <td>$2.6M</td>
+                            </tr>
+                            <tr>
+                                <td>Q4 2026 (Forecast)</td>
+                                <td>$750K</td>
+                                <td>72</td>
+                                <td>$2.25M</td>
+                                <td>$580K</td>
+                                <td>$3.8M</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="annotation">
+                <div class="annotation-text">
+                    <strong>💡 Investor Impact:</strong> This dashboard demonstrates product-market fit with strong unit economics (14.8x LTV:CAC), best-in-class retention (127% NRR), and clear path to profitability. Export these metrics directly into your pitch deck. The cohort analysis proves customers increase spending over time - a key indicator for Series A investors.
+                </div>
+            </div>
+        </div>
+
+        <!-- System Health & Monitoring -->
+        <div id="system-health" class="wireframe">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div>
+                    <h2 style="color: #333; font-size: 24px;">System Health & Monitoring</h2>
+                    <p style="color: #666; margin-top: 5px;">Real-time operational metrics and infrastructure reliability</p>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="button-wireframe">🔔 Alert Settings</button>
+                    <button class="button-wireframe primary">📊 Generate SLA Report</button>
+                </div>
+            </div>
+
+            <!-- Overall System Status -->
+            <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 30px; border-radius: 12px; margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-size: 14px; margin-bottom: 10px; opacity: 0.9;">Overall System Status</div>
+                        <div style="font-size: 42px; font-weight: 600; margin-bottom: 5px;">ALL SYSTEMS OPERATIONAL</div>
+                        <div style="font-size: 14px; opacity: 0.9;">Uptime: 99.97% (Last 30 days)</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 72px;">✓</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Core Services Status -->
+            <div class="wireframe-section" style="margin-bottom: 20px;">
+                <h3>Core Services Health</h3>
+                <div class="grid-3">
+                    <div style="background: white; border: 1px solid #d0d0d0; border-radius: 6px; padding: 20px;">
+                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <span class="status-indicator status-healthy"></span>
+                            <span style="color: #333; font-weight: 600;">Payment Processing</span>
+                        </div>
+                        <div style="color: #666; font-size: 13px; margin-bottom: 8px;">Response Time: 142ms</div>
+                        <div style="color: #666; font-size: 13px; margin-bottom: 8px;">Success Rate: 99.8%</div>
+                        <div style="color: #666; font-size: 13px;">Throughput: 847 tx/min</div>
+                    </div>
+
+                    <div style="background: white; border: 1px solid #d0d0d0; border-radius: 6px; padding: 20px;">
+                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <span class="status-indicator status-healthy"></span>
+                            <span style="color: #333; font-weight: 600;">API Gateway</span>
+                        </div>
+                        <div style="color: #666; font-size: 13px; margin-bottom: 8px;">Response Time: 89ms</div>
+                        <div style="color: #666; font-size: 13px; margin-bottom: 8px;">Uptime: 99.99%</div>
+                        <div style="color: #666; font-size: 13px;">Requests: 12.8K/hr</div>
+                    </div>
+
+                    <div style="background: white; border: 1px solid #d0d0d0; border-radius: 6px; padding: 20px;">
+                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <span class="status-indicator status-healthy"></span>
+                            <span style="color: #333; font-weight: 600;">Database</span>
+                        </div>
+                        <div style="color: #666; font-size: 13px; margin-bottom: 8px;">Query Time: 12ms avg</div>
+                        <div style="color: #666; font-size: 13px; margin-bottom: 8px;">CPU Usage: 32%</div>
+                        <div style="color: #666; font-size: 13px;">Connections: 124/500</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blockchain Node Health -->
+            <div class="wireframe-section" style="margin-bottom: 20px;">
+                <h3>Blockchain Infrastructure</h3>
+                <div class="grid-2">
+                    <div style="background: white; border: 1px solid #d0d0d0; border-radius: 6px; padding: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+                            <div>
+                                <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                                    <span class="status-indicator status-healthy"></span>
+                                    <span style="color: #333; font-weight: 600; font-size: 16px;">Bitcoin Node</span>
+                                </div>
+                                <div style="color: #666; font-size: 12px;">Primary + 2 Failover Nodes</div>
+                            </div>
+                            <div style="font-size: 32px;">₿</div>
+                        </div>
+                        <div style="background: #f9fafb; padding: 15px; border-radius: 6px; margin-bottom: 10px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="color: #666; font-size: 13px;">Block Height:</span>
+                                <span style="color: #333; font-size: 13px; font-weight: 600;">824,567</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="color: #666; font-size: 13px;">Sync Status:</span>
+                                <span style="color: #10b981; font-size: 13px; font-weight: 600;">Fully Synced</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="color: #666; font-size: 13px;">Peer Count:</span>
+                                <span style="color: #333; font-size: 13px; font-weight: 600;">124 peers</span>
+                            </div>
+                        </div>
+                        <div style="color: #666; font-size: 12px;">
+                            Last Block: 2 minutes ago<br/>
+                            Mempool: 4,821 transactions
+                        </div>
+                    </div>
+
+                    <div style="background: white; border: 1px solid #d0d0d0; border-radius: 6px; padding: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+                            <div>
+                                <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                                    <span class="status-indicator status-healthy"></span>
+                                    <span style="color: #333; font-weight: 600; font-size: 16px;">Ethereum Node</span>
+                                </div>
+                                <div style="color: #666; font-size: 12px;">Primary + 2 Failover Nodes</div>
+                            </div>
+                            <div style="font-size: 32px;">Ξ</div>
+                        </div>
+                        <div style="background: #f9fafb; padding: 15px; border-radius: 6px; margin-bottom: 10px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="color: #666; font-size: 13px;">Block Number:</span>
+                                <span style="color: #333; font-size: 13px; font-weight: 600;">18,924,156</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="color: #666; font-size: 13px;">Sync Status:</span>
+                                <span style="color: #10b981; font-size: 13px; font-weight: 600;">Fully Synced</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="color: #666; font-size: 13px;">Gas Price:</span>
+                                <span style="color: #333; font-size: 13px; font-weight: 600;">28 Gwei</span>
+                            </div>
+                        </div>
+                        <div style="color: #666; font-size: 12px;">
+                            Last Block: 14 seconds ago<br/>
+                            Network: Mainnet (Chain ID: 1)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Metrics -->
+            <div class="grid-2" style="margin-bottom: 20px;">
+                <div class="wireframe-section">
+                    <h3>API Performance</h3>
+                    <div style="background: white; padding: 20px; border-radius: 6px;">
+                        <div class="chart-placeholder" style="height: 200px; margin-bottom: 20px;">
+                            📊 Response Time Histogram (Last 24 Hours)
+                        </div>
+                        <div class="grid-2">
+                            <div style="text-align: center; padding: 15px; background: #f9fafb; border-radius: 6px;">
+                                <div style="color: #666; font-size: 12px; margin-bottom: 5px;">P50</div>
+                                <div style="color: #333; font-size: 24px; font-weight: 600;">89ms</div>
+                            </div>
+                            <div style="text-align: center; padding: 15px; background: #f9fafb; border-radius: 6px;">
+                                <div style="color: #666; font-size: 12px; margin-bottom: 5px;">P95</div>
+                                <div style="color: #333; font-size: 24px; font-weight: 600;">142ms</div>
+                            </div>
+                            <div style="text-align: center; padding: 15px; background: #f9fafb; border-radius: 6px;">
+                                <div style="color: #666; font-size: 12px; margin-bottom: 5px;">P99</div>
+                                <div style="color: #333; font-size: 24px; font-weight: 600;">284ms</div>
+                            </div>
+                            <div style="text-align: center; padding: 15px; background: #f9fafb; border-radius: 6px;">
+                                <div style="color: #666; font-size: 12px; margin-bottom: 5px;">Errors</div>
+                                <div style="color: #10b981; font-size: 24px; font-weight: 600;">0.2%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wireframe-section">
+                    <h3>Infrastructure Metrics</h3>
+                    <div style="background: white; padding: 20px; border-radius: 6px;">
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="color: #666; font-size: 13px;">CPU Usage</span>
+                                <span style="color: #333; font-size: 13px; font-weight: 600;">32%</span>
+                            </div>
+                            <div style="background: #e8e8e8; height: 8px; border-radius: 4px; overflow: hidden;">
+                                <div style="background: #10b981; height: 100%; width: 32%;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="color: #666; font-size: 13px;">Memory Usage</span>
+                                <span style="color: #333; font-size: 13px; font-weight: 600;">54%</span>
+                            </div>
+                            <div style="background: #e8e8e8; height: 8px; border-radius: 4px; overflow: hidden;">
+                                <div style="background: #10b981; height: 100%; width: 54%;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="color: #666; font-size: 13px;">Disk Usage</span>
+                                <span style="color: #333; font-size: 13px; font-weight: 600;">42%</span>
+                            </div>
+                            <div style="background: #e8e8e8; height: 8px; border-radius: 4px; overflow: hidden;">
+                                <div style="background: #10b981; height: 100%; width: 42%;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="color: #666; font-size: 13px;">Network I/O</span>
+                                <span style="color: #333; font-size: 13px; font-weight: 600;">1.2 GB/hr</span>
+                            </div>
+                            <div style="background: #e8e8e8; height: 8px; border-radius: 4px; overflow: hidden;">
+                                <div style="background: #10b981; height: 100%; width: 28%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Incident History -->
+            <div class="wireframe-section" style="margin-bottom: 20px;">
+                <h3>Incident History (Last 90 Days)</h3>
+                <table class="table-wireframe">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Severity</th>
+                            <th>Service</th>
+                            <th>Issue</th>
+                            <th>Duration</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>01/12/2026</td>
+                            <td><span style="background: #fef3c7; color: #92400e; padding: 4px 8px; border-radius: 4px; font-size: 11px;">Minor</span></td>
+                            <td>API Gateway</td>
+                            <td>Elevated latency during peak</td>
+                            <td>12 minutes</td>
+                            <td><span style="color: #10b981;">✓ Resolved</span></td>
+                        </tr>
+                        <tr>
+                            <td>12/18/2025</td>
+                            <td><span style="background: #fef3c7; color: #92400e; padding: 4px 8px; border-radius: 4px; font-size: 11px;">Minor</span></td>
+                            <td>BTC Node</td>
+                            <td>Brief sync delay</td>
+                            <td>8 minutes</td>
+                            <td><span style="color: #10b981;">✓ Resolved</span></td>
+                        </tr>
+                        <tr>
+                            <td>11/24/2025</td>
+                            <td><span style="background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 4px; font-size: 11px;">Major</span></td>
+                            <td>Database</td>
+                            <td>Failover during maintenance</td>
+                            <td>45 minutes</td>
+                            <td><span style="color: #10b981;">✓ Resolved</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="background: #f0fdf4; border: 1px solid #10b981; border-radius: 6px; padding: 15px; margin-top: 15px;">
+                    <div style="color: #166534; font-weight: 600; margin-bottom: 5px;">🎯 SLA Performance</div>
+                    <div style="color: #166534; font-size: 13px;">
+                        • 99.97% uptime (Target: 99.9%)<br/>
+                        • Mean Time to Recovery (MTTR): 15 minutes<br/>
+                        • Zero customer-impacting incidents this quarter
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alert Configuration -->
+            <div class="wireframe-section">
+                <h3>Active Monitoring & Alerts</h3>
+                <div class="grid-2">
+                    <div style="background: white; border: 1px solid #d0d0d0; border-radius: 6px; padding: 20px;">
+                        <div style="color: #333; font-weight: 600; margin-bottom: 15px;">Critical Alerts</div>
+                        <div style="color: #666; font-size: 13px; line-height: 1.8;">
+                            🔴 API Response Time > 500ms<br/>
+                            🔴 Error Rate > 1%<br/>
+                            🔴 Blockchain Node Offline<br/>
+                            🔴 Payment Processing Failure<br/>
+                            🔴 Database Connection Loss
+                        </div>
+                    </div>
+                    <div style="background: white; border: 1px solid #d0d0d0; border-radius: 6px; padding: 20px;">
+                        <div style="color: #333; font-weight: 600; margin-bottom: 15px;">Warning Alerts</div>
+                        <div style="color: #666; font-size: 13px; line-height: 1.8;">
+                            🟡 CPU Usage > 75%<br/>
+                            🟡 Memory Usage > 80%<br/>
+                            🟡 Disk Usage > 85%<br/>
+                            🟡 API Latency > 300ms<br/>
+                            🟡 Queue Backup > 100 items
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="annotation">
+                <div class="annotation-text">
+                    <strong>💡 Investor Impact:</strong> This demonstrates operational excellence with 99.97% uptime and enterprise-grade infrastructure. Blockchain node redundancy shows technical sophistication. Low MTTR (15 min) proves responsive operations. Zero customer-impacting incidents builds investor confidence in platform reliability for regulated healthcare payments.
+                </div>
+            </div>
+        </div>
+
+        <!-- AI-Powered Insights -->
+        <div id="ai-insights" class="wireframe">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div>
+                    <h2 style="color: #333; font-size: 24px;">AI-Powered Insights</h2>
+                    <p style="color: #666; margin-top: 5px;">Intelligent recommendations from 25+ AI agents</p>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="button-wireframe">⚙️ Configure Agents</button>
+                    <button class="button-wireframe primary">🤖 Agent Dashboard</button>
+                </div>
+            </div>
+
+            <!-- AI Agent Status -->
+            <div class="grid-4" style="margin-bottom: 20px;">
+                <div style="background: white; border: 2px solid #667eea; border-radius: 8px; padding: 20px; text-align: center;">
+                    <div style="font-size: 36px; margin-bottom: 10px;">🤖</div>
+                    <div style="color: #333; font-size: 24px; font-weight: 600; margin-bottom: 5px;">25</div>
+                    <div style="color: #666; font-size: 12px;">Active AI Agents</div>
+                </div>
+                <div style="background: white; border: 1px solid #d0d0d0; border-radius: 8px; padding: 20px; text-align: center;">
+                    <div style="color: #666; font-size: 12px; margin-bottom: 8px;">Insights Generated</div>
+                    <div style="color: #333; font-size: 24px; font-weight: 600; margin-bottom: 5px;">1,247</div>
+                    <div style="color: #10b981; font-size: 12px;">This month</div>
+                </div>
+                <div style="background: white; border: 1px solid #d0d0d0; border-radius: 8px; padding: 20px; text-align: center;">
+                    <div style="color: #666; font-size: 12px; margin-bottom: 8px;">Actions Taken</div>
+                    <div style="color: #333; font-size: 24px; font-weight: 600; margin-bottom: 5px;">892</div>
+                    <div style="color: #666; font-size: 12px;">71% acceptance rate</div>
+                </div>
+                <div style="background: white; border: 1px solid #d0d0d0; border-radius: 8px; padding: 20px; text-align: center;">
+                    <div style="color: #666; font-size: 12px; margin-bottom: 8px;">Value Generated</div>
+                    <div style="color: #333; font-size: 24px; font-weight: 600; margin-bottom: 5px;">$42K</div>
+                    <div style="color: #10b981; font-size: 12px;">Saved/earned</div>
+                </div>
+            </div>
+
+            <!-- Priority Insights -->
+            <div class="wireframe-section" style="margin-bottom: 20px;">
+                <h3>Priority Insights & Recommendations</h3>
+
+                <div class="ai-insight-card">
+                    <span class="ai-badge">🎯 REVENUE OPTIMIZATION</span>
+                    <div style="color: #333; font-weight: 600; font-size: 16px; margin-bottom: 10px;">
+                        Opportunity: Increase pricing for high-value facilities
+                    </div>
+                    <div style="color: #666; font-size: 14px; margin-bottom: 15px; line-height: 1.6;">
+                        Analysis shows 8 facilities (Memorial Health, City Medical, etc.) have 3x higher transaction volumes than average but pay standard rates. Projected revenue impact: <strong>+$18,400/month</strong> with minimal churn risk (confidence: 87%).
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="button-wireframe primary">View Details</button>
+                        <button class="button-wireframe">Generate Proposal</button>
+                        <button class="button-wireframe">Dismiss</button>
+                    </div>
+                </div>
+
+                <div class="ai-insight-card">
+                    <span class="ai-badge">⚠️ FRAUD DETECTION</span>
+                    <div style="color: #333; font-weight: 600; font-size: 16px; margin-bottom: 10px;">
+                        Alert: Unusual payment pattern detected
+                    </div>
+                    <div style="color: #666; font-size: 14px; margin-bottom: 15px; line-height: 1.6;">
+                        Facility "Valley Healthcare" submitted 5 payments within 2 hours (avg: 1 per week). Amounts are 40% higher than historical average. Pattern matches known suspicious activity. Recommend manual review.
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="button-wireframe primary">Review Transaction</button>
+                        <button class="button-wireframe">Flag for Investigation</button>
+                        <button class="button-wireframe">Mark as Safe</button>
+                    </div>
+                </div>
+
+                <div class="ai-insight-card">
+                    <span class="ai-badge">💰 CASH FLOW OPTIMIZATION</span>
+                    <div style="color: #333; font-weight: 600; font-size: 16px; margin-bottom: 10px;">
+                        Recommendation: Optimal payment timing for gas fees
+                    </div>
+                    <div style="color: #666; font-size: 14px; margin-bottom: 15px; line-height: 1.6;">
+                        BTC network congestion expected to decrease 35% in next 4 hours. Batch processing 12 pending transactions now would save <strong>$840 in network fees</strong>. Optimal execution window: 2:00 AM - 6:00 AM PST.
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="button-wireframe primary">Schedule Batch</button>
+                        <button class="button-wireframe">Process Now</button>
+                    </div>
+                </div>
+
+                <div class="ai-insight-card">
+                    <span class="ai-badge">📈 GROWTH OPPORTUNITY</span>
+                    <div style="color: #333; font-weight: 600; font-size: 16px; margin-bottom: 10px;">
+                        Expansion: 3 facilities ready for upsell
+                    </div>
+                    <div style="color: #666; font-size: 14px; margin-bottom: 15px; line-height: 1.6;">
+                        Riverside Clinic, Summit Medical, and Oak Valley Hospital have exceeded their plan limits for 3 consecutive months. Combined upsell potential: <strong>$4,200/month</strong>. High conversion probability based on usage patterns.
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="button-wireframe primary">Generate Proposals</button>
+                        <button class="button-wireframe">View Analytics</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Agent Performance -->
+            <div class="grid-2" style="margin-bottom: 20px;">
+                <div class="wireframe-section">
+                    <h3>Top Performing AI Agents</h3>
+                    <div style="background: white; padding: 15px; border-radius: 6px; margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <div>
+                                <div style="color: #333; font-weight: 600; margin-bottom: 4px;">💰 Revenue Optimizer</div>
+                                <div style="color: #666; font-size: 12px;">Pricing & upsell recommendations</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="color: #10b981; font-weight: 600;">+$24.8K</div>
+                                <div style="color: #666; font-size: 11px;">This month</div>
+                            </div>
+                        </div>
+                        <div style="background: #e8e8e8; height: 6px; border-radius: 3px; overflow: hidden;">
+                            <div style="background: linear-gradient(90deg, #667eea, #764ba2); height: 100%; width: 92%;"></div>
+                        </div>
+                    </div>
+
+                    <div style="background: white; padding: 15px; border-radius: 6px; margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <div>
+                                <div style="color: #333; font-weight: 600; margin-bottom: 4px;">🔍 Fraud Detector</div>
+                                <div style="color: #666; font-size: 12px;">Anomaly & pattern detection</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="color: #10b981; font-weight: 600;">12 alerts</div>
+                                <div style="color: #666; font-size: 11px;">0 false positives</div>
+                            </div>
+                        </div>
+                        <div style="background: #e8e8e8; height: 6px; border-radius: 3px; overflow: hidden;">
+                            <div style="background: linear-gradient(90deg, #667eea, #764ba2); height: 100%; width: 88%;"></div>
+                        </div>
+                    </div>
+
+                    <div style="background: white; padding: 15px; border-radius: 6px; margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <div>
+                                <div style="color: #333; font-weight: 600; margin-bottom: 4px;">⏰ Payment Scheduler</div>
+                                <div style="color: #666; font-size: 12px;">Gas fee & timing optimization</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="color: #10b981; font-weight: 600;">-$8.4K</div>
+                                <div style="color: #666; font-size: 11px;">Fees saved</div>
+                            </div>
+                        </div>
+                        <div style="background: #e8e8e8; height: 6px; border-radius: 3px; overflow: hidden;">
+                            <div style="background: linear-gradient(90deg, #667eea, #764ba2); height: 100%; width: 84%;"></div>
+                        </div>
+                    </div>
+
+                    <div style="background: white; padding: 15px; border-radius: 6px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <div>
+                                <div style="color: #333; font-weight: 600; margin-bottom: 4px;">📊 Churn Predictor</div>
+                                <div style="color: #666; font-size: 12px;">Early warning & retention</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="color: #10b981; font-weight: 600;">4 saved</div>
+                                <div style="color: #666; font-size: 11px;">At-risk facilities</div>
+                            </div>
+                        </div>
+                        <div style="background: #e8e8e8; height: 6px; border-radius: 3px; overflow: hidden;">
+                            <div style="background: linear-gradient(90deg, #667eea, #764ba2); height: 100%; width: 78%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wireframe-section">
+                    <h3>Predictive Analytics</h3>
+                    <div style="background: white; padding: 20px; border-radius: 6px; margin-bottom: 15px;">
+                        <div style="color: #333; font-weight: 600; margin-bottom: 15px;">Cash Flow Forecast (Next 30 Days)</div>
+                        <div class="chart-placeholder" style="height: 150px; margin-bottom: 15px;">
+                            📈 AI-Predicted vs Historical Cash Flow
+                        </div>
+                        <div style="background: #f9fafb; padding: 15px; border-radius: 6px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="color: #666; font-size: 13px;">Predicted Inflow:</span>
+                                <span style="color: #333; font-size: 13px; font-weight: 600;">$284,200</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="color: #666; font-size: 13px;">Predicted Outflow:</span>
+                                <span style="color: #333; font-size: 13px; font-weight: 600;">$58,400</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding-top: 8px; border-top: 1px dashed #d0d0d0;">
+                                <span style="color: #333; font-size: 14px; font-weight: 600;">Net Position:</span>
+                                <span style="color: #10b981; font-size: 14px; font-weight: 600;">+$225,800</span>
+                            </div>
+                        </div>
+                        <div style="color: #666; font-size: 11px; margin-top: 10px;">
+                            Confidence: 94% • Based on 18 months of data
+                        </div>
+                    </div>
+
+                    <div style="background: white; padding: 20px; border-radius: 6px;">
+                        <div style="color: #333; font-weight: 600; margin-bottom: 15px;">Churn Risk Assessment</div>
+                        <div style="margin-bottom: 12px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span style="color: #666; font-size: 13px;">Low Risk (18 facilities)</span>
+                                <span style="color: #10b981; font-size: 13px; font-weight: 600;">75%</span>
+                            </div>
+                            <div style="background: #e8e8e8; height: 8px; border-radius: 4px; overflow: hidden;">
+                                <div style="background: #10b981; height: 100%; width: 75%;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span style="color: #666; font-size: 13px;">Medium Risk (4 facilities)</span>
+                                <span style="color: #f59e0b; font-size: 13px; font-weight: 600;">17%</span>
+                            </div>
+                            <div style="background: #e8e8e8; height: 8px; border-radius: 4px; overflow: hidden;">
+                                <div style="background: #f59e0b; height: 100%; width: 17%;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span style="color: #666; font-size: 13px;">High Risk (2 facilities)</span>
+                                <span style="color: #dc2626; font-size: 13px; font-weight: 600;">8%</span>
+                            </div>
+                            <div style="background: #e8e8e8; height: 8px; border-radius: 4px; overflow: hidden;">
+                                <div style="background: #dc2626; height: 100%; width: 8%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="annotation">
+                <div class="annotation-text">
+                    <strong>💡 Investor Impact:</strong> The 25+ AI agents differentiate Advancia from traditional payment processors. Revenue optimization agent shows clear ROI (+$24.8K/month). Fraud detection with zero false positives proves technical sophistication. Predictive analytics (94% confidence) demonstrate data advantage. This is your competitive moat - investors invest in defensibility.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showWireframe(id) {
+            document.querySelectorAll('.wireframe').forEach(w => {
+                w.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.nav-tab').forEach(t => {
+                t.classList.remove('active');
+            });
+            
+            document.getElementById(id).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

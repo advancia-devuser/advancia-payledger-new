@@ -1,0 +1,182 @@
+/* Typography System - Advancia Pay
+ * Platform: Major Second (1.125) - Professional, data-dense interfaces
+ * Marketing: Major Third (1.250) - Strong visual hierarchy
+ */
+
+/* Platform Typography (Major Second - 1.125) */
+:root {
+  /* Base */
+  --base-size: 16px;
+  --platform-ratio: 1.125;
+  --marketing-ratio: 1.25;
+
+  /* Platform Type Scale (Major Second - 1.125) */
+  --text-xs: 0.79rem; /* 12.64px - 16 ÷ 1.125² */
+  --text-sm: 0.89rem; /* 14.22px - 16 ÷ 1.125 */
+  --text-base: 1rem; /* 16px - Base */
+  --text-lg: 1.125rem; /* 18px - 16 × 1.125 */
+  --text-xl: 1.266rem; /* 20.25px - 16 × 1.125² */
+  --text-2xl: 1.424rem; /* 22.78px - 16 × 1.125³ */
+  --text-3xl: 1.602rem; /* 25.63px - 16 × 1.125⁴ */
+  --text-4xl: 1.802rem; /* 28.83px - 16 × 1.125⁵ */
+  --text-5xl: 2.027rem; /* 32.43px - 16 × 1.125⁶ */
+
+  /* Marketing Type Scale (Major Third - 1.250) */
+  --marketing-xs: 0.64rem; /* 10.24px - 16 ÷ 1.25² */
+  --marketing-sm: 0.8rem; /* 12.8px - 16 ÷ 1.25 */
+  --marketing-base: 1rem; /* 16px - Base */
+  --marketing-lg: 1.25rem; /* 20px - 16 × 1.25 */
+  --marketing-xl: 1.563rem; /* 25px - 16 × 1.25² */
+  --marketing-2xl: 1.953rem; /* 31.25px - 16 × 1.25³ */
+  --marketing-3xl: 2.441rem; /* 39.06px - 16 × 1.25⁴ */
+  --marketing-4xl: 3.052rem; /* 48.83px - 16 × 1.25⁵ */
+  --marketing-5xl: 3.815rem; /* 61.04px - 16 × 1.25⁶ */
+
+  /* Line Heights */
+  --leading-tight: 1.2;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.75;
+
+  /* Font Families */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    sans-serif;
+  --font-mono: "Courier New", monospace;
+  --font-display: "Inter", system-ui, sans-serif;
+
+  /* Font Weights */
+  --font-light: 300;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-extrabold: 800;
+}
+
+/* Platform Typography Classes */
+.text-xs {
+  font-size: var(--text-xs);
+}
+.text-sm {
+  font-size: var(--text-sm);
+}
+.text-base {
+  font-size: var(--text-base);
+}
+.text-lg {
+  font-size: var(--text-lg);
+}
+.text-xl {
+  font-size: var(--text-xl);
+}
+.text-2xl {
+  font-size: var(--text-2xl);
+}
+.text-3xl {
+  font-size: var(--text-3xl);
+}
+.text-4xl {
+  font-size: var(--text-4xl);
+}
+.text-5xl {
+  font-size: var(--text-5xl);
+}
+
+/* Marketing Typography Classes */
+.marketing-xs {
+  font-size: var(--marketing-xs);
+}
+.marketing-sm {
+  font-size: var(--marketing-sm);
+}
+.marketing-base {
+  font-size: var(--marketing-base);
+}
+.marketing-lg {
+  font-size: var(--marketing-lg);
+}
+.marketing-xl {
+  font-size: var(--marketing-xl);
+}
+.marketing-2xl {
+  font-size: var(--marketing-2xl);
+}
+.marketing-3xl {
+  font-size: var(--marketing-3xl);
+}
+.marketing-4xl {
+  font-size: var(--marketing-4xl);
+}
+.marketing-5xl {
+  font-size: var(--marketing-5xl);
+}
+
+/* Line Height Classes */
+.leading-tight {
+  line-height: var(--leading-tight);
+}
+.leading-normal {
+  line-height: var(--leading-normal);
+}
+.leading-relaxed {
+  line-height: var(--leading-relaxed);
+}
+
+/* Font Weight Classes */
+.font-light {
+  font-weight: var(--font-light);
+}
+.font-normal {
+  font-weight: var(--font-normal);
+}
+.font-medium {
+  font-weight: var(--font-medium);
+}
+.font-semibold {
+  font-weight: var(--font-semibold);
+}
+.font-bold {
+  font-weight: var(--font-bold);
+}
+.font-extrabold {
+  font-weight: var(--font-extrabold);
+}
+
+/* Font Family Classes */
+.font-sans {
+  font-family: var(--font-sans);
+}
+.font-mono {
+  font-family: var(--font-mono);
+}
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+  :root {
+    --base-size: 14px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --base-size: 18px;
+  }
+}
+
+/* Accessibility Support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Adjust contrast for dark mode if needed */
+    --text-contrast: 0.9;
+  }
+}

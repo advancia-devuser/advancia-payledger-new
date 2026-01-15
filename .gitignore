@@ -1,0 +1,148 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build artifacts
+.next/
+dist/
+out/
+build/
+*.tsbuildinfo
+
+# Environment variables - SECURITY CRITICAL
+.env
+.env.*
+.env.local
+.env.production
+.env.staging
+.env.development
+.env.test
+!.env.example
+!.env.template
+!.env.template.secure
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# System files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+
+# IDEs (allow .vscode for workspace settings)
+.idea/
+.vscode/settings.json
+.vscode/.ropeproject
+*.sublime-project
+*.sublime-workspace
+
+# Deployment
+.vercel/
+.vercel
+
+# Railway - DEPRECATED (migrated to Digital Ocean)
+.railway/
+.railway
+railway.json
+nixpacks.toml
+Procfile
+
+# Digital Ocean
+.digitalocean/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+database.db
+prisma/dev.db
+*.dump
+*.sql.gz
+
+# Backups and temporary files
+BACKUPS/
+backup/
+*.backup
+*.bak
+*.tmp
+.cache/
+temp/
+tmp/
+
+# Security - Private keys and certificates
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+id_rsa*
+*.pub
+.ssh/
+
+# Secrets and credentials
+secrets/
+credentials/
+*.credentials
+*.secrets
+
+# Claude/Cline conversation history
+.claude/
+.cline/
+.aider*
+.cursor/
+
+# Package manager lock files (optional - keep your preferred one)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Windows reserved names
+nul
+NUL
+CON
+PRN
+AUX
+com[1-9]
+lpt[1-9]
+backend/nul
+**/nul
+
+# Test coverage
+coverage/
+.nyc_output/
+*.coverage
+.coverage
+htmlcov/
+
+# Documentation builds
+docs/_build/
+site/
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+
+# Docker
+.dockerignore.prod
+docker-compose.override.yml
+backend/.env.production
+backend/.env.production
