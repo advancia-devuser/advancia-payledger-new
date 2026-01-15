@@ -1,5 +1,11 @@
 # Neon Database & Ngrok Setup Guide
 
+**Repository:** https://github.com/advancia-devuser/advanciapayledger-1  
+**Latest Commit:** 992ab2b (Security Fixed)  
+**Date:** January 15, 2026
+
+---
+
 ## 🗄️ Neon Database Setup
 
 ### Step 1: Create Neon Account
@@ -179,6 +185,7 @@ ENABLE_REDIS=false
 
 ## 🎯 Quick Start Checklist
 
+- [ ] Clone repository: `git clone https://github.com/advancia-devuser/advanciapayledger-1.git`
 - [ ] Create Neon account and get connection string
 - [ ] Update `DATABASE_URL` in `backend-clean/.env`
 - [ ] Run database migrations
@@ -203,3 +210,32 @@ When deploying to production:
 5. Set up proper CORS configuration
 6. Configure rate limiting
 7. Enable monitoring and logging
+
+---
+
+## 🔗 Related Documentation
+
+- **Complete Deployment Guide**: `DEPLOYMENT-SUMMARY.md`
+- **Email Setup**: `manual-email-setup.md`
+- **Security Fixes**: `SECURITY-FIXED.md`
+- **Quick Start**: `START-HERE.md`
+- **GitHub Repository**: https://github.com/advancia-devuser/advanciapayledger-1
+
+---
+
+## 📞 Support
+
+### Documentation
+- GitHub: https://github.com/advancia-devuser/advanciapayledger-1
+- All guides in repository root directory
+
+### External Resources
+- Neon Docs: https://neon.tech/docs
+- Ngrok Docs: https://ngrok.com/docs
+- Prisma Docs: https://www.prisma.io/docs
+
+---
+
+**Status:** ✅ Updated for new repository  
+**Security:** ✅ All vulnerabilities fixed  
+**Timeline:** Ready for immediate setup
