@@ -1,0 +1,1 @@
+Write-Host 'Starting population...' -ForegroundColor Green; New-Item -ItemType Directory -Force -Path 'backend-clean\src' | Out-Null; New-Item -ItemType Directory -Force -Path 'frontend-clean\app' | Out-Null; Write-Host 'Directories created!' -ForegroundColor Yellow

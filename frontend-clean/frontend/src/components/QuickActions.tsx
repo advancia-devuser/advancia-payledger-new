@@ -1,7 +1,7 @@
 "use client";
 
 import { useSmartSuggestions } from "@/hooks/useSmartSuggestions";
-import { SmartRecommendation } from "@/lib/ai-brain/ai-core.types";
+import { SmartRecommendation } from "@/lib/ai-core.types";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -165,3 +165,4 @@ export default function QuickActions() {
     </div>
   );
 }
+

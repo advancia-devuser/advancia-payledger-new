@@ -21,7 +21,7 @@ import {
   SmartDateRange,
   SmartRecommendation,
   UIPersonalization,
-} from "@/lib/ai-brain/ai-core.types";
+} from "@/lib/ai-core.types";
 import { api } from "@/utils/api";
 
 // ============================================
@@ -244,3 +244,4 @@ export async function getAIStatus(): Promise<{
 }> {
   return api.get("/api/ai/status");
 }
+

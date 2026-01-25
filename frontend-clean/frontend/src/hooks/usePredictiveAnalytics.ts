@@ -6,7 +6,7 @@
 import {
   PredictiveAnalysis,
   RevenueForecast,
-} from "@/lib/ai-brain/ai-core.types";
+} from "@/lib/ai-core.types";
 import { getRevenueForecast, predictMetric } from "@/services/aiCore";
 import { useCallback, useState } from "react";
 
@@ -73,3 +73,4 @@ export function usePredictiveAnalytics() {
     getPrediction,
   };
 }
+

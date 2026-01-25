@@ -3,7 +3,7 @@
  * Provides AI-powered suggestions for user actions and UI elements
  */
 
-import { SmartRecommendation } from "@/lib/ai-brain/ai-core.types";
+import { SmartRecommendation } from "@/lib/ai-core.types";
 import { getRecommendations } from "@/services/aiCore";
 import { useCallback, useEffect, useState } from "react";
 
@@ -42,3 +42,4 @@ export function useSmartSuggestions(category?: string) {
     refresh,
   };
 }
+

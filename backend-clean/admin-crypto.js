@@ -1,0 +1,1 @@
+const crypto = require('crypto'); console.log('Admin with Crypto:'); console.log('Email: admin@advancia.com'); console.log('Password: Admin123!'); console.log('ETH: 0x6beb245C6DCc2CE1f6635716f1253d2D3be500BD'); console.log('BTC: bc1q37a9kpzyea5cahpyx8xpx6v7vr5na64f4cxxnt');

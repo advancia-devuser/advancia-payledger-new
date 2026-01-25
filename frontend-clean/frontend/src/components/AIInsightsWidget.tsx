@@ -6,7 +6,7 @@
 "use client";
 
 import { useAIInsights } from "@/lib/ai-brain/AIInsightsEngine";
-import { AIInsight } from "@/lib/ai-brain/ai-core.types";
+import { AIInsight } from "@/lib/ai-core.types";
 import { useEffect, useState } from "react";
 
 export default function AIInsightsWidget() {
@@ -136,3 +136,4 @@ export default function AIInsightsWidget() {
     </div>
   );
 }
+
