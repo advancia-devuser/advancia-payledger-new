@@ -1,0 +1,1 @@
+Write-Host '🚀 Deploying Advancia PayLedger to DigitalOcean...' -ForegroundColor Cyan; Write-Host 'Deployment files ready - need doctl CLI and authentication'; Write-Host 'Next steps:' -ForegroundColor Yellow; Write-Host '1. Install doctl CLI'; Write-Host '2. Run: doctl auth init'; Write-Host '3. Run: doctl apps create --spec .do/app.yaml'
