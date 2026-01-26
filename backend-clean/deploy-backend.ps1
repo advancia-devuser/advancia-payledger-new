@@ -1,0 +1,1 @@
+Write-Host '🚀 Deploying Advancia PayLedger Backend to DigitalOcean...' -ForegroundColor Cyan; Write-Host 'VPC: 10.108.0.0/20'; Write-Host 'Team ID: 12bb4188-25f0-4764-9f3e-55d81d36b097'; Write-Host 'Backend deployment files ready - need doctl CLI and authentication'

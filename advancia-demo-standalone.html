@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advancia PayLedger - Healthcare Fintech Platform</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f9fafb;
+            color: #1f2937;
+        }
+        
+        .header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .logo-text h1 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 0.125rem;
+        }
+        
+        .logo-text p {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .header-btn {
+            padding: 0.5rem;
+            border: none;
+            background: none;
+            color: #6b7280;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        
+        .header-btn:hover {
+            background: #f3f4f6;
+            color: #1f2937;
+        }
+        
+        .main-content {
+            display: flex;
+            min-height: calc(100vh - 65px);
+        }
+        
+        .sidebar {
+            width: 256px;
+            background: white;
+            border-right: 1px solid #e5e7eb;
+            padding: 1rem;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border: none;
+            background: none;
+            color: #6b7280;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+            width: 100%;
+            text-align: left;
+            font-weight: 500;
+        }
+        
+        .nav-item:hover {
+            background: #f3f4f6;
+            color: #1f2937;
+        }
+        
+        .nav-item.active {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+        
+        .content {
+            flex: 1;
+            padding: 2rem;
+        }
+        
+        .content-header {
+            margin-bottom: 2rem;
+        }
+        
+        .content-header h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+        
+        .content-header p {
+            color: #6b7280;
+        }
+        
+        .content-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #3b82f6;
+            border: 1px solid #3b82f6;
+        }
+        
+        .btn-secondary:hover {
+            background: #f8fafc;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: #dbeafe;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #3b82f6;
+        }
+        
+        .trend {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .trend.up {
+            color: #10b981;
+        }
+        
+        .trend.down {
+            color: #ef4444;
+        }
+        
+        .stat-title {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1f2937;
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .chart-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .table-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            margin-bottom: 2rem;
+        }
+        
+        .table-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            text-align: left;
+            padding: 0.75rem;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        tr:hover {
+            background: #f9fafb;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .status-completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .footer {
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        
+        .footer-stats {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">
+                <i data-lucide="wallet"></i>
+            </div>
+            <div class="logo-text">
+                <h1>Advancia Pay Ledger</h1>
+                <p>Healthcare Fintech Platform</p>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="header-btn">
+                <i data-lucide="bell"></i>
+            </button>
+            <button class="header-btn">
+                <i data-lucide="settings"></i>
+            </button>
+            <button class="header-btn">
+                <i data-lucide="log-out"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <aside class="sidebar">
+            <nav>
+                <button class="nav-item active" onclick="showSection('dashboard')">
+                    <i data-lucide="trending-up"></i>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-item" onclick="showSection('facilities')">
+                    <i data-lucide="building"></i>
+                    <span>Facilities</span>
+                </button>
+                <button class="nav-item" onclick="showSection('payments')">
+                    <i data-lucide="wallet"></i>
+                    <span>Payments</span>
+                </button>
+                <button class="nav-item" onclick="showSection('appointments')">
+                    <i data-lucide="calendar"></i>
+                    <span>Appointments</span>
+                </button>
+                <button class="nav-item" onclick="showSection('beds')">
+                    <i data-lucide="bed"></i>
+                    <span>Bed Management</span>
+                </button>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <div class="content-header">
+                <h1>Dashboard</h1>
+                <p>Welcome back! Here's what's happening with your platform.</p>
+            </div>
+
+            <div class="content-actions">
+                <button class="btn btn-secondary">
+                    <i data-lucide="refresh"></i>
+                    Refresh
+                </button>
+                <button class="btn btn-primary">
+                    <i data-lucide="file-text"></i>
+                    Generate Report
+                </button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">
+                            <i data-lucide="dollar-sign"></i>
+                        </div>
+                        <div class="trend up">
+                            <i data-lucide="trending-up"></i>
+                            +42%
+                        </div>
+                    </div>
+                    <div class="stat-title">Monthly Recurring Revenue</div>
+                    <div class="stat-value">$247K</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">
+                            <i data-lucide="building"></i>
+                        </div>
+                        <div class="trend up">
+                            <i data-lucide="trending-up"></i>
+                            +2
+                        </div>
+                    </div>
+                    <div class="stat-title">Active Facilities</div>
+                    <div class="stat-value">24</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">
+                            <i data-lucide="activity"></i>
+                        </div>
+                        <div class="trend up">
+                            <i data-lucide="trending-up"></i>
+                            +18%
+                        </div>
+                    </div>
+                    <div class="stat-title">Total Transactions</div>
+                    <div class="stat-value">1,847</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">
+                            <i data-lucide="users"></i>
+                        </div>
+                        <div class="trend up">
+                            <i data-lucide="trending-up"></i>
+                            +12%
+                        </div>
+                    </div>
+                    <div class="stat-title">Active Patients</div>
+                    <div class="stat-value">1,083</div>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h2 class="chart-title">Revenue Growth</h2>
+                    <canvas id="revenueChart"></canvas>
+                </div>
+
+                <div class="chart-card">
+                    <h2 class="chart-title">Payment Methods Distribution</h2>
+                    <canvas id="paymentChart"></canvas>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <h2 class="table-title">Recent Transactions</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Facility</th>
+                            <th>Amount</th>
+                            <th>Method</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>TX001</td>
+                            <td>Healthcare Facility A</td>
+                            <td>$12,500</td>
+                            <td><span class="status-badge">Solana</span></td>
+                            <td><span class="status-badge status-completed">completed</span></td>
+                            <td>2 min ago</td>
+                        </tr>
+                        <tr>
+                            <td>TX002</td>
+                            <td>Healthcare Facility B</td>
+                            <td>$8,900</td>
+                            <td><span class="status-badge">Ethereum</span></td>
+                            <td><span class="status-badge status-completed">completed</span></td>
+                            <td>15 min ago</td>
+                        </tr>
+                        <tr>
+                            <td>TX003</td>
+                            <td>Healthcare Facility C</td>
+                            <td>$15,300</td>
+                            <td><span class="status-badge">Polygon</span></td>
+                            <td><span class="status-badge status-pending">pending</span></td>
+                            <td>32 min ago</td>
+                        </tr>
+                        <tr>
+                            <td>TX004</td>
+                            <td>Healthcare Facility D</td>
+                            <td>$6,700</td>
+                            <td><span class="status-badge">Base</span></td>
+                            <td><span class="status-badge status-completed">completed</span></td>
+                            <td>1 hr ago</td>
+                        </tr>
+                        <tr>
+                            <td>TX005</td>
+                            <td>Healthcare Facility E</td>
+                            <td>$9,400</td>
+                            <td><span class="status-badge">Solana</span></td>
+                            <td><span class="status-badge status-completed">completed</span></td>
+                            <td>2 hr ago</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div>
+            <p>© 2026 Advancia Pay Ledger. All rights reserved.</p>
+        </div>
+        <div class="footer-stats">
+            <span>MRR: $247K</span>
+            <span>24 Facilities</span>
+            <span>+42% Growth</span>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Revenue Growth Chart
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
+                datasets: [{
+                    label: 'Revenue ($)',
+                    data: [145000, 168000, 195000, 212000, 247000],
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.4
+                }, {
+                    label: 'Facilities',
+                    data: [18, 20, 22, 23, 24],
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Payment Methods Chart
+        const paymentCtx = document.getElementById('paymentChart').getContext('2d');
+        new Chart(paymentCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Solana', 'Ethereum', 'Polygon', 'Base'],
+                datasets: [{
+                    label: 'Amount ($)',
+                    data: [98800, 74100, 43500, 30600],
+                    backgroundColor: [
+                        '#14F195',
+                        '#627EEA',
+                        '#8247E5',
+                        '#0052FF'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Navigation function
+        function showSection(section) {
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Add active class to clicked item
+            event.target.closest('.nav-item').classList.add('active');
+            
+            // Update content based on section
+            const contentHeader = document.querySelector('.content-header');
+            const contentTitle = contentHeader.querySelector('h1');
+            const contentSubtitle = contentHeader.querySelector('p');
+            
+            switch(section) {
+                case 'dashboard':
+                    contentTitle.textContent = 'Dashboard';
+                    contentSubtitle.textContent = 'Welcome back! Here\'s what\'s happening with your platform.';
+                    break;
+                case 'facilities':
+                    contentTitle.textContent = 'Healthcare Facilities';
+                    contentSubtitle.textContent = 'Manage your connected healthcare facilities';
+                    break;
+                case 'payments':
+                    contentTitle.textContent = 'Payment Processing';
+                    contentSubtitle.textContent = 'Multi-blockchain payment infrastructure';
+                    break;
+                case 'appointments':
+                    contentTitle.textContent = 'Appointments';
+                    contentSubtitle.textContent = 'Schedule and manage patient appointments';
+                    break;
+                case 'beds':
+                    contentTitle.textContent = 'Bed Management';
+                    contentSubtitle.textContent = 'Track bed availability and occupancy across facilities';
+                    break;
+            }
+        }
+
+        // Refresh function
+        document.querySelector('.btn-secondary').addEventListener('click', function() {
+            location.reload();
+        });
+
+        // Generate Report function
+        document.querySelector('.btn-primary').addEventListener('click', function() {
+            alert('Report generation would be implemented here. This would generate a comprehensive dashboard report with all metrics and analytics.');
+        });
+    </script>
+</body>
+</html>
