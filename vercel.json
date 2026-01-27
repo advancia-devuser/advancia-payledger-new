@@ -1,0 +1,1 @@
+{"version": 2, "name": "advancia-onboarding", "builds": [{"src": "customer-onboarding-system.html", "use": "@vercel/static"}], "routes": [{"src": "/", "dest": "customer-onboarding-system.html"}]}

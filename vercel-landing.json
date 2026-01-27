@@ -1,0 +1,1 @@
+{"version": 2, "name": "advancia-payledger-landing", "builds": [{"src": "advancia-landing-page.html", "use": "@vercel/static"}], "routes": [{"src": "/", "dest": "advancia-landing-page.html"}]}

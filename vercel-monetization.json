@@ -1,0 +1,1 @@
+{"version": 2, "name": "advancia-monetization", "builds": [{"src": "advancia-monetization-dashboard.html", "use": "@vercel/static"}], "routes": [{"src": "/", "dest": "advancia-monetization-dashboard.html"}]}

@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advancia PayLedger - Healthcare Fintech Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .pulse-dot {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                            <i data-lucide="heart-pulse" class="w-6 h-6 text-white"></i>
+                        </div>
+                        <span class="text-xl font-bold text-gray-900">Advancia PayLedger</span>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="text-gray-600 hover:text-gray-900 transition">Features</a>
+                    <a href="#metrics" class="text-gray-600 hover:text-gray-900 transition">Metrics</a>
+                    <a href="#integration" class="text-gray-600 hover:text-gray-900 transition">Integration</a>
+                    <a href="#pricing" class="text-gray-600 hover:text-gray-900 transition">Pricing</a>
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                        Get Started
+                    </button>
+                </div>
+                
+                <button class="md:hidden" onclick="toggleMobileMenu()">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-t">
+            <div class="px-4 py-2 space-y-1">
+                <a href="#features" class="block px-3 py-2 text-gray-600 hover:text-gray-900">Features</a>
+                <a href="#metrics" class="block px-3 py-2 text-gray-600 hover:text-gray-900">Metrics</a>
+                <a href="#integration" class="block px-3 py-2 text-gray-600 hover:text-gray-900">Integration</a>
+                <a href="#pricing" class="block px-3 py-2 text-gray-600 hover:text-gray-900">Pricing</a>
+                <button class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                    Get Started
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div class="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+                        <div class="w-2 h-2 bg-green-400 rounded-full pulse-dot"></div>
+                        <span class="text-sm">Platform Status: Operational</span>
+                    </div>
+                    
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6">
+                        Healthcare Fintech
+                        <span class="text-blue-300">Revolutionized</span>
+                    </h1>
+                    
+                    <p class="text-xl text-blue-100 mb-8">
+                        Complete payment processing and facility management platform for modern healthcare. 
+                        Process payments across 5+ blockchains, manage 24+ facilities, and track $247K+ MRR.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <button class="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                            Start Free Trial
+                        </button>
+                        <button class="border border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/10 transition">
+                            View Demo
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center space-x-6 mt-8">
+                        <div class="flex -space-x-2">
+                            <img src="https://picsum.photos/seed/user1/40/40.jpg" class="w-10 h-10 rounded-full border-2 border-white" alt="User">
+                            <img src="https://picsum.photos/seed/user2/40/40.jpg" class="w-10 h-10 rounded-full border-2 border-white" alt="User">
+                            <img src="https://picsum.photos/seed/user3/40/40.jpg" class="w-10 h-10 rounded-full border-2 border-white" alt="User">
+                            <div class="w-10 h-10 rounded-full border-2 border-white bg-blue-500 flex items-center justify-center text-sm font-semibold">
+                                +50
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex text-yellow-400">
+                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                            </div>
+                            <p class="text-sm text-blue-100">Trusted by 50+ healthcare providers</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <div class="absolute inset-0 bg-blue-400/20 rounded-3xl transform rotate-6"></div>
+                    <div class="bg-white rounded-3xl p-8 shadow-2xl relative">
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="metric-card rounded-lg p-4">
+                                <div class="text-2xl font-bold text-gray-900">$247K</div>
+                                <div class="text-sm text-gray-600">Monthly Revenue</div>
+                            </div>
+                            <div class="metric-card rounded-lg p-4">
+                                <div class="text-2xl font-bold text-gray-900">24</div>
+                                <div class="text-sm text-gray-600">Facilities</div>
+                            </div>
+                            <div class="metric-card rounded-lg p-4">
+                                <div class="text-2xl font-bold text-gray-900">1,847</div>
+                                <div class="text-sm text-gray-600">Transactions</div>
+                            </div>
+                            <div class="metric-card rounded-lg p-4">
+                                <div class="text-2xl font-bold text-gray-900">515</div>
+                                <div class="text-sm text-gray-600">Beds Managed</div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                        <i data-lucide="check" class="w-4 h-4 text-white"></i>
+                                    </div>
+                                    <span class="text-sm font-medium">Payment Processed</span>
+                                </div>
+                                <span class="text-sm text-gray-600">$12,500</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                                        <i data-lucide="clock" class="w-4 h-4 text-white"></i>
+                                    </div>
+                                    <span class="text-sm font-medium">Pending</span>
+                                </div>
+                                <span class="text-sm text-gray-600">$8,900</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metrics Section -->
+    <section id="metrics" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                    Platform Performance
+                </h2>
+                <p class="text-xl text-gray-600">
+                    Real-time metrics showing the power of healthcare fintech
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-blue-600 mb-2">$247K</div>
+                    <div class="text-gray-600 mb-2">Monthly Recurring Revenue</div>
+                    <div class="text-green-600 text-sm font-medium">+42% growth</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-green-600 mb-2">24</div>
+                    <div class="text-gray-600 mb-2">Healthcare Facilities</div>
+                    <div class="text-green-600 text-sm font-medium">+2 new this month</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-purple-600 mb-2">1,847</div>
+                    <div class="text-gray-600 mb-2">Total Transactions</div>
+                    <div class="text-green-600 text-sm font-medium">+18% increase</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-orange-600 mb-2">515</div>
+                    <div class="text-gray-600 mb-2">Beds Managed</div>
+                    <div class="text-green-600 text-sm font-medium">+12% utilization</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                    Complete Healthcare Fintech Solution
+                </h2>
+                <p class="text-xl text-gray-600">
+                    Everything you need to manage modern healthcare payments and facilities
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-xl p-8 shadow-lg card-hover">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
+                        <i data-lucide="credit-card" class="w-6 h-6 text-blue-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Multi-Blockchain Payments</h3>
+                    <p class="text-gray-600 mb-4">
+                        Process payments across Solana, Ethereum, Polygon, Base, and more. 
+                        Support for 5+ blockchain networks with instant settlement.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li class="flex items-center">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            Instant settlement
+                        </li>
+                        <li class="flex items-center">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            Low transaction fees
+                        </li>
+                        <li class="flex items-center">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            Global accessibility
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white rounded-xl p-8 shadow-lg card-hover">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-6">
+                        <i data-lucide="building" class="w-6 h-6 text-green-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Facility Management</h3>
+                    <p class="text-gray-600 mb-4">
+                        Manage 24+ healthcare facilities with real-time bed tracking, 
+                        appointment scheduling, and occupancy monitoring.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li class="flex items-center">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            Real-time bed tracking
+                        </li>
+                        <li class="flex items-center">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            Appointment scheduling
+                        </li>
+                        <li class="flex items-center">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            Occupancy analytics
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white rounded-xl p-8 shadow-lg card-hover">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-6">
+                        <i data-lucide="bar-chart-3" class="w-6 h-6 text-purple-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Advanced Analytics</h3>
+                    <p class="text-gray-600 mb-4">
+                        Comprehensive dashboard with $247K MRR tracking, revenue growth charts, 
+                        and detailed transaction analytics.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li class="flex items-center">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            Revenue growth tracking
+                        </li>
+                        <li class="flex items-center">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            Transaction analytics
+                        </li>
+                        <li class="flex items-center">
+                            <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                            Custom reporting
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Integration Section -->
+    <section id="integration" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                    Seamless Integration
+                </h2>
+                <p class="text-xl text-gray-600">
+                    Connect with your existing healthcare systems and blockchain networks
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-6">
+                        Connect Everything You Need
+                    </h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="link" class="w-5 h-5 text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 mb-2">Healthcare Systems</h4>
+                                <p class="text-gray-600">
+                                    Integrate with EMR, EHR, and practice management systems 
+                                    through our comprehensive API suite.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="network" class="w-5 h-5 text-green-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 mb-2">Blockchain Networks</h4>
+                                <p class="text-gray-600">
+                                    Support for Solana, Ethereum, Polygon, Base, and Binance Smart Chain 
+                                    with automatic network optimization.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="shield" class="w-5 h-5 text-purple-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 mb-2">Security & Compliance</h4>
+                                <p class="text-gray-600">
+                                    HIPAA compliant, bank-grade encryption, and comprehensive 
+                                    audit trails for all transactions.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 rounded-2xl p-8">
+                    <div class="grid grid-cols-3 gap-4 mb-8">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mx-auto mb-3 shadow-sm">
+                                <i data-lucide="database" class="w-8 h-8 text-gray-700"></i>
+                            </div>
+                            <div class="text-sm font-medium text-gray-900">EMR/EHR</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mx-auto mb-3 shadow-sm">
+                                <i data-lucide="coins" class="w-8 h-8 text-gray-700"></i>
+                            </div>
+                            <div class="text-sm font-medium text-gray-900">Solana</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mx-auto mb-3 shadow-sm">
+                                <i data-lucide="hexagon" class="w-8 h-8 text-gray-700"></i>
+                            </div>
+                            <div class="text-sm font-medium text-gray-900">Ethereum</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mx-auto mb-3 shadow-sm">
+                                <i data-lucide="triangle" class="w-8 h-8 text-gray-700"></i>
+                            </div>
+                            <div class="text-sm font-medium text-gray-900">Polygon</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mx-auto mb-3 shadow-sm">
+                                <i data-lucide="square" class="w-8 h-8 text-gray-700"></i>
+                            </div>
+                            <div class="text-sm font-medium text-gray-900">Base</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mx-auto mb-3 shadow-sm">
+                                <i data-lucide="zap" class="w-8 h-8 text-gray-700"></i>
+                            </div>
+                            <div class="text-sm font-medium text-gray-900">BSC</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-medium text-gray-900">API Response Time</span>
+                            <span class="text-sm text-green-600 font-medium">98ms</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-green-600 h-2 rounded-full" style="width: 95%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                    Simple, Transparent Pricing
+                </h2>
+                <p class="text-xl text-gray-600">
+                    Choose the plan that fits your healthcare facility needs
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-xl p-8 shadow-lg">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Starter</h3>
+                    <div class="text-3xl font-bold text-gray-900 mb-4">$299<span class="text-lg text-gray-600">/month</span></div>
+                    <p class="text-gray-600 mb-6">Perfect for small healthcare facilities</p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center">
+                            <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i>
+                            Up to 5 facilities
+                        </li>
+                        <li class="flex items-center">
+                            <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i>
+                            100 transactions/month
+                        </li>
+                        <li class="flex items-center">
+                            <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i>
+                            Basic analytics
+                        </li>
+                        <li class="flex items-center">
+                            <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i>
+                            Email support
+                        </li>
+                    </ul>
+                    <button class="w-full bg-gray-100 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition">
+                        Get Started
+                    </button>
+                </div>
+                
+                <div class="bg-blue-600 text-white rounded-xl p-8 shadow-lg transform scale-105">
+                    <div class="bg-yellow-400 text-blue-900 text-sm font-semibold px-3 py-1 rounded-full inline-block mb-4">
+                        Most Popular
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Professional</h3>
+                    <div class="text-3xl font-bold mb-4">$799<span class="text-lg text-blue-200">/month</span></div>
+                    <p class="text-blue-100 mb-6">Ideal for growing healthcare networks</p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center">
+                            <i data-lucide="check" class="w-5 h-5 text-blue-300 mr-3"></i>
+                            Up to 25 facilities
+                        </li>
+                        <li class="flex items-center">
+                            <i data-lucide="check" class="w-5 h-5 text-blue-300 mr-3"></i>
+                            1,000 transactions/month
+                        </li>
+                        <li class="flex items-center">
+                            <i data-lucide="check" class="w-5 h-5 text-blue-300 mr-3"></i>
+                            Advanced analytics
+                        </li>
+                        <li class="flex items-center">
+                            <i data-lucide="check" class="w-5 h-5 text-blue-300 mr-3"></i>
+                            Priority support
+                        </li>
+                        <li class="flex items-center">
+                            <i data-lucide="check" class="w-5 h-5 text-blue-300 mr-3"></i>
+                            Custom integrations
+                        </li>
+                    </ul>
+                    <button class="w-full bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                        Get Started
+                    </button>
+                </div>
+                
+                <div class="bg-white rounded-xl p-8 shadow-lg">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Enterprise</h3>
+                    <div class="text-3xl font-bold text-gray-900 mb-4">Custom<span class="text-lg text-gray-600"></span></div>
+                    <p class="text-gray-600 mb-6">For large healthcare organizations</p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center">
+                            <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i>
+                            Unlimited facilities
+                        </li>
+                        <li class="flex items-center">
+                            <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i>
+                            Unlimited transactions
+                        </li>
+                        <li class="flex items-center">
+                            <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i>
+                            Custom analytics
+                        </li>
+                        <li class="flex items-center">
+                            <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i>
+                            Dedicated support
+                        </li>
+                        <li class="flex items-center">
+                            <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3"></i>
+                            White-label options
+                        </li>
+                    </ul>
+                    <button class="w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-800 transition">
+                        Contact Sales
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-blue-600 text-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                Ready to Transform Your Healthcare Payments?
+            </h2>
+            <p class="text-xl text-blue-100 mb-8">
+                Join 50+ healthcare providers already using Advancia PayLedger to process 
+                millions in payments across multiple blockchains.
+            </p>
+            <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center">
+                <button class="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition">
+                    Start Free Trial
+                </button>
+                <button class="border border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition">
+                    Schedule Demo
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                            <i data-lucide="heart-pulse" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <span class="text-lg font-bold">Advancia PayLedger</span>
+                    </div>
+                    <p class="text-gray-400">
+                        The complete healthcare fintech platform for modern medical facilities.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Product</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">Features</a></li>
+                        <li><a href="#" class="hover:text-white transition">Pricing</a></li>
+                        <li><a href="#" class="hover:text-white transition">Integration</a></li>
+                        <li><a href="#" class="hover:text-white transition">API</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Company</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">About</a></li>
+                        <li><a href="#" class="hover:text-white transition">Blog</a></li>
+                        <li><a href="#" class="hover:text-white transition">Careers</a></li>
+                        <li><a href="#" class="hover:text-white transition">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-white transition">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-white transition">HIPAA Compliance</a></li>
+                        <li><a href="#" class="hover:text-white transition">Security</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400">© 2026 Advancia PayLedger. All rights reserved.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i data-lucide="twitter" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i data-lucide="linkedin" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i data-lucide="github" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Close mobile menu if open
+                    document.getElementById('mobileMenu').classList.add('hidden');
+                }
+            });
+        });
+        
+        // Add scroll effect to navigation
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('shadow-lg');
+            } else {
+                nav.classList.remove('shadow-lg');
+            }
+        });
+        
+        // Animate metrics on scroll
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe metric cards
+        document.querySelectorAll('.metric-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.6s ease-out';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>

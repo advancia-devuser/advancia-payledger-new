@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Onboarding - Advancia PayLedger</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .step-indicator {
+            transition: all 0.3s ease;
+        }
+        
+        .step-indicator.active {
+            background: #3b82f6;
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .step-indicator.completed {
+            background: #10b981;
+            color: white;
+        }
+        
+        .onboarding-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .onboarding-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+        }
+        
+        .progress-bar {
+            transition: width 0.5s ease;
+        }
+        
+        .input-group {
+            margin-bottom: 24px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .input-group input:focus,
+        .input-group select:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .feature-card {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .feature-card:hover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+        
+        .feature-card.selected {
+            border-color: #3b82f6;
+            background: #dbeafe;
+        }
+        
+        .success-animation {
+            animation: successPulse 0.6s ease;
+        }
+        
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .loading-spinner {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                            <i data-lucide="heart-pulse" class="w-6 h-6 text-white"></i>
+                        </div>
+                        <span class="text-xl font-bold text-gray-900">Advancia PayLedger</span>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button class="text-gray-600 hover:text-gray-900">Support</button>
+                    <button class="text-gray-600 hover:text-gray-900">Login</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Progress Bar -->
+    <div class="bg-white border-b">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-4">
+                    <div class="step-indicator active w-10 h-10 rounded-full flex items-center justify-center font-semibold" id="step-1">
+                        1
+                    </div>
+                    <div class="step-indicator w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center font-semibold" id="step-2">
+                        2
+                    </div>
+                    <div class="step-indicator w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center font-semibold" id="step-3">
+                        3
+                    </div>
+                    <div class="step-indicator w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center font-semibold" id="step-4">
+                        4
+                    </div>
+                </div>
+                <div class="text-sm text-gray-600">
+                    Step <span id="current-step">1</span> of 4
+                </div>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+                <div class="progress-bar bg-blue-600 h-2 rounded-full" id="progress-bar" style="width: 25%"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Step 1: Facility Information -->
+        <div id="step-1-content" class="onboarding-step">
+            <div class="onboarding-card p-8">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="building" class="w-8 h-8 text-blue-600"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Facility Information</h2>
+                    <p class="text-gray-600">Tell us about your healthcare facility</p>
+                </div>
+                
+                <form id="facility-form">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="input-group">
+                            <label for="facility-name">Facility Name *</label>
+                            <input type="text" id="facility-name" name="facilityName" required placeholder="Enter facility name">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="facility-type">Facility Type *</label>
+                            <select id="facility-type" name="facilityType" required>
+                                <option value="">Select facility type</option>
+                                <option value="hospital">Hospital</option>
+                                <option value="clinic">Clinic</option>
+                                <option value="dental">Dental Practice</option>
+                                <option value="pharmacy">Pharmacy</option>
+                                <option value="laboratory">Laboratory</option>
+                                <option value="imaging">Imaging Center</option>
+                                <option value="urgent-care">Urgent Care</option>
+                                <option value="specialty">Specialty Center</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="provider-count">Number of Providers *</label>
+                            <input type="number" id="provider-count" name="providerCount" required min="1" placeholder="Enter number of healthcare providers">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="monthly-volume">Estimated Monthly Transactions *</label>
+                            <input type="number" id="monthly-volume" name="monthlyVolume" required min="1" placeholder="Enter estimated monthly transactions">
+                        </div>
+                        
+                        <div class="input-group md:col-span-2">
+                            <label for="facility-address">Address *</label>
+                            <input type="text" id="facility-address" name="facilityAddress" required placeholder="Enter facility address">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="facility-city">City *</label>
+                            <input type="text" id="facility-city" name="facilityCity" required placeholder="Enter city">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="facility-state">State *</label>
+                            <input type="text" id="facility-state" name="facilityState" required placeholder="Enter state">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="facility-zip">ZIP Code *</label>
+                            <input type="text" id="facility-zip" name="facilityZip" required placeholder="Enter ZIP code">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="facility-phone">Phone Number *</label>
+                            <input type="tel" id="facility-phone" name="facilityPhone" required placeholder="Enter phone number">
+                        </div>
+                        
+                        <div class="input-group md:col-span-2">
+                            <label for="facility-description">Description</label>
+                            <textarea id="facility-description" name="facilityDescription" rows="4" placeholder="Tell us about your facility and services"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end">
+                        <button type="button" onclick="nextStep()" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                            Next Step
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Step 2: Contact Information -->
+        <div id="step-2-content" class="onboarding-step" style="display: none;">
+            <div class="onboarding-card p-8">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="users" class="w-8 h-8 text-blue-600"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Contact Information</h2>
+                    <p class="text-gray-600">Who should we contact about your account?</p>
+                </div>
+                
+                <form id="contact-form">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="input-group">
+                            <label for="contact-first-name">First Name *</label>
+                            <input type="text" id="contact-first-name" name="contactFirstName" required placeholder="Enter first name">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="contact-last-name">Last Name *</label>
+                            <input type="text" id="contact-last-name" name="contactLastName" required placeholder="Enter last name">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="contact-email">Email Address *</label>
+                            <input type="email" id="contact-email" name="contactEmail" required placeholder="Enter email address">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="contact-phone">Phone Number *</label>
+                            <input type="tel" id="contact-phone" name="contactPhone" required placeholder="Enter phone number">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="contact-title">Job Title *</label>
+                            <input type="text" id="contact-title" name="contactTitle" required placeholder="Enter job title">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="contact-department">Department</label>
+                            <input type="text" id="contact-department" name="contactDepartment" placeholder="Enter department">
+                        </div>
+                        
+                        <div class="input-group md:col-span-2">
+                            <label for="billing-address">Billing Address (if different)</label>
+                            <input type="text" id="billing-address" name="billingAddress" placeholder="Enter billing address">
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between">
+                        <button type="button" onclick="previousStep()" class="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition">
+                            Previous
+                        </button>
+                        <button type="button" onclick="nextStep()" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                            Next Step
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Step 3: Plan Selection -->
+        <div id="step-3-content" class="onboarding-step" style="display: none;">
+            <div class="onboarding-card p-8">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="credit-card" class="w-8 h-8 text-blue-600"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Choose Your Plan</h2>
+                    <p class="text-gray-600">Select the perfect plan for your facility</p>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <div class="feature-card" onclick="selectPlan('starter')">
+                        <div class="text-center mb-4">
+                            <h3 class="text-xl font-bold text-gray-900">Starter</h3>
+                            <div class="text-3xl font-bold text-gray-900">$299</div>
+                            <div class="text-gray-600">per month</div>
+                        </div>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex items-center">
+                                <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                Up to 5 providers
+                            </li>
+                            <li class="flex items-center">
+                                <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                100 transactions/month
+                            </li>
+                            <li class="flex items-center">
+                                <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                Basic payment processing
+                            </li>
+                            <li class="flex items-center">
+                                <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                Email support
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card" onclick="selectPlan('professional')">
+                        <div class="text-center mb-4">
+                            <div class="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold mb-2">
+                                MOST POPULAR
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900">Professional</h3>
+                            <div class="text-3xl font-bold text-blue-600">$799</div>
+                            <div class="text-gray-600">per month</div>
+                        </div>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex items-center">
+                                <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                Up to 25 providers
+                            </li>
+                            <li class="flex items-center">
+                                <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                1,000 transactions/month
+                            </li>
+                            <li class="flex items-center">
+                                <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                Advanced payment processing
+                            </li>
+                            <li class="flex items-center">
+                                <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                Priority support (24/7)
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card" onclick="selectPlan('enterprise')">
+                        <div class="text-center mb-4">
+                            <h3 class="text-xl font-bold text-gray-900">Enterprise</h3>
+                            <div class="text-3xl font-bold text-purple-600">$2,499</div>
+                            <div class="text-gray-600">per month</div>
+                        </div>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex items-center">
+                                <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                Unlimited providers
+                            </li>
+                            <li class="flex items-center">
+                                <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                Unlimited transactions
+                            </li>
+                            <li class="flex items-center">
+                                <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                Enterprise features
+                            </li>
+                            <li class="flex items-center">
+                                <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2"></i>
+                                Dedicated account manager
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                    <h4 class="font-semibold text-gray-900 mb-2">Premium Add-ons</h4>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <label class="flex items-center">
+                            <input type="checkbox" name="premium-features" value="advanced-analytics" class="mr-2">
+                            <span>Advanced Analytics ($199/month)</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="premium-features" value="ai-insights" class="mr-2">
+                            <span>AI Insights ($299/month)</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="premium-features" value="custom-reports" class="mr-2">
+                            <span>Custom Reports ($149/month)</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="premium-features" value="api-access" class="mr-2">
+                            <span>API Access ($249/month)</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between">
+                    <button type="button" onclick="previousStep()" class="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition">
+                        Previous
+                    </button>
+                    <button type="button" onclick="nextStep()" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                        Next Step
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4: Payment & Review -->
+        <div id="step-4-content" class="onboarding-step" style="display: none;">
+            <div class="onboarding-card p-8">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="check-circle" class="w-8 h-8 text-blue-600"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Review & Complete Setup</h2>
+                    <p class="text-gray-600">Review your information and complete setup</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6 mb-6">
+                    <h3 class="font-semibold text-gray-900 mb-4">Order Summary</h3>
+                    <div id="order-summary">
+                        <!-- Dynamic content will be inserted here -->
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h3 class="font-semibold text-gray-900 mb-4">Payment Information</h3>
+                        <div class="space-y-4">
+                            <div class="input-group">
+                                <label for="card-number">Card Number *</label>
+                                <input type="text" id="card-number" name="cardNumber" required placeholder="1234 5678 9012 3456">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="input-group">
+                                    <label for="card-expiry">Expiry Date *</label>
+                                    <input type="text" id="card-expiry" name="cardExpiry" required placeholder="MM/YY">
+                                </div>
+                                <div class="input-group">
+                                    <label for="card-cvc">CVC *</label>
+                                    <input type="text" id="card-cvc" name="cardCvc" required placeholder="123">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="card-name">Cardholder Name *</label>
+                                <input type="text" id="card-name" name="cardName" required placeholder="John Doe">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-semibold text-gray-900 mb-4">Billing Address</h3>
+                        <div class="space-y-4">
+                            <div class="input-group">
+                                <label for="billing-address-full">Address *</label>
+                                <input type="text" id="billing-address-full" name="billingAddressFull" required placeholder="Enter billing address">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="input-group">
+                                    <label for="billing-city">City *</label>
+                                    <input type="text" id="billing-city" name="billingCity" required placeholder="Enter city">
+                                </div>
+                                <div class="input-group">
+                                    <label for="billing-state">State *</label>
+                                    <input type="text" id="billing-state" name="billingState" required placeholder="Enter state">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="billing-zip">ZIP Code *</label>
+                                <input type="text" id="billing-zip" name="billingZip" required placeholder="Enter ZIP code">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-blue-50 rounded-lg p-4 mb-6">
+                    <div class="flex items-start">
+                        <input type="checkbox" id="terms-accept" name="termsAccept" required class="mr-3 mt-1">
+                        <label for="terms-accept" class="text-sm text-gray-700">
+                            I agree to the <a href="#" class="text-blue-600 hover:underline">Terms of Service</a> and <a href="#" class="text-blue-600 hover:underline">Privacy Policy</a>. I understand that my subscription will automatically renew and I can cancel at any time.
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between">
+                    <button type="button" onclick="previousStep()" class="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition">
+                        Previous
+                    </button>
+                    <button type="button" onclick="completeOnboarding()" class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition">
+                        Complete Setup
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Screen -->
+        <div id="success-content" class="onboarding-step" style="display: none;">
+            <div class="onboarding-card p-8 text-center">
+                <div class="w-20 h-20 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-6 success-animation">
+                    <i data-lucide="check-circle" class="w-10 h-10 text-green-600"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Welcome to Advancia PayLedger!</h2>
+                <p class="text-xl text-gray-600 mb-8">Your account has been successfully created</p>
+                
+                <div class="bg-gray-50 rounded-lg p-6 mb-8 text-left">
+                    <h3 class="font-semibold text-gray-900 mb-4">Next Steps:</h3>
+                    <ol class="space-y-3 text-gray-600">
+                        <li class="flex items-start">
+                            <span class="font-semibold mr-2">1.</span>
+                            <span>Check your email for account verification and login credentials</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="font-semibold mr-2">2.</span>
+                            <span>Download our mobile app for iOS or Android</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="font-semibold mr-2">3.</span>
+                            <span>Complete your profile and add your healthcare providers</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="font-semibold mr-2">4.</span>
+                            <span>Start processing payments with our blockchain-powered system</span>
+                        </li>
+                    </ol>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center">
+                    <button class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                        Go to Dashboard
+                    </button>
+                    <button class="bg-gray-200 text-gray-800 px-8 py-3 rounded-lg font-semibold hover:bg-gray-300 transition">
+                        Download Mobile App
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Global variables
+        let currentStep = 1;
+        const totalSteps = 4;
+        let selectedPlan = null;
+        let onboardingData = {
+            facility: {},
+            contact: {},
+            plan: {},
+            payment: {}
+        };
+        
+        // Step navigation
+        function nextStep() {
+            if (validateCurrentStep()) {
+                saveCurrentStepData();
+                currentStep++;
+                updateStepDisplay();
+            }
+        }
+        
+        function previousStep() {
+            currentStep--;
+            updateStepDisplay();
+        }
+        
+        function updateStepDisplay() {
+            // Hide all step contents
+            document.querySelectorAll('.onboarding-step').forEach(step => {
+                step.style.display = 'none';
+            });
+            
+            // Show current step
+            document.getElementById(`step-${currentStep}-content`).style.display = 'block';
+            
+            // Update step indicators
+            for (let i = 1; i <= totalSteps; i++) {
+                const indicator = document.getElementById(`step-${i}`);
+                if (i < currentStep) {
+                    indicator.classList.add('completed');
+                    indicator.classList.remove('active');
+                } else if (i === currentStep) {
+                    indicator.classList.add('active');
+                    indicator.classList.remove('completed');
+                } else {
+                    indicator.classList.remove('active', 'completed');
+                }
+            }
+            
+            // Update progress bar
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            document.getElementById('current-step').textContent = currentStep;
+            
+            // Special handling for step 4 (review)
+            if (currentStep === 4) {
+                updateOrderSummary();
+            }
+            
+            // Re-initialize Lucide icons
+            setTimeout(() => {
+                lucide.createIcons();
+            }, 100);
+        }
+        
+        function validateCurrentStep() {
+            let isValid = true;
+            
+            if (currentStep === 1) {
+                const form = document.getElementById('facility-form');
+                isValid = form.checkValidity();
+                if (!isValid) {
+                    form.reportValidity();
+                }
+            } else if (currentStep === 2) {
+                const form = document.getElementById('contact-form');
+                isValid = form.checkValidity();
+                if (!isValid) {
+                    form.reportValidity();
+                }
+            } else if (currentStep === 3) {
+                if (!selectedPlan) {
+                    alert('Please select a plan');
+                    isValid = false;
+                }
+            }
+            
+            return isValid;
+        }
+        
+        function saveCurrentStepData() {
+            if (currentStep === 1) {
+                const form = document.getElementById('facility-form');
+                const formData = new FormData(form);
+                for (let [key, value] of formData.entries()) {
+                    onboardingData.facility[key] = value;
+                }
+            } else if (currentStep === 2) {
+                const form = document.getElementById('contact-form');
+                const formData = new FormData(form);
+                for (let [key, value] of formData.entries()) {
+                    onboardingData.contact[key] = value;
+                }
+            } else if (currentStep === 3) {
+                onboardingData.plan.selectedPlan = selectedPlan;
+                const premiumFeatures = document.querySelectorAll('input[name="premium-features"]:checked');
+                onboardingData.plan.premiumFeatures = Array.from(premiumFeatures).map(cb => cb.value);
+            }
+        }
+        
+        function selectPlan(plan) {
+            selectedPlan = plan;
+            
+            // Update UI
+            document.querySelectorAll('.feature-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+        }
+        
+        function updateOrderSummary() {
+            const planPrices = {
+                starter: 299,
+                professional: 799,
+                enterprise: 2499
+            };
+            
+            const premiumPrices = {
+                'advanced-analytics': 199,
+                'ai-insights': 299,
+                'custom-reports': 149,
+                'api-access': 249
+            };
+            
+            let total = planPrices[selectedPlan] || 0;
+            
+            if (onboardingData.plan.premiumFeatures) {
+                onboardingData.plan.premiumFeatures.forEach(feature => {
+                    total += premiumPrices[feature] || 0;
+                });
+            }
+            
+            const summaryHTML = `
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <span>Plan: ${selectedPlan ? selectedPlan.charAt(0).toUpperCase() + selectedPlan.slice(1) : 'Not selected'}</span>
+                        <span>$${planPrices[selectedPlan] || 0}/month</span>
+                    </div>
+                    ${onboardingData.plan.premiumFeatures ? onboardingData.plan.premiumFeatures.map(feature => `
+                        <div class="flex justify-between text-sm">
+                            <span>${feature.replace('-', ' ').charAt(0).toUpperCase() + feature.replace('-', ' ').slice(1)}</span>
+                            <span>$${premiumPrices[feature] || 0}/month</span>
+                        </div>
+                    `).join('') : ''}
+                    <div class="border-t pt-2 mt-2">
+                        <div class="flex justify-between font-semibold">
+                            <span>Total Monthly</span>
+                            <span>$${total}/month</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('order-summary').innerHTML = summaryHTML;
+        }
+        
+        function completeOnboarding() {
+            // Validate final step
+            const termsAccepted = document.getElementById('terms-accept').checked;
+            if (!termsAccepted) {
+                alert('Please accept the terms and conditions');
+                return;
+            }
+            
+            // Save payment data
+            const paymentForm = document.querySelector('#step-4-content form');
+            if (paymentForm) {
+                const formData = new FormData(paymentForm);
+                for (let [key, value] of formData.entries()) {
+                    onboardingData.payment[key] = value;
+                }
+            }
+            
+            // Simulate API call
+            console.log('Onboarding data:', onboardingData);
+            
+            // Show success screen
+            document.getElementById('step-4-content').style.display = 'none';
+            document.getElementById('success-content').style.display = 'block';
+            
+            // Update progress to 100%
+            document.getElementById('progress-bar').style.width = '100%';
+            
+            // Re-initialize Lucide icons
+            setTimeout(() => {
+                lucide.createIcons();
+            }, 100);
+        }
+        
+        // Initialize
+        updateStepDisplay();
+    </script>
+</body>
+</html>
