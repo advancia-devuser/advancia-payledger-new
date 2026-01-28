@@ -72,7 +72,7 @@ export const uploadKYCSchema = z.object({
 export const envSchema = z.object({
   DATABASE_URL: z.string().url('Invalid database URL'),
   JWT_SECRET: z.string().min(32, 'JWT secret must be at least 32 characters'),
-  PORT: z.string().transform(Number).default('3001'),
+  PORT: z.coerce.number().default(3001),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   CORS_ORIGIN: z.string().default('*'),
 });
@@ -84,7 +84,7 @@ export function validateEnv() {
   } catch (error) {
     if (error instanceof z.ZodError) {
       console.error('❌ Environment validation failed:');
-      error.errors.forEach((err) => {
+      error.issues.forEach((err) => {
         console.error(`  - ${err.path.join('.')}: ${err.message}`);
       });
       process.exit(1);
@@ -105,7 +105,7 @@ export function validate<T>(schema: z.ZodSchema<T>) {
         return res.status(400).json({
           success: false,
           error: 'Validation failed',
-          details: error.errors.map((err) => ({
+          details: error.issues.map((err) => ({
             field: err.path.join('.'),
             message: err.message,
           })),
