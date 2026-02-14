@@ -88,6 +88,16 @@ export default function Home() {
   const [authEmail, setAuthEmail] = useState("");
   const [authPassword, setAuthPassword] = useState("");
   const [lastLoginUser, setLastLoginUser] = useState<{ name: string; email: string } | null>(null);
+  const [selectedWallet, setSelectedWallet] = useState<string | null>(null);
+  const [showSendModal, setShowSendModal] = useState(false);
+  const [showReceiveModal, setShowReceiveModal] = useState(false);
+
+  // Mock wallet data
+  const mockWallets = [
+    { id: "btc-1", name: "Bitcoin Wallet", currency: "BTC", balance: 0.00000000, usdValue: 0.00, icon: "₿", color: "from-orange-500 to-yellow-600" },
+    { id: "eth-1", name: "Ethereum Wallet", currency: "ETH", balance: 0.000000, usdValue: 0.00, icon: "Ξ", color: "from-blue-500 to-indigo-600" },
+    { id: "usdc-1", name: "USD Coin", currency: "USDC", balance: 0.00, usdValue: 0.00, icon: "$", color: "from-green-500 to-emerald-600" }
+  ];
 
   // Dashboard data
   const mockTransactions: Array<{
@@ -104,7 +114,7 @@ export default function Home() {
     { name: "USD Balance", value: 0, usd: 0 }
   ];
 
-  const totalBalance = mockBalance.reduce((sum, asset) => sum + asset.usd, 0);
+  const totalBalance = mockWallets.reduce((sum, wallet) => sum + wallet.usdValue, 0);
 
   if (currentPage === "dashboard" && !isAuthed) {
     return (
@@ -266,28 +276,78 @@ export default function Home() {
           {/* Dashboard Tab */}
           {activeTab === "dashboard" && (
             <div className="space-y-6">
+              {/* Quick Actions Bar */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <button 
+                  onClick={() => setActiveTab("payments")}
+                  className="bg-gradient-to-br from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 rounded-xl p-4 text-white transition-all hover:scale-105 shadow-lg cursor-pointer text-left"
+                >
+                  <div className="text-2xl mb-2">💸</div>
+                  <div className="font-semibold">Send Money</div>
+                  <div className="text-xs text-blue-200">Quick transfer</div>
+                </button>
+                <button 
+                  onClick={() => setActiveTab("booking")}
+                  className="bg-gradient-to-br from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 rounded-xl p-4 text-white transition-all hover:scale-105 shadow-lg cursor-pointer text-left"
+                >
+                  <div className="text-2xl mb-2">🏥</div>
+                  <div className="font-semibold">Book Chamber</div>
+                  <div className="text-xs text-purple-200">Healthcare visit</div>
+                </button>
+                <button 
+                  onClick={() => setActiveTab("wallet")}
+                  className="bg-gradient-to-br from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 rounded-xl p-4 text-white transition-all hover:scale-105 shadow-lg cursor-pointer text-left"
+                >
+                  <div className="text-2xl mb-2">👛</div>
+                  <div className="font-semibold">My Wallet</div>
+                  <div className="text-xs text-green-200">View balances</div>
+                </button>
+                <button 
+                  onClick={() => setActiveTab("analytics")}
+                  className="bg-gradient-to-br from-orange-600 to-orange-700 hover:from-orange-500 hover:to-orange-600 rounded-xl p-4 text-white transition-all hover:scale-105 shadow-lg cursor-pointer text-left"
+                >
+                  <div className="text-2xl mb-2">📊</div>
+                  <div className="font-semibold">Analytics</div>
+                  <div className="text-xs text-orange-200">View stats</div>
+                </button>
+              </div>
+
               {/* Balance Cards */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg p-6 text-white shadow-lg cursor-pointer hover:scale-105 transition">
+                <div 
+                  onClick={() => setActiveTab("wallet")}
+                  className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg p-6 text-white shadow-lg cursor-pointer hover:scale-105 transition"
+                >
                   <p className="text-blue-100 text-sm mb-2">Total Balance</p>
                   <p className="text-3xl font-bold mb-2">${totalBalance.toFixed(2)}</p>
-                  <p className="text-blue-200 text-xs">No activity yet</p>
+                  <p className="text-blue-200 text-xs">Click to view wallets →</p>
                 </div>
-                <div className="bg-gradient-to-br from-green-600 to-green-800 rounded-lg p-6 text-white shadow-lg cursor-pointer hover:scale-105 transition">
+                <div 
+                  onClick={() => setActiveTab("healthcare")}
+                  className="bg-gradient-to-br from-green-600 to-green-800 rounded-lg p-6 text-white shadow-lg cursor-pointer hover:scale-105 transition"
+                >
                   <p className="text-green-100 text-sm mb-2">Healthcare Coverage</p>
                   <p className="text-3xl font-bold mb-2">$8,450</p>
                   <p className="text-green-200 text-xs">Annual limit remaining</p>
                 </div>
                 <div className="bg-gradient-to-br from-purple-600 to-purple-800 rounded-lg p-6 text-white shadow-lg cursor-pointer hover:scale-105 transition">
                   <p className="text-purple-100 text-sm mb-2">Monthly Transactions</p>
-                  <p className="text-3xl font-bold mb-2">142</p>
-                  <p className="text-purple-200 text-xs">+12% from last month</p>
+                  <p className="text-3xl font-bold mb-2">0</p>
+                  <p className="text-purple-200 text-xs">Start transacting now</p>
                 </div>
               </div>
 
               {/* Recent Transactions */}
               <div className="bg-gray-800 rounded-lg p-6 border border-purple-500 shadow-lg">
-                <h3 className="text-white font-bold mb-4">Recent Transactions</h3>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-white font-bold">Recent Transactions</h3>
+                  <button 
+                    onClick={() => setActiveTab("payments")}
+                    className="text-purple-400 hover:text-purple-300 text-sm font-semibold cursor-pointer"
+                  >
+                    View All →
+                  </button>
+                </div>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
@@ -302,8 +362,16 @@ export default function Home() {
                     <tbody>
                       {mockTransactions.length === 0 ? (
                         <tr className="border-b border-gray-700">
-                          <td colSpan={5} className="py-6 px-4 text-gray-400 text-center">
-                            No transactions yet.
+                          <td colSpan={5} className="py-8 px-4 text-center">
+                            <div className="text-5xl mb-3">🎉</div>
+                            <p className="text-gray-400 font-semibold mb-2">No transactions yet!</p>
+                            <p className="text-gray-500 text-sm mb-4">Start your first transaction to see it here</p>
+                            <button 
+                              onClick={() => setActiveTab("payments")}
+                              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold px-6 py-2 rounded-lg transition cursor-pointer inline-block"
+                            >
+                              Make First Transaction
+                            </button>
                           </td>
                         </tr>
                       ) : (
@@ -335,18 +403,142 @@ export default function Home() {
           {/* Wallet Tab */}
           {activeTab === "wallet" && (
             <div className="space-y-6">
+              {/* Quick Actions */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <button 
+                  onClick={() => setShowSendModal(true)}
+                  className="bg-gradient-to-br from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 rounded-xl p-4 text-white transition-all hover:scale-105 shadow-lg cursor-pointer"
+                >
+                  <div className="text-3xl mb-2">↗️</div>
+                  <div className="font-semibold">Send</div>
+                  <div className="text-xs text-blue-200">Transfer funds</div>
+                </button>
+                <button 
+                  onClick={() => setShowReceiveModal(true)}
+                  className="bg-gradient-to-br from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 rounded-xl p-4 text-white transition-all hover:scale-105 shadow-lg cursor-pointer"
+                >
+                  <div className="text-3xl mb-2">↙️</div>
+                  <div className="font-semibold">Receive</div>
+                  <div className="text-xs text-green-200">Get paid</div>
+                </button>
+                <button className="bg-gradient-to-br from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 rounded-xl p-4 text-white transition-all hover:scale-105 shadow-lg cursor-pointer">
+                  <div className="text-3xl mb-2">🔄</div>
+                  <div className="font-semibold">Swap</div>
+                  <div className="text-xs text-purple-200">Exchange crypto</div>
+                </button>
+                <button className="bg-gradient-to-br from-orange-600 to-orange-700 hover:from-orange-500 hover:to-orange-600 rounded-xl p-4 text-white transition-all hover:scale-105 shadow-lg cursor-pointer">
+                  <div className="text-3xl mb-2">💳</div>
+                  <div className="font-semibold">Buy</div>
+                  <div className="text-xs text-orange-200">Add funds</div>
+                </button>
+              </div>
+
+              {/* Total Portfolio Value */}
+              <div className="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-2xl p-8 text-white shadow-xl">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <div>
+                    <p className="text-indigo-100 text-sm mb-2">Total Portfolio Value</p>
+                    <p className="text-5xl font-bold mb-1">${totalBalance.toFixed(2)}</p>
+                    <p className="text-indigo-200 text-sm">≈ $0.00 USD</p>
+                  </div>
+                  <div className="flex gap-3">
+                    <button className="bg-white/20 hover:bg-white/30 backdrop-blur rounded-lg px-5 py-2 font-semibold transition cursor-pointer">
+                      Add Funds
+                    </button>
+                    <button className="bg-white/20 hover:bg-white/30 backdrop-blur rounded-lg px-5 py-2 font-semibold transition cursor-pointer">
+                      Portfolio
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Wallets Grid */}
               <div className="bg-gray-800 rounded-lg p-6 border border-purple-500 shadow-lg">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                   <div>
-                    <h3 className="text-white font-bold text-xl">Wallet</h3>
-                    <p className="text-gray-400 text-sm">New accounts start with empty wallets.</p>
+                    <h3 className="text-white font-bold text-xl">My Wallets</h3>
+                    <p className="text-gray-400 text-sm">Manage your cryptocurrency wallets</p>
                   </div>
-                  <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold px-6 py-2 rounded transition">
-                    Add Wallet
+                  <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold px-6 py-2 rounded-lg transition cursor-pointer">
+                    + Add Wallet
                   </button>
                 </div>
-                <div className="border border-purple-500/30 rounded-lg p-6 text-center text-gray-400">
-                  No wallets connected yet.
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {mockWallets.map((wallet) => (
+                    <div 
+                      key={wallet.id}
+                      onClick={() => setSelectedWallet(wallet.id === selectedWallet ? null : wallet.id)}
+                      className={`bg-gradient-to-br ${wallet.color} rounded-xl p-6 text-white cursor-pointer transition-all hover:scale-105 shadow-lg ${selectedWallet === wallet.id ? 'ring-4 ring-white/50' : ''}`}
+                    >
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="text-4xl">{wallet.icon}</div>
+                        <button className="bg-white/20 hover:bg-white/30 backdrop-blur rounded-full p-2 transition">
+                          <span className="text-xl">⋮</span>
+                        </button>
+                      </div>
+                      <div>
+                        <p className="text-white/80 text-sm mb-1">{wallet.name}</p>
+                        <p className="text-2xl font-bold mb-1">{wallet.balance} {wallet.currency}</p>
+                        <p className="text-white/70 text-sm">≈ ${wallet.usdValue.toFixed(2)} USD</p>
+                      </div>
+                      <div className="mt-4 pt-4 border-t border-white/20 flex gap-2">
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowSendModal(true);
+                          }}
+                          className="flex-1 bg-white/20 hover:bg-white/30 backdrop-blur rounded-lg py-2 text-sm font-semibold transition"
+                        >
+                          Send
+                        </button>
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowReceiveModal(true);
+                          }}
+                          className="flex-1 bg-white/20 hover:bg-white/30 backdrop-blur rounded-lg py-2 text-sm font-semibold transition"
+                        >
+                          Receive
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Wallet Details */}
+                {selectedWallet && (
+                  <div className="mt-6 bg-gray-700/50 border border-purple-500/30 rounded-lg p-6">
+                    <h4 className="text-white font-semibold mb-4">Wallet Details</h4>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">Wallet Address</span>
+                        <span className="text-white font-mono">0x742d...9c3a</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">Network</span>
+                        <span className="text-white">Mainnet</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">Total Transactions</span>
+                        <span className="text-white">0</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">Created</span>
+                        <span className="text-white">Feb 14, 2026</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Recent Wallet Activity */}
+              <div className="bg-gray-800 rounded-lg p-6 border border-purple-500 shadow-lg">
+                <h4 className="text-white font-bold mb-4">Recent Activity</h4>
+                <div className="text-center py-8 text-gray-400">
+                  <div className="text-5xl mb-3">📭</div>
+                  <p>No transactions yet</p>
+                  <p className="text-sm mt-2">Your wallet activity will appear here</p>
                 </div>
               </div>
             </div>
@@ -393,25 +585,42 @@ export default function Home() {
                     <h3 className="text-white font-bold text-xl">Chamber Booking</h3>
                     <p className="text-gray-400 text-sm">Reserve a private chamber for your next session.</p>
                   </div>
-                  <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold px-6 py-2 rounded transition">
-                    New Booking
+                  <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold px-6 py-2 rounded-lg transition cursor-pointer">
+                    + New Booking
                   </button>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {[
-                    { name: "Chamber A", type: "Executive Suite", availability: "Available Now", price: "$120 / hr" },
-                    { name: "Chamber B", type: "Wellness Pod", availability: "Next: 3:30 PM", price: "$90 / hr" },
-                    { name: "Chamber C", type: "Clinical Room", availability: "Available Tomorrow", price: "$75 / hr" }
+                    { name: "Chamber A", type: "Executive Suite", availability: "Available Now", price: "$120 / hr", status: "available", amenities: ["WiFi", "Coffee", "Privacy"] },
+                    { name: "Chamber B", type: "Wellness Pod", availability: "Next: 3:30 PM", price: "$90 / hr", status: "busy", amenities: ["Massage", "Aromatherapy", "Music"] },
+                    { name: "Chamber C", type: "Clinical Room", availability: "Available Tomorrow", price: "$75 / hr", status: "available", amenities: ["Medical Equipment", "Sterilized", "Professional"] }
                   ].map((chamber) => (
-                    <div key={chamber.name} className="bg-gray-700/60 border border-purple-500/40 rounded-xl p-5 hover:border-purple-400 transition">
-                      <p className="text-white font-semibold text-lg">{chamber.name}</p>
-                      <p className="text-purple-200 text-sm">{chamber.type}</p>
-                      <div className="mt-4 space-y-2 text-sm">
-                        <p className="text-gray-300">{chamber.availability}</p>
-                        <p className="text-green-400 font-semibold">{chamber.price}</p>
+                    <div key={chamber.name} className="bg-gray-700/60 border border-purple-500/40 rounded-xl p-5 hover:border-purple-400 transition hover:scale-105 cursor-pointer">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <p className="text-white font-semibold text-lg">{chamber.name}</p>
+                          <p className="text-purple-200 text-sm">{chamber.type}</p>
+                        </div>
+                        <span className={`px-2 py-1 rounded-full text-xs font-semibold ${chamber.status === 'available' ? 'bg-green-900 text-green-200' : 'bg-yellow-900 text-yellow-200'}`}>
+                          {chamber.status}
+                        </span>
                       </div>
-                      <button className="mt-5 w-full bg-purple-600 hover:bg-purple-500 text-white font-semibold py-2 rounded transition">
-                        Book Chamber
+                      <div className="flex gap-2 mb-4">
+                        {chamber.amenities.map((amenity, idx) => (
+                          <span key={idx} className="text-xs bg-purple-900/50 text-purple-200 px-2 py-1 rounded">
+                            {amenity}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="mt-4 space-y-2 text-sm">
+                        <p className="text-gray-300">🕒 {chamber.availability}</p>
+                        <p className="text-green-400 font-semibold text-lg">{chamber.price}</p>
+                      </div>
+                      <button className="mt-5 w-full bg-purple-600 hover:bg-purple-500 text-white font-semibold py-2 rounded-lg transition">
+                        Book Now
+                      </button>
+                      <button className="mt-2 w-full border border-purple-500/50 hover:bg-purple-500/10 text-purple-300 font-semibold py-2 rounded-lg transition">
+                        View Details
                       </button>
                     </div>
                   ))}
@@ -422,17 +631,28 @@ export default function Home() {
                 <h4 className="text-white font-bold mb-4">Upcoming Bookings</h4>
                 <div className="space-y-4">
                   {[
-                    { date: "Feb 16, 2026", time: "10:00 AM", chamber: "Chamber B", status: "Confirmed" },
-                    { date: "Feb 20, 2026", time: "1:30 PM", chamber: "Chamber A", status: "Pending" }
+                    { date: "Feb 16, 2026", time: "10:00 AM", chamber: "Chamber B", type: "Wellness Session", status: "Confirmed", duration: "2 hours" },
+                    { date: "Feb 20, 2026", time: "1:30 PM", chamber: "Chamber A", type: "Executive Meeting", status: "Pending", duration: "1 hour" }
                   ].map((booking, idx) => (
-                    <div key={idx} className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 border border-purple-500/30 rounded-lg p-4">
-                      <div>
-                        <p className="text-white font-semibold">{booking.chamber}</p>
-                        <p className="text-gray-400 text-sm">{booking.date} • {booking.time}</p>
+                    <div key={idx} className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border border-purple-500/30 rounded-lg p-5 hover:border-purple-400 hover:bg-gray-700/30 transition cursor-pointer">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <p className="text-white font-semibold text-lg">{booking.chamber}</p>
+                          <span className={`text-xs font-semibold px-3 py-1 rounded-full ${booking.status === "Confirmed" ? "bg-green-900 text-green-200" : "bg-yellow-900 text-yellow-200"}`}>
+                            {booking.status}
+                          </span>
+                        </div>
+                        <p className="text-purple-300 text-sm mb-1">{booking.type}</p>
+                        <p className="text-gray-400 text-sm">📅 {booking.date} • ⏰ {booking.time} • ⏱️ {booking.duration}</p>
                       </div>
-                      <span className={`text-xs font-semibold px-3 py-1 rounded-full ${booking.status === "Confirmed" ? "bg-green-900 text-green-200" : "bg-yellow-900 text-yellow-200"}`}>
-                        {booking.status}
-                      </span>
+                      <div className="flex gap-2">
+                        <button className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
+                          Modify
+                        </button>
+                        <button className="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
+                          Cancel
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -512,6 +732,89 @@ export default function Home() {
             </div>
           )}
         </div>
+
+        {/* Send Modal */}
+        {showSendModal && (
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowSendModal(false)}>
+            <div className="bg-gray-800 rounded-2xl p-8 max-w-md w-full border border-purple-500 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-white font-bold text-2xl">Send Crypto</h3>
+                <button onClick={() => setShowSendModal(false)} className="text-gray-400 hover:text-white text-2xl">×</button>
+              </div>
+              <form className="space-y-4">
+                <div>
+                  <label className="block text-gray-300 text-sm mb-2">Select Wallet</label>
+                  <select className="w-full bg-gray-700 border border-purple-500 rounded-lg px-4 py-3 text-white">
+                    <option>Bitcoin Wallet (0.00 BTC)</option>
+                    <option>Ethereum Wallet (0.00 ETH)</option>
+                    <option>USD Coin (0.00 USDC)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-gray-300 text-sm mb-2">Recipient Address</label>
+                  <input type="text" placeholder="0x742d35Cc6634C0532925a3b844Bc..." className="w-full bg-gray-700 border border-purple-500 rounded-lg px-4 py-3 text-white placeholder-gray-400" />
+                </div>
+                <div>
+                  <label className="block text-gray-300 text-sm mb-2">Amount</label>
+                  <input type="number" placeholder="0.00" className="w-full bg-gray-700 border border-purple-500 rounded-lg px-4 py-3 text-white placeholder-gray-400" />
+                </div>
+                <div className="bg-purple-900/30 border border-purple-500/30 rounded-lg p-4 text-sm">
+                  <div className="flex justify-between mb-2">
+                    <span className="text-gray-400">Network Fee</span>
+                    <span className="text-white font-semibold">$0.00</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Total</span>
+                    <span className="text-white font-semibold">$0.00</span>
+                  </div>
+                </div>
+                <button type="button" className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold py-3 rounded-lg transition cursor-pointer">
+                  Send Transaction
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Receive Modal */}
+        {showReceiveModal && (
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowReceiveModal(false)}>
+            <div className="bg-gray-800 rounded-2xl p-8 max-w-md w-full border border-purple-500 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-white font-bold text-2xl">Receive Crypto</h3>
+                <button onClick={() => setShowReceiveModal(false)} className="text-gray-400 hover:text-white text-2xl">×</button>
+              </div>
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-gray-300 text-sm mb-2">Select Wallet</label>
+                  <select className="w-full bg-gray-700 border border-purple-500 rounded-lg px-4 py-3 text-white">
+                    <option>Bitcoin Wallet</option>
+                    <option>Ethereum Wallet</option>
+                    <option>USD Coin</option>
+                  </select>
+                </div>
+                <div className="bg-white rounded-xl p-6 text-center">
+                  <div className="w-48 h-48 bg-gray-200 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                    <span className="text-gray-400 font-mono text-xs">QR Code</span>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-gray-300 text-sm mb-2">Wallet Address</label>
+                  <div className="flex gap-2">
+                    <input type="text" value="0x742d35Cc6634C0532925a3b844Bc9c3a" readOnly className="flex-1 bg-gray-700 border border-purple-500 rounded-lg px-4 py-3 text-white font-mono text-sm" />
+                    <button className="bg-purple-600 hover:bg-purple-500 px-4 py-3 rounded-lg text-white font-semibold transition">
+                      Copy
+                    </button>
+                  </div>
+                </div>
+                <div className="bg-yellow-900/30 border border-yellow-500/30 rounded-lg p-4 text-sm text-yellow-200">
+                  <p className="font-semibold mb-1">⚠️ Important</p>
+                  <p className="text-xs">Only send crypto to this address. Sending other tokens may result in permanent loss.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     );
   }
