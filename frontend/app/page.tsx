@@ -96,6 +96,9 @@ export default function Home() {
   const [completedTasks, setCompletedTasks] = useState<string[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [unreadNotifications, setUnreadNotifications] = useState(3);
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showHelpModal, setShowHelpModal] = useState(false);
 
   // Mock wallet data
   const mockWallets = [
@@ -136,6 +139,35 @@ export default function Home() {
     { id: 2, type: "account", icon: "👤", action: "Account created", details: "Welcome to Advancia!", time: "2 min ago", color: "green" },
     { id: 3, type: "wallet", icon: "👛", action: "Wallet initialized", details: "BTC, ETH, USDC wallets added", time: "2 min ago", color: "purple" },
     { id: 4, type: "security", icon: "🔐", action: "Security check", details: "All systems secure", time: "5 min ago", color: "green" }
+  ];
+
+  // Mock search data
+  const mockSearchResults = [
+    { id: 1, type: "wallet", title: "Bitcoin Wallet", description: "BTC - 0.00000000", icon: "₿" },
+    { id: 2, type: "wallet", title: "Ethereum Wallet", description: "ETH - 0.000000", icon: "Ξ" },
+    { id: 3, type: "wallet", title: "USD Coin", description: "USDC - 0.00", icon: "$" },
+    { id: 4, type: "booking", title: "Executive Suite", description: "Premium workspace", icon: "🏢" },
+    { id: 5, type: "feature", title: "Send Payment", description: "Transfer funds", icon: "💸" },
+    { id: 6, type: "feature", title: "Analytics", description: "View statistics", icon: "📊" }
+  ];
+
+  const filteredSearchResults = searchQuery.length > 0 
+    ? mockSearchResults.filter(item => 
+        item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        item.description.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : [];
+
+  // Mock FAQ data
+  const mockFAQs = [
+    { id: 1, category: "Getting Started", question: "How do I create a wallet?", answer: "Navigate to the Wallet tab and click 'Add Wallet'. Choose your currency and follow the setup process." },
+    { id: 2, category: "Getting Started", question: "How do I verify my account?", answer: "Click on your profile, go to Settings, and complete the KYC verification process." },
+    { id: 3, category: "Payments", question: "How long do transfers take?", answer: "Internal transfers are instant. External transfers may take 1-3 business days depending on the network." },
+    { id: 4, category: "Payments", question: "What are the transaction fees?", answer: "Fees vary by currency. BTC: 0.0001, ETH: 0.001, USDC: $0.50. Enterprise accounts get discounted rates." },
+    { id: 5, category: "Security", question: "How do I enable 2FA?", answer: "Go to Settings > Security > Two-Factor Authentication and follow the setup wizard." },
+    { id: 6, category: "Security", question: "What if I lose my password?", answer: "Click 'Forgot Password' on the login page. You'll receive a reset link via email." },
+    { id: 7, category: "Booking", question: "How do I book a chamber?", answer: "Go to the Booking tab, select your preferred chamber, choose a time slot, and confirm your booking." },
+    { id: 8, category: "Booking", question: "Can I cancel a booking?", answer: "Yes, you can cancel up to 24 hours before the scheduled time for a full refund." }
   ];
 
   if (currentPage === "dashboard" && !isAuthed) {
@@ -314,6 +346,75 @@ export default function Home() {
                   </div>
                 )}
               </div>
+
+              {/* Global Search */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowSearch(!showSearch)}
+                  className="p-2 hover:bg-gray-700 rounded-lg transition cursor-pointer"
+                >
+                  <span className="text-2xl">🔍</span>
+                </button>
+                
+                {/* Search Modal */}
+                {showSearch && (
+                  <div className="absolute right-0 mt-2 w-[500px] bg-gray-800 border border-purple-500 rounded-lg shadow-2xl z-50">
+                    <div className="p-4">
+                      <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        placeholder="Search wallets, transactions, bookings..."
+                        className="w-full bg-gray-700 border border-purple-500/50 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-purple-400"
+                        autoFocus
+                      />
+                    </div>
+                    
+                    {searchQuery.length > 0 && (
+                      <div className="max-h-96 overflow-y-auto border-t border-gray-700">
+                        {filteredSearchResults.length > 0 ? (
+                          <div className="divide-y divide-gray-700">
+                            {filteredSearchResults.map((result) => (
+                              <div
+                                key={result.id}
+                                className="p-4 hover:bg-gray-700/50 cursor-pointer transition flex items-center gap-4"
+                                onClick={() => {
+                                  setShowSearch(false);
+                                  setSearchQuery("");
+                                  if (result.type === "wallet") setActiveTab("wallet");
+                                  if (result.type === "booking") setActiveTab("booking");
+                                  if (result.type === "feature") setActiveTab(result.title.toLowerCase().includes("payment") ? "payments" : "analytics");
+                                }}
+                              >
+                                <div className="text-3xl">{result.icon}</div>
+                                <div className="flex-1">
+                                  <h4 className="text-white font-semibold">{result.title}</h4>
+                                  <p className="text-gray-400 text-sm">{result.description}</p>
+                                </div>
+                                <span className="text-purple-400 text-xs uppercase font-semibold">{result.type}</span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="p-8 text-center text-gray-400">
+                            <span className="text-4xl block mb-2">🔍</span>
+                            No results found for "{searchQuery}"
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    
+                    {searchQuery.length === 0 && (
+                      <div className="p-6 text-center text-gray-400 text-sm">
+                        <p className="mb-2">Quick search tips:</p>
+                        <p className="text-xs">• Search for wallets (BTC, ETH, USDC)</p>
+                        <p className="text-xs">• Find bookings and chambers</p>
+                        <p className="text-xs">• Access features quickly</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
               
               <div className="text-right">
                 <p className="text-gray-300 text-sm">Welcome back</p>
@@ -336,7 +437,7 @@ export default function Home() {
         {/* Navigation Tabs */}
         <nav className="bg-gray-800 border-b border-purple-500 overflow-x-auto">
           <div className="max-w-7xl mx-auto px-6 flex gap-8">
-            {["dashboard", "wallet", "payments", "booking", "healthcare", "analytics", "wireframes", "ecosystem", "activity", "notifications", "settings", "admin"].map((tab) => (
+            {["dashboard", "wallet", "payments", "booking", "healthcare", "analytics", "wireframes", "ecosystem", "activity", "notifications", "settings", "help", "admin"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -528,12 +629,35 @@ export default function Home() {
                   <div className="text-xs text-green-200">View balances</div>
                 </button>
                 <button 
-                  onClick={() => setActiveTab("analytics")}
+                  onClick={() => {
+                    // Generate CSV export
+                    const reportData = `Advancia PayLedger Report - ${new Date().toLocaleDateString()}\n\n` +
+                      `Account Holder: ${authName || "User"}\n` +
+                      `Email: ${authEmail || "user@example.com"}\n\n` +
+                      `WALLET SUMMARY\n` +
+                      `Bitcoin (BTC): 0.00000000 BTC ($0.00)\n` +
+                      `Ethereum (ETH): 0.000000 ETH ($0.00)\n` +
+                      `USD Coin (USDC): 0.00 USDC ($0.00)\n` +
+                      `Total Portfolio Value: $${totalBalance.toFixed(2)}\n\n` +
+                      `TRANSACTIONS\n` +
+                      `No transactions yet\n\n` +
+                      `Generated on: ${new Date().toLocaleString()}`;
+                    
+                    const blob = new Blob([reportData], { type: 'text/csv' });
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `PayLedger-Report-${new Date().toISOString().split('T')[0]}.csv`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                  }}
                   className="bg-gradient-to-br from-orange-600 to-orange-700 hover:from-orange-500 hover:to-orange-600 rounded-xl p-4 text-white transition-all hover:scale-105 shadow-lg cursor-pointer text-left"
                 >
-                  <div className="text-2xl mb-2">📊</div>
-                  <div className="font-semibold">Analytics</div>
-                  <div className="text-xs text-orange-200">View stats</div>
+                  <div className="text-2xl mb-2">📥</div>
+                  <div className="font-semibold">Export Report</div>
+                  <div className="text-xs text-orange-200">Download CSV</div>
                 </button>
               </div>
 
@@ -1359,6 +1483,108 @@ export default function Home() {
                     <button className="bg-orange-600 hover:bg-orange-500 text-white font-semibold px-4 py-2 rounded-lg transition cursor-pointer">
                       Export Data
                     </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Help & Support Tab */}
+          {activeTab === "help" && (
+            <div className="space-y-6">
+              <div className="bg-gray-800 rounded-lg p-6 border border-purple-500 shadow-lg">
+                <h3 className="text-white font-bold text-2xl mb-2">Help & Support</h3>
+                <p className="text-gray-400 mb-6">Find answers, get help, and contact our support team</p>
+
+                {/* Quick Actions */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                  <div className="bg-gradient-to-br from-blue-900/40 to-cyan-900/40 border border-blue-500/40 rounded-lg p-6 cursor-pointer hover:border-blue-400 transition">
+                    <div className="text-4xl mb-3">📚</div>
+                    <h4 className="text-white font-bold mb-2">Documentation</h4>
+                    <p className="text-gray-300 text-sm">Comprehensive guides and tutorials</p>
+                  </div>
+                  <div className="bg-gradient-to-br from-green-900/40 to-emerald-900/40 border border-green-500/40 rounded-lg p-6 cursor-pointer hover:border-green-400 transition">
+                    <div className="text-4xl mb-3">💬</div>
+                    <h4 className="text-white font-bold mb-2">Live Chat</h4>
+                    <p className="text-gray-300 text-sm">Chat with support team (9AM-6PM)</p>
+                  </div>
+                  <div className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border border-purple-500/40 rounded-lg p-6 cursor-pointer hover:border-purple-400 transition">
+                    <div className="text-4xl mb-3">📧</div>
+                    <h4 className="text-white font-bold mb-2">Email Support</h4>
+                    <p className="text-gray-300 text-sm">support@advanciapayledger.com</p>
+                  </div>
+                </div>
+
+                {/* FAQs by Category */}
+                <div className="space-y-6">
+                  <h4 className="text-white font-bold text-xl">Frequently Asked Questions</h4>
+                  
+                  {["Getting Started", "Payments", "Security", "Booking"].map((category) => (
+                    <div key={category} className="bg-gray-700/30 border border-gray-600 rounded-lg p-6">
+                      <h5 className="text-white font-bold mb-4 flex items-center gap-2">
+                        <span className="text-purple-400">▶</span> {category}
+                      </h5>
+                      <div className="space-y-4">
+                        {mockFAQs
+                          .filter((faq) => faq.category === category)
+                          .map((faq) => (
+                            <div key={faq.id} className="border-l-4 border-purple-500 pl-4 py-2">
+                              <h6 className="text-white font-semibold mb-2">{faq.question}</h6>
+                              <p className="text-gray-400 text-sm">{faq.answer}</p>
+                            </div>
+                          ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Contact Form */}
+                <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-6 mt-8">
+                  <h4 className="text-white font-bold mb-4">Still Need Help?</h4>
+                  <p className="text-gray-400 text-sm mb-4">Send us a message and we'll get back to you within 24 hours</p>
+                  <form className="space-y-4">
+                    <div>
+                      <label className="block text-gray-300 text-sm mb-2">Subject</label>
+                      <input type="text" placeholder="What do you need help with?" className="w-full bg-gray-700 border border-purple-500/50 rounded-lg px-4 py-3 text-white placeholder-gray-400" />
+                    </div>
+                    <div>
+                      <label className="block text-gray-300 text-sm mb-2">Category</label>
+                      <select className="w-full bg-gray-700 border border-purple-500/50 rounded-lg px-4 py-3 text-white">
+                        <option>General Question</option>
+                        <option>Account Issue</option>
+                        <option>Payment Problem</option>
+                        <option>Technical Support</option>
+                        <option>Feature Request</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-gray-300 text-sm mb-2">Message</label>
+                      <textarea rows={5} placeholder="Describe your issue in detail..." className="w-full bg-gray-700 border border-purple-500/50 rounded-lg px-4 py-3 text-white placeholder-gray-400"></textarea>
+                    </div>
+                    <button type="button" className="bg-purple-600 hover:bg-purple-500 text-white font-bold px-6 py-3 rounded-lg transition cursor-pointer">
+                      Send Message
+                    </button>
+                  </form>
+                </div>
+
+                {/* System Status */}
+                <div className="bg-gradient-to-br from-green-900/20 to-emerald-900/20 border border-green-500/40 rounded-lg p-6 mt-8">
+                  <h4 className="text-white font-bold mb-4 flex items-center gap-2">
+                    <span className="text-green-400">●</span> System Status
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-300 text-sm">Platform</span>
+                      <span className="text-green-400 font-semibold text-sm">Operational</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-300 text-sm">API</span>
+                      <span className="text-green-400 font-semibold text-sm">99.98% Uptime</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-300 text-sm">Payments</span>
+                      <span className="text-green-400 font-semibold text-sm">All Systems Go</span>
+                    </div>
                   </div>
                 </div>
               </div>

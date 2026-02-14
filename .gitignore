@@ -149,3 +149,5 @@ backend/.env.production
 
 .vercel
 .env*.local
+
+.vercel
