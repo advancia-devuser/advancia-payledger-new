@@ -99,6 +99,9 @@ export default function Home() {
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [showHelpModal, setShowHelpModal] = useState(false);
+  const [show2FAModal, setShow2FAModal] = useState(false);
+  const [showSessionsModal, setShowSessionsModal] = useState(false);
+  const [referralCode] = useState("ADV-" + Math.random().toString(36).substring(2, 8).toUpperCase());
 
   // Mock wallet data
   const mockWallets = [
@@ -168,6 +171,20 @@ export default function Home() {
     { id: 6, category: "Security", question: "What if I lose my password?", answer: "Click 'Forgot Password' on the login page. You'll receive a reset link via email." },
     { id: 7, category: "Booking", question: "How do I book a chamber?", answer: "Go to the Booking tab, select your preferred chamber, choose a time slot, and confirm your booking." },
     { id: 8, category: "Booking", question: "Can I cancel a booking?", answer: "Yes, you can cancel up to 24 hours before the scheduled time for a full refund." }
+  ];
+
+  // Mock active sessions
+  const mockSessions = [
+    { id: 1, device: "Windows PC", browser: "Chrome 121", location: "New York, USA", ip: "192.168.1.1", lastActive: "Just now", current: true },
+    { id: 2, device: "iPhone 15 Pro", browser: "Safari", location: "New York, USA", ip: "192.168.1.50", lastActive: "2 hours ago", current: false }
+  ];
+
+  // Mock security audit log
+  const mockSecurityLog = [
+    { id: 1, event: "Login successful", device: "Windows PC", time: "Just now", status: "success" },
+    { id: 2, event: "Account created", device: "Windows PC", time: "5 min ago", status: "success" },
+    { id: 3, event: "Email verified", device: "Windows PC", time: "6 min ago", status: "success" },
+    { id: 4, event: "Password updated", device: "Unknown", time: "2 days ago", status: "info" }
   ];
 
   if (currentPage === "dashboard" && !isAuthed) {
@@ -437,7 +454,7 @@ export default function Home() {
         {/* Navigation Tabs */}
         <nav className="bg-gray-800 border-b border-purple-500 overflow-x-auto">
           <div className="max-w-7xl mx-auto px-6 flex gap-8">
-            {["dashboard", "wallet", "payments", "booking", "healthcare", "analytics", "wireframes", "ecosystem", "activity", "notifications", "settings", "help", "admin"].map((tab) => (
+            {["dashboard", "wallet", "payments", "booking", "healthcare", "analytics", "wireframes", "ecosystem", "activity", "notifications", "settings", "security", "referral", "api", "help", "admin"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -1591,6 +1608,300 @@ export default function Home() {
             </div>
           )}
 
+          {/* Security Center Tab */}
+          {activeTab === "security" && (
+            <div className="space-y-6">
+              <div className="bg-gray-800 rounded-lg p-6 border border-purple-500 shadow-lg">
+                <h3 className="text-white font-bold text-2xl mb-2">Security Center</h3>
+                <p className="text-gray-400 mb-6">Manage your account security and privacy settings</p>
+
+                {/* Security Overview */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                  <div className="bg-gradient-to-br from-green-900/40 to-emerald-900/40 border border-green-500/40 rounded-lg p-6">
+                    <div className="text-4xl mb-3">🛡️</div>
+                    <h4 className="text-white font-bold mb-2">Security Score</h4>
+                    <p className="text-green-200 text-3xl font-bold mb-2">65/100</p>
+                    <p className="text-gray-400 text-sm">Enable 2FA to improve</p>
+                  </div>
+                  <div className="bg-gradient-to-br from-blue-900/40 to-cyan-900/40 border border-blue-500/40 rounded-lg p-6">
+                    <div className="text-4xl mb-3">🔑</div>
+                    <h4 className="text-white font-bold mb-2">2FA Status</h4>
+                    <p className="text-orange-200 text-lg font-bold mb-2">Not Enabled</p>
+                    <button 
+                      onClick={() => setShow2FAModal(true)}
+                      className="text-blue-300 hover:text-blue-200 text-sm font-semibold"
+                    >
+                      Set up now →
+                    </button>
+                  </div>
+                  <div className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border border-purple-500/40 rounded-lg p-6">
+                    <div className="text-4xl mb-3">📱</div>
+                    <h4 className="text-white font-bold mb-2">Active Devices</h4>
+                    <p className="text-purple-200 text-3xl font-bold mb-2">{mockSessions.length}</p>
+                    <button 
+                      onClick={() => setShowSessionsModal(true)}
+                      className="text-purple-300 hover:text-purple-200 text-sm font-semibold"
+                    >
+                      Manage devices →
+                    </button>
+                  </div>
+                </div>
+
+                {/* Recent Security Activity */}
+                <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-6 mb-6">
+                  <h4 className="text-white font-bold mb-4">Security Audit Log</h4>
+                  <div className="space-y-3">
+                    {mockSecurityLog.map((log) => (
+                      <div key={log.id} className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-3 h-3 rounded-full ${log.status === 'success' ? 'bg-green-500' : 'bg-blue-500'}`}></div>
+                          <div>
+                            <h5 className="text-white font-semibold text-sm">{log.event}</h5>
+                            <p className="text-gray-400 text-xs">{log.device}</p>
+                          </div>
+                        </div>
+                        <p className="text-gray-500 text-xs">{log.time}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Security Recommendations */}
+                <div className="bg-orange-900/20 border border-orange-500/40 rounded-lg p-6">
+                  <h4 className="text-orange-400 font-bold mb-4">Security Recommendations</h4>
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3">
+                      <span className="text-orange-400 text-xl">⚠️</span>
+                      <div className="flex-1">
+                        <h5 className="text-white font-semibold mb-1">Enable Two-Factor Authentication</h5>
+                        <p className="text-gray-400 text-sm mb-2">Add an extra layer of security to your account</p>
+                        <button 
+                          onClick={() => setShow2FAModal(true)}
+                          className="bg-orange-600 hover:bg-orange-500 text-white font-semibold px-4 py-2 rounded-lg text-sm transition cursor-pointer"
+                        >
+                          Enable 2FA
+                        </button>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="text-blue-400 text-xl">ℹ️</span>
+                      <div className="flex-1">
+                        <h5 className="text-white font-semibold mb-1">Review Active Sessions</h5>
+                        <p className="text-gray-400 text-sm">Check for unrecognized devices and sign them out</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="text-green-400 text-xl">✅</span>
+                      <div className="flex-1">
+                        <h5 className="text-white font-semibold mb-1">Strong Password Detected</h5>
+                        <p className="text-gray-400 text-sm">Your password meets security requirements</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Referral Program Tab */}
+          {activeTab === "referral" && (
+            <div className="space-y-6">
+              <div className="bg-gray-800 rounded-lg p-6 border border-purple-500 shadow-lg">
+                <h3 className="text-white font-bold text-2xl mb-2">Referral Program</h3>
+                <p className="text-gray-400 mb-6">Invite friends and earn rewards together</p>
+
+                {/* Referral Stats */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                  <div className="bg-gradient-to-br from-green-900/40 to-emerald-900/40 border border-green-500/40 rounded-lg p-6 text-center">
+                    <div className="text-4xl mb-3">💰</div>
+                    <h4 className="text-white font-bold mb-2">Total Earned</h4>
+                    <p className="text-green-200 text-3xl font-bold">$0.00</p>
+                  </div>
+                  <div className="bg-gradient-to-br from-blue-900/40 to-cyan-900/40 border border-blue-500/40 rounded-lg p-6 text-center">
+                    <div className="text-4xl mb-3">👥</div>
+                    <h4 className="text-white font-bold mb-2">Referrals</h4>
+                    <p className="text-blue-200 text-3xl font-bold">0</p>
+                  </div>
+                  <div className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border border-purple-500/40 rounded-lg p-6 text-center">
+                    <div className="text-4xl mb-3">🎁</div>
+                    <h4 className="text-white font-bold mb-2">Pending Rewards</h4>
+                    <p className="text-purple-200 text-3xl font-bold">$0.00</p>
+                  </div>
+                </div>
+
+                {/* Referral Code */}
+                <div className="bg-gradient-to-br from-purple-900/40 to-blue-900/40 border border-purple-500/40 rounded-lg p-8 mb-6">
+                  <h4 className="text-white font-bold text-xl mb-4 text-center">Your Referral Code</h4>
+                  <div className="flex items-center justify-center gap-4 mb-4">
+                    <div className="bg-gray-900 border border-purple-500 rounded-lg px-8 py-4">
+                      <p className="text-purple-300 text-3xl font-mono font-bold tracking-wider">{referralCode}</p>
+                    </div>
+                    <button 
+                      onClick={() => {
+                        navigator.clipboard.writeText(referralCode);
+                      }}
+                      className="bg-purple-600 hover:bg-purple-500 text-white font-bold px-6 py-4 rounded-lg transition cursor-pointer"
+                    >
+                      📋 Copy
+                    </button>
+                  </div>
+                  <p className="text-center text-gray-400 text-sm">Share this code with friends to earn rewards</p>
+                </div>
+
+                {/* How It Works */}
+                <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-6 mb-6">
+                  <h4 className="text-white font-bold mb-4">How It Works</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="text-center">
+                      <div className="text-5xl mb-3">1️⃣</div>
+                      <h5 className="text-white font-semibold mb-2">Share Your Code</h5>
+                      <p className="text-gray-400 text-sm">Send your referral code to friends and family</p>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-5xl mb-3">2️⃣</div>
+                      <h5 className="text-white font-semibold mb-2">They Sign Up</h5>
+                      <p className="text-gray-400 text-sm">Your friend creates an account using your code</p>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-5xl mb-3">3️⃣</div>
+                      <h5 className="text-white font-semibold mb-2">Both Earn Rewards</h5>
+                      <p className="text-gray-400 text-sm">You both get $25 bonus credit after their first transaction</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Reward Tiers */}
+                <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-6">
+                  <h4 className="text-white font-bold mb-4">Reward Tiers</h4>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg">
+                      <div>
+                        <h5 className="text-white font-semibold">Bronze (1-5 referrals)</h5>
+                        <p className="text-gray-400 text-sm">$25 per referral</p>
+                      </div>
+                      <span className="px-4 py-2 bg-orange-900 text-orange-200 rounded-lg font-semibold">Active</span>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg opacity-50">
+                      <div>
+                        <h5 className="text-white font-semibold">Silver (6-15 referrals)</h5>
+                        <p className="text-gray-400 text-sm">$35 per referral</p>
+                      </div>
+                      <span className="px-4 py-2 bg-gray-700 text-gray-400 rounded-lg font-semibold">Locked</span>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg opacity-50">
+                      <div>
+                        <h5 className="text-white font-semibold">Gold (16+ referrals)</h5>
+                        <p className="text-gray-400 text-sm">$50 per referral + exclusive perks</p>
+                      </div>
+                      <span className="px-4 py-2 bg-gray-700 text-gray-400 rounded-lg font-semibold">Locked</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* API Documentation Tab */}
+          {activeTab === "api" && (
+            <div className="space-y-6">
+              <div className="bg-gray-800 rounded-lg p-6 border border-purple-500 shadow-lg">
+                <h3 className="text-white font-bold text-2xl mb-2">API Documentation</h3>
+                <p className="text-gray-400 mb-6">Integrate Advancia PayLedger into your applications</p>
+
+                {/* API Overview */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                  <div className="bg-gradient-to-br from-blue-900/40 to-cyan-900/40 border border-blue-500/40 rounded-lg p-6">
+                    <div className="text-4xl mb-3">🔗</div>
+                    <h4 className="text-white font-bold mb-2">REST API</h4>
+                    <p className="text-blue-200 text-sm mb-3">Full RESTful API access</p>
+                    <p className="text-gray-400 text-xs">Version 2.0</p>
+                  </div>
+                  <div className="bg-gradient-to-br from-green-900/40 to-emerald-900/40 border border-green-500/40 rounded-lg p-6">
+                    <div className="text-4xl mb-3">⚡</div>
+                    <h4 className="text-white font-bold mb-2">Response Time</h4>
+                    <p className="text-green-200 text-3xl font-bold mb-2">45ms</p>
+                    <p className="text-gray-400 text-xs">Average globally</p>
+                  </div>
+                  <div className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border border-purple-500/40 rounded-lg p-6">
+                    <div className="text-4xl mb-3">✅</div>
+                    <h4 className="text-white font-bold mb-2">Uptime</h4>
+                    <p className="text-purple-200 text-3xl font-bold mb-2">99.98%</p>
+                    <p className="text-gray-400 text-xs">Last 30 days</p>
+                  </div>
+                </div>
+
+                {/* API Key */}
+                <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-6 mb-6">
+                  <h4 className="text-white font-bold mb-4">API Keys</h4>
+                  <div className="bg-gray-800 rounded-lg p-4 mb-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-gray-400 text-sm">Production Key</span>
+                      <span className="text-green-400 text-xs font-semibold">Active</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <code className="flex-1 bg-gray-900 text-purple-300 font-mono text-sm px-4 py-2 rounded">
+                        adv_live_••••••••••••••••••••1234
+                      </code>
+                      <button className="bg-gray-600 hover:bg-gray-500 text-white font-semibold px-4 py-2 rounded-lg transition cursor-pointer text-sm">
+                        Copy
+                      </button>
+                    </div>
+                  </div>
+                  <button className="bg-purple-600 hover:bg-purple-500 text-white font-semibold px-4 py-2 rounded-lg transition cursor-pointer">
+                    + Generate New Key
+                  </button>
+                </div>
+
+                {/* Quick Start */}
+                <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-6 mb-6">
+                  <h4 className="text-white font-bold mb-4">Quick Start</h4>
+                  <div className="bg-gray-900 rounded-lg p-4 mb-4">
+                    <p className="text-gray-400 text-xs mb-2">Base URL</p>
+                    <code className="text-blue-300 font-mono text-sm">https://api.advanciapayledger.com/v2</code>
+                  </div>
+                  <div className="bg-gray-900 rounded-lg p-4">
+                    <p className="text-gray-400 text-xs mb-2">Example Request</p>
+                    <pre className="text-green-300 font-mono text-xs overflow-x-auto">
+{`curl -X GET https://api.advanciapayledger.com/v2/wallets \\
+  -H "Authorization: Bearer YOUR_API_KEY" \\
+  -H "Content-Type: application/json"`}
+                    </pre>
+                  </div>
+                </div>
+
+                {/* API Endpoints */}
+                <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-6">
+                  <h4 className="text-white font-bold mb-4">Available Endpoints</h4>
+                  <div className="space-y-3">
+                    {[
+                      { method: "GET", endpoint: "/wallets", desc: "List all wallets" },
+                      { method: "POST", endpoint: "/payments", desc: "Create a payment" },
+                      { method: "GET", endpoint: "/transactions", desc: "Get transaction history" },
+                      { method: "POST", endpoint: "/bookings", desc: "Create a booking" },
+                      { method: "GET", endpoint: "/user/profile", desc: "Get user profile" },
+                      { method: "PUT", endpoint: "/user/settings", desc: "Update settings" }
+                    ].map((endpoint, idx) => (
+                      <div key={idx} className="flex items-center gap-4 p-3 bg-gray-800/50 rounded-lg">
+                        <span className={`px-3 py-1 rounded font-mono text-xs font-bold ${
+                          endpoint.method === 'GET' ? 'bg-blue-900 text-blue-200' : 'bg-green-900 text-green-200'
+                        }`}>
+                          {endpoint.method}
+                        </span>
+                        <code className="flex-1 text-purple-300 font-mono text-sm">{endpoint.endpoint}</code>
+                        <span className="text-gray-400 text-sm">{endpoint.desc}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-4 text-center">
+                    <button className="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 rounded-lg transition cursor-pointer">
+                      View Full Documentation →
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Admin Tab */}
           {activeTab === "admin" && (
             <div className="space-y-6">
@@ -1697,6 +2008,135 @@ export default function Home() {
                   <p className="font-semibold mb-1">⚠️ Important</p>
                   <p className="text-xs">Only send crypto to this address. Sending other tokens may result in permanent loss.</p>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 2FA Setup Modal */}
+        {show2FAModal && (
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShow2FAModal(false)}>
+            <div className="bg-gray-800 rounded-2xl p-8 max-w-lg w-full border border-purple-500 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-white font-bold text-2xl">Enable Two-Factor Authentication</h3>
+                <button onClick={() => setShow2FAModal(false)} className="text-gray-400 hover:text-white text-2xl">×</button>
+              </div>
+              
+              <div className="space-y-6">
+                {/* Step 1 */}
+                <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center font-bold">1</div>
+                    <h4 className="text-white font-bold">Download Authenticator App</h4>
+                  </div>
+                  <p className="text-gray-300 text-sm mb-3">Install Google Authenticator or Authy on your mobile device</p>
+                  <div className="flex gap-2">
+                    <button className="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 rounded-lg transition cursor-pointer text-sm">
+                      📱 iOS App Store
+                    </button>
+                    <button className="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 rounded-lg transition cursor-pointer text-sm">
+                      🤖 Google Play
+                    </button>
+                  </div>
+                </div>
+
+                {/* Step 2 */}
+                <div className="bg-purple-900/20 border border-purple-500/30 rounded-lg p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center font-bold">2</div>
+                    <h4 className="text-white font-bold">Scan QR Code</h4>
+                  </div>
+                  <div className="bg-white rounded-lg p-4 mb-4">
+                    <div className="w-48 h-48 bg-gray-200 rounded-lg mx-auto flex items-center justify-center">
+                      <span className="text-gray-400 font-mono text-xs">2FA QR Code</span>
+                    </div>
+                  </div>
+                  <div className="bg-gray-900 rounded-lg p-3 mb-2">
+                    <p className="text-gray-400 text-xs mb-1">Manual Entry Code</p>
+                    <code className="text-purple-300 font-mono text-sm">JBSW Y3DP EHPK 3PXP</code>
+                  </div>
+                </div>
+
+                {/* Step 3 */}
+                <div className="bg-green-900/20 border border-green-500/30 rounded-lg p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center font-bold">3</div>
+                    <h4 className="text-white font-bold">Enter Verification Code</h4>
+                  </div>
+                  <input 
+                    type="text" 
+                    placeholder="000000" 
+                    maxLength={6}
+                    className="w-full bg-gray-700 border border-green-500 rounded-lg px-4 py-3 text-white text-center font-mono text-2xl tracking-widest placeholder-gray-500"
+                  />
+                </div>
+
+                <button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold py-3 rounded-lg transition cursor-pointer">
+                  Enable 2FA
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Sessions Management Modal */}
+        {showSessionsModal && (
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowSessionsModal(false)}>
+            <div className="bg-gray-800 rounded-2xl p-8 max-w-2xl w-full border border-purple-500 shadow-2xl max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h3 className="text-white font-bold text-2xl">Active Sessions</h3>
+                  <p className="text-gray-400 text-sm">Manage devices with access to your account</p>
+                </div>
+                <button onClick={() => setShowSessionsModal(false)} className="text-gray-400 hover:text-white text-2xl">×</button>
+              </div>
+              
+              <div className="space-y-4">
+                {mockSessions.map((session) => (
+                  <div key={session.id} className={`p-6 rounded-lg border ${session.current ? 'bg-green-900/20 border-green-500/40' : 'bg-gray-700/30 border-gray-600'}`}>
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-start gap-4">
+                        <div className="text-4xl">
+                          {session.device.includes('iPhone') ? '📱' : '💻'}
+                        </div>
+                        <div>
+                          <h4 className="text-white font-bold mb-1">{session.device}</h4>
+                          <p className="text-gray-400 text-sm mb-2">{session.browser}</p>
+                          {session.current && (
+                            <span className="inline-block bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                              Current Session
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      {!session.current && (
+                        <button className="bg-red-600 hover:bg-red-500 text-white font-semibold px-4 py-2 rounded-lg transition cursor-pointer text-sm">
+                          Sign Out
+                        </button>
+                      )}
+                    </div>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <p className="text-gray-500 mb-1">Location</p>
+                        <p className="text-white">{session.location}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500 mb-1">IP Address</p>
+                        <p className="text-white font-mono">{session.ip}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500 mb-1">Last Active</p>
+                        <p className="text-white">{session.lastActive}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-6 pt-6 border-t border-gray-700">
+                <button className="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-lg transition cursor-pointer">
+                  Sign Out All Other Sessions
+                </button>
               </div>
             </div>
           </div>
