@@ -1,0 +1,9 @@
+/*
+Cloudflare Pages Redirects Configuration
+Route all requests to index.html for SPA routing
+*/
+
+/* Handle all routes for the single-page application */
+/* Rewrite to index.html for client-side routing */
+/api/* https://api.advancia.io/api/:splat 200
+/* /index.html 200
