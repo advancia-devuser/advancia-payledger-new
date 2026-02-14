@@ -87,12 +87,18 @@ export default function Home() {
   const [authName, setAuthName] = useState("");
   const [authEmail, setAuthEmail] = useState("");
   const [authPassword, setAuthPassword] = useState("");
+  const [lastLoginUser, setLastLoginUser] = useState<{ name: string; email: string } | null>(null);
 
   // Dashboard data
-  const mockTransactions = [
-    { id: 1, type: "Payment", amount: 1250, status: "Completed", date: "2026-02-14", recipient: "Alice Johnson" },
-    { id: 2, type: "Healthcare", amount: 85, status: "Completed", date: "2026-02-13", description: "Monthly Premium" },
-  ];
+  const mockTransactions: Array<{
+    id: number;
+    type: string;
+    amount: number;
+    status: string;
+    date: string;
+    recipient?: string;
+    description?: string;
+  }> = [];
 
   const mockBalance = [
     { name: "USD Balance", value: 0, usd: 0 }
@@ -153,6 +159,10 @@ export default function Home() {
               className="space-y-4"
               onSubmit={(event) => {
                 event.preventDefault();
+                setLastLoginUser({
+                  name: authName || "New User",
+                  email: authEmail || "newuser@example.com"
+                });
                 setIsAuthed(true);
                 setActiveTab("dashboard");
               }}
@@ -236,7 +246,7 @@ export default function Home() {
         {/* Navigation Tabs */}
         <nav className="bg-gray-800 border-b border-purple-500">
           <div className="max-w-7xl mx-auto px-6 flex gap-8">
-            {["dashboard", "payments", "booking", "healthcare", "analytics"].map((tab) => (
+            {["dashboard", "wallet", "payments", "booking", "healthcare", "analytics", "admin"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -290,25 +300,53 @@ export default function Home() {
                       </tr>
                     </thead>
                     <tbody>
-                      {mockTransactions.map((tx) => (
-                        <tr key={tx.id} className="border-b border-gray-700 hover:bg-gray-700 transition cursor-pointer">
-                          <td className="py-3 px-4">
-                            <span className="inline-block px-2 py-1 rounded text-xs font-semibold bg-blue-900 text-blue-200">
-                              {tx.type}
-                            </span>
+                      {mockTransactions.length === 0 ? (
+                        <tr className="border-b border-gray-700">
+                          <td colSpan={5} className="py-6 px-4 text-gray-400 text-center">
+                            No transactions yet.
                           </td>
-                          <td className="py-3 px-4 text-gray-300">{tx.recipient || tx.description}</td>
-                          <td className="py-3 px-4 text-green-400 font-semibold">${tx.amount}</td>
-                          <td className="py-3 px-4">
-                            <span className="inline-block px-2 py-1 rounded text-xs font-semibold bg-green-900 text-green-200">
-                              {tx.status}
-                            </span>
-                          </td>
-                          <td className="py-3 px-4 text-gray-400">{tx.date}</td>
                         </tr>
-                      ))}
+                      ) : (
+                        mockTransactions.map((tx) => (
+                          <tr key={tx.id} className="border-b border-gray-700 hover:bg-gray-700 transition cursor-pointer">
+                            <td className="py-3 px-4">
+                              <span className="inline-block px-2 py-1 rounded text-xs font-semibold bg-blue-900 text-blue-200">
+                                {tx.type}
+                              </span>
+                            </td>
+                            <td className="py-3 px-4 text-gray-300">{tx.recipient || tx.description}</td>
+                            <td className="py-3 px-4 text-green-400 font-semibold">${tx.amount}</td>
+                            <td className="py-3 px-4">
+                              <span className="inline-block px-2 py-1 rounded text-xs font-semibold bg-green-900 text-green-200">
+                                {tx.status}
+                              </span>
+                            </td>
+                            <td className="py-3 px-4 text-gray-400">{tx.date}</td>
+                          </tr>
+                        ))
+                      )}
                     </tbody>
                   </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Wallet Tab */}
+          {activeTab === "wallet" && (
+            <div className="space-y-6">
+              <div className="bg-gray-800 rounded-lg p-6 border border-purple-500 shadow-lg">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                  <div>
+                    <h3 className="text-white font-bold text-xl">Wallet</h3>
+                    <p className="text-gray-400 text-sm">New accounts start with empty wallets.</p>
+                  </div>
+                  <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold px-6 py-2 rounded transition">
+                    Add Wallet
+                  </button>
+                </div>
+                <div className="border border-purple-500/30 rounded-lg p-6 text-center text-gray-400">
+                  No wallets connected yet.
                 </div>
               </div>
             </div>
@@ -442,6 +480,33 @@ export default function Home() {
                     <p className="text-gray-300 text-sm">Uptime</p>
                     <p className="text-white font-bold text-xl">99.98%</p>
                   </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Admin Tab */}
+          {activeTab === "admin" && (
+            <div className="space-y-6">
+              <div className="bg-gray-800 rounded-lg p-6 border border-purple-500 shadow-lg">
+                <h3 className="text-white font-bold text-xl mb-2">Admin Management</h3>
+                <p className="text-gray-400 text-sm mb-6">Latest user login activity.</p>
+                <div className="space-y-4">
+                  {lastLoginUser ? (
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 border border-purple-500/30 rounded-lg p-4">
+                      <div>
+                        <p className="text-white font-semibold">{lastLoginUser.name}</p>
+                        <p className="text-gray-400 text-sm">{lastLoginUser.email}</p>
+                      </div>
+                      <span className="text-xs font-semibold px-3 py-1 rounded-full bg-green-900 text-green-200">
+                        Logged in
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="border border-purple-500/30 rounded-lg p-6 text-center text-gray-400">
+                      No users have logged in yet.
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
