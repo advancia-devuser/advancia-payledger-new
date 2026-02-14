@@ -254,13 +254,13 @@ export default function Home() {
         </header>
 
         {/* Navigation Tabs */}
-        <nav className="bg-gray-800 border-b border-purple-500">
+        <nav className="bg-gray-800 border-b border-purple-500 overflow-x-auto">
           <div className="max-w-7xl mx-auto px-6 flex gap-8">
-            {["dashboard", "wallet", "payments", "booking", "healthcare", "analytics", "admin"].map((tab) => (
+            {["dashboard", "wallet", "payments", "booking", "healthcare", "analytics", "wireframes", "ecosystem", "admin"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`py-4 px-2 border-b-2 font-semibold capitalize transition-all ${
+                className={`py-4 px-2 border-b-2 font-semibold capitalize transition-all whitespace-nowrap ${
                   activeTab === tab
                     ? "border-purple-500 text-purple-400"
                     : "border-transparent text-gray-400 hover:text-gray-200"
@@ -700,6 +700,216 @@ export default function Home() {
                     <p className="text-gray-300 text-sm">Uptime</p>
                     <p className="text-white font-bold text-xl">99.98%</p>
                   </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Wireframes Tab */}
+          {activeTab === "wireframes" && (
+            <div className="space-y-6">
+              <div className="bg-gray-800 rounded-lg p-6 border border-purple-500 shadow-lg">
+                <h3 className="text-white font-bold text-2xl mb-2">Platform Wireframes</h3>
+                <p className="text-gray-400 mb-6">Interactive mockups and UI/UX design system</p>
+                
+                {/* Wireframe Categories */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                  <div className="bg-gradient-to-br from-blue-900/40 to-purple-900/40 border border-blue-500/40 rounded-xl p-6 cursor-pointer hover:scale-105 hover:border-blue-400 transition">
+                    <div className="text-4xl mb-3">📱</div>
+                    <h4 className="text-white font-bold mb-2">Mobile App</h4>
+                    <p className="text-gray-300 text-sm mb-4">iOS & Android wireframes</p>
+                    <div className="flex gap-2">
+                      <span className="text-xs bg-blue-900/50 text-blue-200 px-2 py-1 rounded">12 Screens</span>
+                      <span className="text-xs bg-purple-900/50 text-purple-200 px-2 py-1 rounded">v2.1</span>
+                    </div>
+                  </div>
+                  <div className="bg-gradient-to-br from-green-900/40 to-emerald-900/40 border border-green-500/40 rounded-xl p-6 cursor-pointer hover:scale-105 hover:border-green-400 transition">
+                    <div className="text-4xl mb-3">🖥️</div>
+                    <h4 className="text-white font-bold mb-2">Web Dashboard</h4>
+                    <p className="text-gray-300 text-sm mb-4">Desktop interface flows</p>
+                    <div className="flex gap-2">
+                      <span className="text-xs bg-green-900/50 text-green-200 px-2 py-1 rounded">8 Pages</span>
+                      <span className="text-xs bg-emerald-900/50 text-emerald-200 px-2 py-1 rounded">v1.8</span>
+                    </div>
+                  </div>
+                  <div className="bg-gradient-to-br from-orange-900/40 to-red-900/40 border border-orange-500/40 rounded-xl p-6 cursor-pointer hover:scale-105 hover:border-orange-400 transition">
+                    <div className="text-4xl mb-3">⚙️</div>
+                    <h4 className="text-white font-bold mb-2">Admin Panel</h4>
+                    <p className="text-gray-300 text-sm mb-4">Management console</p>
+                    <div className="flex gap-2">
+                      <span className="text-xs bg-orange-900/50 text-orange-200 px-2 py-1 rounded">15 Views</span>
+                      <span className="text-xs bg-red-900/50 text-red-200 px-2 py-1 rounded">v1.5</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Wireframe Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {[
+                    { title: "Login Screen", type: "Auth", screens: ["Email", "Password", "2FA"], color: "blue" },
+                    { title: "Dashboard Home", type: "Main", screens: ["Overview", "Quick Actions", "Stats"], color: "purple" },
+                    { title: "Wallet View", type: "Finance", screens: ["Balances", "History", "Send/Receive"], color: "green" },
+                    { title: "Payment Flow", type: "Transaction", screens: ["Enter Amount", "Confirm", "Success"], color: "indigo" },
+                    { title: "Booking System", type: "Healthcare", screens: ["Select Chamber", "Date/Time", "Confirm"], color: "pink" },
+                    { title: "User Profile", type: "Account", screens: ["Settings", "Security", "Preferences"], color: "cyan" }
+                  ].map((wireframe, idx) => (
+                    <div key={idx} className={`bg-gray-700/50 border border-${wireframe.color}-500/30 rounded-lg p-5 hover:border-${wireframe.color}-400 transition cursor-pointer`}>
+                      <div className="flex items-center justify-between mb-4">
+                        <h4 className="text-white font-semibold">{wireframe.title}</h4>
+                        <span className={`text-xs font-semibold px-2 py-1 rounded bg-${wireframe.color}-900/50 text-${wireframe.color}-200`}>
+                          {wireframe.type}
+                        </span>
+                      </div>
+                      <div className="bg-gray-900 rounded border border-gray-600 p-4 mb-4 h-48 flex items-center justify-center">
+                        <div className="text-center">
+                          <div className="w-32 h-32 bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg mx-auto mb-2 border border-gray-500 flex items-center justify-center">
+                            <span className="text-gray-500 text-xs">Wireframe</span>
+                          </div>
+                          <p className="text-gray-500 text-xs">Interactive Mockup</p>
+                        </div>
+                      </div>
+                      <div className="space-y-1">
+                        {wireframe.screens.map((screen, i) => (
+                          <div key={i} className="flex items-center gap-2 text-xs text-gray-400">
+                            <div className={`w-2 h-2 rounded-full bg-${wireframe.color}-500`}></div>
+                            <span>{screen}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <button className={`mt-4 w-full bg-${wireframe.color}-600/20 hover:bg-${wireframe.color}-600/40 border border-${wireframe.color}-500/50 text-${wireframe.color}-300 font-semibold py-2 rounded transition`}>
+                        View Details
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Design System */}
+              <div className="bg-gray-800 rounded-lg p-6 border border-purple-500 shadow-lg">
+                <h4 className="text-white font-bold text-xl mb-4">Design System</h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="bg-gray-700 rounded-lg p-4 text-center cursor-pointer hover:scale-105 transition">
+                    <div className="text-3xl mb-2">🎨</div>
+                    <p className="text-white font-semibold text-sm">Colors</p>
+                    <p className="text-gray-400 text-xs">24 Palette</p>
+                  </div>
+                  <div className="bg-gray-700 rounded-lg p-4 text-center cursor-pointer hover:scale-105 transition">
+                    <div className="text-3xl mb-2">📝</div>
+                    <p className="text-white font-semibold text-sm">Typography</p>
+                    <p className="text-gray-400 text-xs">8 Styles</p>
+                  </div>
+                  <div className="bg-gray-700 rounded-lg p-4 text-center cursor-pointer hover:scale-105 transition">
+                    <div className="text-3xl mb-2">🔲</div>
+                    <p className="text-white font-semibold text-sm">Components</p>
+                    <p className="text-gray-400 text-xs">45 Elements</p>
+                  </div>
+                  <div className="bg-gray-700 rounded-lg p-4 text-center cursor-pointer hover:scale-105 transition">
+                    <div className="text-3xl mb-2">✨</div>
+                    <p className="text-white font-semibold text-sm">Icons</p>
+                    <p className="text-gray-400 text-xs">120+ Icons</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Ecosystem Tab */}
+          {activeTab === "ecosystem" && (
+            <div className="space-y-6">
+              <div className="bg-gray-800 rounded-lg p-6 border border-purple-500 shadow-lg">
+                <h3 className="text-white font-bold text-2xl mb-2">Platform Ecosystem</h3>
+                <p className="text-gray-400 mb-6">Integrated services and partner network</p>
+
+                {/* Central Platform */}
+                <div className="relative mb-12">
+                  <div className="max-w-md mx-auto bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl p-8 text-white text-center shadow-2xl cursor-pointer hover:scale-105 transition">
+                    <div className="text-5xl mb-3">🏦</div>
+                    <h4 className="text-2xl font-bold mb-2">Advancia PayLedger</h4>
+                    <p className="text-blue-100 text-sm">Core Platform</p>
+                  </div>
+                </div>
+
+                {/* Ecosystem Components */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                  {[
+                    { icon: "💰", title: "Payment Gateway", desc: "Crypto & Fiat Processing", partners: ["Stripe", "Coinbase", "PayPal"], color: "from-green-600 to-emerald-700" },
+                    { icon: "🏥", title: "Healthcare Network", desc: "Medical Service Providers", partners: ["UnitedHealth", "Aetna", "BlueCross"], color: "from-blue-600 to-cyan-700" },
+                    { icon: "🔐", title: "Security Layer", desc: "Identity & Authentication", partners: ["Auth0", "Okta", "1Password"], color: "from-red-600 to-orange-700" },
+                    { icon: "📊", title: "Analytics Engine", desc: "Business Intelligence", partners: ["Tableau", "PowerBI", "Looker"], color: "from-purple-600 to-pink-700" },
+                    { icon: "🌐", title: "Blockchain Networks", desc: "Multi-chain Support", partners: ["Bitcoin", "Ethereum", "Polygon"], color: "from-yellow-600 to-amber-700" },
+                    { icon: "💳", title: "Banking Partners", desc: "Traditional Finance", partners: ["Chase", "BofA", "Wells Fargo"], color: "from-indigo-600 to-blue-700" },
+                    { icon: "📱", title: "Mobile SDKs", desc: "iOS & Android Libraries", partners: ["React Native", "Flutter", "Swift"], color: "from-teal-600 to-green-700" },
+                    { icon: "🔔", title: "Notifications", desc: "Multi-channel Alerts", partners: ["Twilio", "SendGrid", "Firebase"], color: "from-pink-600 to-rose-700" }
+                  ].map((component, idx) => (
+                    <div key={idx} className={`bg-gradient-to-br ${component.color} rounded-xl p-6 text-white shadow-lg cursor-pointer hover:scale-105 transition`}>
+                      <div className="text-4xl mb-3">{component.icon}</div>
+                      <h4 className="font-bold mb-1">{component.title}</h4>
+                      <p className="text-white/80 text-xs mb-4">{component.desc}</p>
+                      <div className="space-y-1">
+                        {component.partners.map((partner, i) => (
+                          <div key={i} className="flex items-center gap-2 text-xs">
+                            <div className="w-1.5 h-1.5 rounded-full bg-white/60"></div>
+                            <span className="text-white/90">{partner}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Integration Flow */}
+                <div className="bg-gray-700/50 border border-purple-500/30 rounded-lg p-6">
+                  <h4 className="text-white font-bold mb-6">Integration Architecture</h4>
+                  <div className="space-y-4">
+                    {[
+                      { layer: "Presentation Layer", components: ["Web App", "Mobile App", "Admin Dashboard"], color: "blue" },
+                      { layer: "API Gateway", components: ["REST API", "GraphQL", "WebSocket"], color: "purple" },
+                      { layer: "Business Logic", components: ["Payment Service", "Healthcare Service", "User Management"], color: "green" },
+                      { layer: "Data Layer", components: ["PostgreSQL", "Redis Cache", "S3 Storage"], color: "orange" },
+                      { layer: "Infrastructure", components: ["AWS/Azure", "CDN", "Load Balancer"], color: "red" }
+                    ].map((layer, idx) => (
+                      <div key={idx} className="flex items-center gap-4 cursor-pointer hover:bg-gray-700/30 p-3 rounded transition">
+                        <div className={`bg-${layer.color}-600 text-white px-4 py-2 rounded-lg font-semibold text-sm min-w-[160px] text-center`}>
+                          {layer.layer}
+                        </div>
+                        <div className="flex-1 flex gap-2 flex-wrap">
+                          {layer.components.map((comp, i) => (
+                            <span key={i} className="text-xs bg-gray-800 text-gray-300 px-3 py-1 rounded-full border border-gray-600">
+                              {comp}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* API Status */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="bg-gradient-to-br from-green-900/40 to-emerald-900/40 border border-green-500/40 rounded-lg p-6 cursor-pointer hover:scale-105 transition">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="text-white font-bold">API Status</h4>
+                    <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
+                  </div>
+                  <p className="text-3xl font-bold text-green-400 mb-1">99.98%</p>
+                  <p className="text-green-200 text-sm">Uptime (30 days)</p>
+                </div>
+                <div className="bg-gradient-to-br from-blue-900/40 to-cyan-900/40 border border-blue-500/40 rounded-lg p-6 cursor-pointer hover:scale-105 transition">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="text-white font-bold">API Calls</h4>
+                    <span className="text-2xl">📈</span>
+                  </div>
+                  <p className="text-3xl font-bold text-blue-400 mb-1">2.4M</p>
+                  <p className="text-blue-200 text-sm">Requests/day</p>
+                </div>
+                <div className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border border-purple-500/40 rounded-lg p-6 cursor-pointer hover:scale-105 transition">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="text-white font-bold">Response Time</h4>
+                    <span className="text-2xl">⚡</span>
+                  </div>
+                  <p className="text-3xl font-bold text-purple-400 mb-1">45ms</p>
+                  <p className="text-purple-200 text-sm">Average latency</p>
                 </div>
               </div>
             </div>
