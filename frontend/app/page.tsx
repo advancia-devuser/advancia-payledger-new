@@ -91,6 +91,9 @@ export default function Home() {
   const [selectedWallet, setSelectedWallet] = useState<string | null>(null);
   const [showSendModal, setShowSendModal] = useState(false);
   const [showReceiveModal, setShowReceiveModal] = useState(false);
+  const [isNewUser, setIsNewUser] = useState(true);
+  const [onboardingStep, setOnboardingStep] = useState(0);
+  const [completedTasks, setCompletedTasks] = useState<string[]>([]);
 
   // Mock wallet data
   const mockWallets = [
@@ -276,6 +279,148 @@ export default function Home() {
           {/* Dashboard Tab */}
           {activeTab === "dashboard" && (
             <div className="space-y-6">
+              {/* New User Welcome Banner */}
+              {isNewUser && (
+                <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-2xl p-8 text-white shadow-2xl">
+                  <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="text-5xl">👋</span>
+                        <h2 className="text-3xl font-bold">Welcome, {authName || "Friend"}!</h2>
+                      </div>
+                      <p className="text-indigo-100 text-lg mb-4">
+                        Your Advancia PayLedger account is ready. Let's get you started with a quick tour!
+                      </p>
+                      <div className="flex gap-3">
+                        <button 
+                          onClick={() => setOnboardingStep(1)}
+                          className="bg-white text-purple-600 font-bold px-6 py-3 rounded-lg hover:bg-indigo-50 transition cursor-pointer"
+                        >
+                          Start Tour 🚀
+                        </button>
+                        <button 
+                          onClick={() => setIsNewUser(false)}
+                          className="bg-white/20 hover:bg-white/30 backdrop-blur text-white font-semibold px-6 py-3 rounded-lg transition cursor-pointer"
+                        >
+                          Skip for Now
+                        </button>
+                      </div>
+                    </div>
+                    <div className="text-6xl">🎉</div>
+                  </div>
+                </div>
+              )}
+
+              {/* Getting Started Checklist */}
+              {isNewUser && (
+                <div className="bg-gray-800 rounded-lg p-6 border border-purple-500 shadow-lg">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h3 className="text-white font-bold text-xl">Getting Started Checklist</h3>
+                      <p className="text-gray-400 text-sm">Complete these steps to unlock the full power of your account</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-3xl font-bold text-purple-400">{completedTasks.length}/6</p>
+                      <p className="text-gray-400 text-xs">Completed</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    {[
+                      { id: "profile", icon: "👤", title: "Complete Your Profile", desc: "Add your personal information", action: () => setActiveTab("admin") },
+                      { id: "wallet", icon: "👛", title: "Set Up Your First Wallet", desc: "Add BTC, ETH, or USDC wallet", action: () => setActiveTab("wallet") },
+                      { id: "verify", icon: "✅", title: "Verify Your Identity", desc: "KYC verification for higher limits", action: () => {} },
+                      { id: "deposit", icon: "💰", title: "Make Your First Deposit", desc: "Add funds to start transacting", action: () => setActiveTab("wallet") },
+                      { id: "booking", icon: "🏥", title: "Book a Chamber", desc: "Reserve your first healthcare session", action: () => setActiveTab("booking") },
+                      { id: "security", icon: "🔐", title: "Enable 2FA Security", desc: "Protect your account with 2FA", action: () => {} }
+                    ].map((task) => (
+                      <div 
+                        key={task.id}
+                        onClick={() => {
+                          if (!completedTasks.includes(task.id)) {
+                            setCompletedTasks([...completedTasks, task.id]);
+                          }
+                          task.action();
+                        }}
+                        className={`flex items-center gap-4 p-4 rounded-lg border cursor-pointer transition-all ${
+                          completedTasks.includes(task.id)
+                            ? 'bg-green-900/30 border-green-500/50'
+                            : 'bg-gray-700/30 border-purple-500/30 hover:border-purple-400 hover:bg-gray-700/50'
+                        }`}
+                      >
+                        <div className="text-3xl">{task.icon}</div>
+                        <div className="flex-1">
+                          <h4 className="text-white font-semibold">{task.title}</h4>
+                          <p className="text-gray-400 text-sm">{task.desc}</p>
+                        </div>
+                        {completedTasks.includes(task.id) ? (
+                          <div className="bg-green-600 text-white rounded-full w-8 h-8 flex items-center justify-center">
+                            ✓
+                          </div>
+                        ) : (
+                          <div className="bg-gray-700 text-gray-400 rounded-full w-8 h-8 flex items-center justify-center border border-gray-600">
+                            ○
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {completedTasks.length === 6 && (
+                    <div className="mt-6 bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg p-6 text-center">
+                      <div className="text-4xl mb-2">🎊</div>
+                      <h4 className="text-white font-bold text-xl mb-2">Congratulations!</h4>
+                      <p className="text-green-100 mb-4">You've completed the setup process. Your account is fully activated!</p>
+                      <button 
+                        onClick={() => setIsNewUser(false)}
+                        className="bg-white text-green-600 font-bold px-6 py-2 rounded-lg hover:bg-green-50 transition cursor-pointer"
+                      >
+                        Continue to Dashboard
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Quick Start Guide */}
+              {isNewUser && (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div 
+                    onClick={() => setActiveTab("wallet")}
+                    className="bg-gradient-to-br from-blue-900/60 to-cyan-900/60 border border-blue-500/40 rounded-xl p-6 cursor-pointer hover:scale-105 hover:border-blue-400 transition"
+                  >
+                    <div className="text-4xl mb-3">💳</div>
+                    <h4 className="text-white font-bold mb-2">Manage Crypto</h4>
+                    <p className="text-blue-200 text-sm mb-4">Store and manage Bitcoin, Ethereum, and stablecoins securely</p>
+                    <button className="text-blue-300 hover:text-blue-200 font-semibold text-sm">
+                      Explore Wallets →
+                    </button>
+                  </div>
+                  <div 
+                    onClick={() => setActiveTab("booking")}
+                    className="bg-gradient-to-br from-purple-900/60 to-pink-900/60 border border-purple-500/40 rounded-xl p-6 cursor-pointer hover:scale-105 hover:border-purple-400 transition"
+                  >
+                    <div className="text-4xl mb-3">🏥</div>
+                    <h4 className="text-white font-bold mb-2">Healthcare Access</h4>
+                    <p className="text-purple-200 text-sm mb-4">Book private chambers and manage your healthcare plans</p>
+                    <button className="text-purple-300 hover:text-purple-200 font-semibold text-sm">
+                      View Chambers →
+                    </button>
+                  </div>
+                  <div 
+                    onClick={() => setActiveTab("analytics")}
+                    className="bg-gradient-to-br from-green-900/60 to-emerald-900/60 border border-green-500/40 rounded-xl p-6 cursor-pointer hover:scale-105 hover:border-green-400 transition"
+                  >
+                    <div className="text-4xl mb-3">📊</div>
+                    <h4 className="text-white font-bold mb-2">Track Everything</h4>
+                    <p className="text-green-200 text-sm mb-4">Real-time analytics for your finances and healthcare</p>
+                    <button className="text-green-300 hover:text-green-200 font-semibold text-sm">
+                      See Analytics →
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* Quick Actions Bar */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <button 
