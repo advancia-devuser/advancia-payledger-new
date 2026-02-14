@@ -109,6 +109,12 @@ export default function Home() {
   const [isDarkTheme, setIsDarkTheme] = useState(true);
   const [kycStatus, setKycStatus] = useState<"unverified" | "pending" | "verified">("unverified");
   const [transactionFilter, setTransactionFilter] = useState("all");
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingAction, setLoadingAction] = useState("");
+  const [depositMethod, setDepositMethod] = useState("bank");
+  const [withdrawMethod, setWithdrawMethod] = useState("bank");
+  const [depositAmount, setDepositAmount] = useState("");
+  const [withdrawAmount, setWithdrawAmount] = useState("");
 
   // Mock wallet data
   const mockWallets = [
@@ -609,8 +615,14 @@ export default function Home() {
               {isNewUser && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div 
-                    onClick={() => setActiveTab("wallet")}
-                    className="bg-gradient-to-br from-blue-900/60 to-cyan-900/60 border border-blue-500/40 rounded-xl p-6 cursor-pointer hover:scale-105 hover:border-blue-400 transition"
+                    onClick={() => {
+                      setLoadingAction('start-wallet');
+                      setTimeout(() => {
+                        setActiveTab("wallet");
+                        setLoadingAction('');
+                      }, 200);
+                    }}
+                    className="bg-gradient-to-br from-blue-900/60 to-cyan-900/60 border border-blue-500/40 rounded-xl p-6 cursor-pointer hover:scale-105 hover:border-blue-400 transition-all duration-300 transform hover:shadow-2xl active:scale-95"
                   >
                     <div className="text-4xl mb-3">💳</div>
                     <h4 className="text-white font-bold mb-2">Manage Crypto</h4>
@@ -620,8 +632,14 @@ export default function Home() {
                     </button>
                   </div>
                   <div 
-                    onClick={() => setActiveTab("booking")}
-                    className="bg-gradient-to-br from-purple-900/60 to-pink-900/60 border border-purple-500/40 rounded-xl p-6 cursor-pointer hover:scale-105 hover:border-purple-400 transition"
+                    onClick={() => {
+                      setLoadingAction('start-booking');
+                      setTimeout(() => {
+                        setActiveTab("booking");
+                        setLoadingAction('');
+                      }, 200);
+                    }}
+                    className="bg-gradient-to-br from-purple-900/60 to-pink-900/60 border border-purple-500/40 rounded-xl p-6 cursor-pointer hover:scale-105 hover:border-purple-400 transition-all duration-300 transform hover:shadow-2xl active:scale-95"
                   >
                     <div className="text-4xl mb-3">🏥</div>
                     <h4 className="text-white font-bold mb-2">Healthcare Access</h4>
@@ -631,8 +649,14 @@ export default function Home() {
                     </button>
                   </div>
                   <div 
-                    onClick={() => setActiveTab("analytics")}
-                    className="bg-gradient-to-br from-green-900/60 to-emerald-900/60 border border-green-500/40 rounded-xl p-6 cursor-pointer hover:scale-105 hover:border-green-400 transition"
+                    onClick={() => {
+                      setLoadingAction('start-analytics');
+                      setTimeout(() => {
+                        setActiveTab("analytics");
+                        setLoadingAction('');
+                      }, 200);
+                    }}
+                    className="bg-gradient-to-br from-green-900/60 to-emerald-900/60 border border-green-500/40 rounded-xl p-6 cursor-pointer hover:scale-105 hover:border-green-400 transition-all duration-300 transform hover:shadow-2xl active:scale-95"
                   >
                     <div className="text-4xl mb-3">📊</div>
                     <h4 className="text-white font-bold mb-2">Track Everything</h4>
@@ -797,29 +821,48 @@ export default function Home() {
               {/* Quick Actions */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <button 
-                  onClick={() => setShowSendModal(true)}
-                  className="bg-gradient-to-br from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 rounded-xl p-4 text-white transition-all hover:scale-105 shadow-lg cursor-pointer"
+                  onClick={() => {
+                    setShowSendModal(true);
+                    setLoadingAction('send');
+                    setTimeout(() => setLoadingAction(''), 300);
+                  }}
+                  className="bg-gradient-to-br from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 rounded-xl p-4 text-white transition-all hover:scale-110 active:scale-95 shadow-lg hover:shadow-2xl cursor-pointer transform"
                 >
-                  <div className="text-3xl mb-2">↗️</div>
+                  <div className="text-3xl mb-2 transition-transform group-hover:rotate-12">↗️</div>
                   <div className="font-semibold">Send</div>
                   <div className="text-xs text-blue-200">Transfer funds</div>
                 </button>
                 <button 
-                  onClick={() => setShowReceiveModal(true)}
-                  className="bg-gradient-to-br from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 rounded-xl p-4 text-white transition-all hover:scale-105 shadow-lg cursor-pointer"
+                  onClick={() => {
+                    setShowReceiveModal(true);
+                    setLoadingAction('receive');
+                    setTimeout(() => setLoadingAction(''), 300);
+                  }}
+                  className="bg-gradient-to-br from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 rounded-xl p-4 text-white transition-all hover:scale-110 active:scale-95 shadow-lg hover:shadow-2xl cursor-pointer transform"
                 >
                   <div className="text-3xl mb-2">↙️</div>
                   <div className="font-semibold">Receive</div>
                   <div className="text-xs text-green-200">Get paid</div>
                 </button>
-                <button className="bg-gradient-to-br from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 rounded-xl p-4 text-white transition-all hover:scale-105 shadow-lg cursor-pointer">
+                <button 
+                  onClick={() => {
+                    setActiveTab('wallet');
+                    setLoadingAction('swap');
+                    setTimeout(() => setLoadingAction(''), 300);
+                  }}
+                  className="bg-gradient-to-br from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 rounded-xl p-4 text-white transition-all hover:scale-110 active:scale-95 shadow-lg hover:shadow-2xl cursor-pointer transform"
+                >
                   <div className="text-3xl mb-2">🔄</div>
                   <div className="font-semibold">Swap</div>
                   <div className="text-xs text-purple-200">Exchange crypto</div>
                 </button>
                 <button 
-                  onClick={() => setShowDepositModal(true)}
-                  className="bg-gradient-to-br from-orange-600 to-orange-700 hover:from-orange-500 hover:to-orange-600 rounded-xl p-4 text-white transition-all hover:scale-105 shadow-lg cursor-pointer"
+                  onClick={() => {
+                    setShowDepositModal(true);
+                    setLoadingAction('deposit');
+                    setTimeout(() => setLoadingAction(''), 300);
+                  }}
+                  className="bg-gradient-to-br from-orange-600 to-orange-700 hover:from-orange-500 hover:to-orange-600 rounded-xl p-4 text-white transition-all hover:scale-110 active:scale-95 shadow-lg hover:shadow-2xl cursor-pointer transform"
                 >
                   <div className="text-3xl mb-2">💳</div>
                   <div className="font-semibold">Deposit</div>
@@ -837,14 +880,22 @@ export default function Home() {
                   </div>
                   <div className="flex gap-3">
                     <button 
-                      onClick={() => setShowDepositModal(true)}
-                      className="bg-white/20 hover:bg-white/30 backdrop-blur rounded-lg px-5 py-2 font-semibold transition cursor-pointer"
+                      onClick={() => {
+                        setShowDepositModal(true);
+                        setIsLoading(true);
+                        setTimeout(() => setIsLoading(false), 200);
+                      }}
+                      className="bg-white/20 hover:bg-white/30 backdrop-blur rounded-lg px-5 py-2 font-semibold transition-all hover:scale-105 active:scale-95 cursor-pointer transform"
                     >
                       💰 Deposit
                     </button>
                     <button 
-                      onClick={() => setShowWithdrawModal(true)}
-                      className="bg-white/20 hover:bg-white/30 backdrop-blur rounded-lg px-5 py-2 font-semibold transition cursor-pointer"
+                      onClick={() => {
+                        setShowWithdrawModal(true);
+                        setIsLoading(true);
+                        setTimeout(() => setIsLoading(false), 200);
+                      }}
+                      className="bg-white/20 hover:bg-white/30 backdrop-blur rounded-lg px-5 py-2 font-semibold transition-all hover:scale-105 active:scale-95 cursor-pointer transform"
                     >
                       💸 Withdraw
                     </button>
@@ -859,7 +910,14 @@ export default function Home() {
                     <h3 className="text-white font-bold text-xl">My Wallets</h3>
                     <p className="text-gray-400 text-sm">Manage your cryptocurrency wallets</p>
                   </div>
-                  <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold px-6 py-2 rounded-lg transition cursor-pointer">
+                  <button 
+                    onClick={() => {
+                      setActiveTab('wallet');
+                      setIsLoading(true);
+                      setTimeout(() => setIsLoading(false), 200);
+                    }}
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold px-6 py-2 rounded-lg transition-all hover:scale-105 active:scale-95 cursor-pointer transform shadow-lg hover:shadow-xl"
+                  >
                     + Add Wallet
                   </button>
                 </div>
@@ -868,12 +926,23 @@ export default function Home() {
                   {mockWallets.map((wallet) => (
                     <div 
                       key={wallet.id}
-                      onClick={() => setSelectedWallet(wallet.id === selectedWallet ? null : wallet.id)}
-                      className={`bg-gradient-to-br ${wallet.color} rounded-xl p-6 text-white cursor-pointer transition-all hover:scale-105 shadow-lg ${selectedWallet === wallet.id ? 'ring-4 ring-white/50' : ''}`}
+                      onClick={() => {
+                        setSelectedWallet(wallet.id === selectedWallet ? null : wallet.id);
+                        setIsLoading(true);
+                        setTimeout(() => setIsLoading(false), 150);
+                      }}
+                      className={`bg-gradient-to-br ${wallet.color} rounded-xl p-6 text-white cursor-pointer transition-all duration-300 transform hover:scale-105 hover:shadow-2xl active:scale-95 ${selectedWallet === wallet.id ? 'ring-4 ring-white/50 scale-105 shadow-2xl' : 'shadow-lg'}`}
                     >
                       <div className="flex items-center justify-between mb-4">
-                        <div className="text-4xl">{wallet.icon}</div>
-                        <button className="bg-white/20 hover:bg-white/30 backdrop-blur rounded-full p-2 transition">
+                        <div className="text-4xl transition-transform hover:scale-125 duration-300">{wallet.icon}</div>
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setLoadingAction('wallet-menu');
+                            setTimeout(() => setLoadingAction(''), 200);
+                          }}
+                          className="bg-white/20 hover:bg-white/30 backdrop-blur rounded-full p-2 transition-all hover:scale-110 active:scale-95 cursor-pointer"
+                        >
                           <span className="text-xl">⋮</span>
                         </button>
                       </div>
@@ -886,20 +955,28 @@ export default function Home() {
                         <button 
                           onClick={(e) => {
                             e.stopPropagation();
-                            setShowSendModal(true);
+                            setLoadingAction('send');
+                            setTimeout(() => {
+                              setShowSendModal(true);
+                              setLoadingAction('');
+                            }, 150);
                           }}
-                          className="flex-1 bg-white/20 hover:bg-white/30 backdrop-blur rounded-lg py-2 text-sm font-semibold transition"
+                          className="flex-1 bg-white/20 hover:bg-white/30 backdrop-blur rounded-lg py-2 text-sm font-semibold transition-all hover:scale-105 active:scale-95 transform shadow hover:shadow-lg"
                         >
-                          Send
+                          {loadingAction === 'send' ? '⏳' : 'Send'}
                         </button>
                         <button 
-                          onClick={(e) => {
+                          onClick=(e) => {
                             e.stopPropagation();
-                            setShowReceiveModal(true);
+                            setLoadingAction('receive');
+                            setTimeout(() => {
+                              setShowReceiveModal(true);
+                              setLoadingAction('');
+                            }, 150);
                           }}
-                          className="flex-1 bg-white/20 hover:bg-white/30 backdrop-blur rounded-lg py-2 text-sm font-semibold transition"
+                          className="flex-1 bg-white/20 hover:bg-white/30 backdrop-blur rounded-lg py-2 text-sm font-semibold transition-all hover:scale-105 active:scale-95 transform shadow hover:shadow-lg"
                         >
-                          Receive
+                          {loadingAction === 'receive' ? '⏳' : 'Receive'}
                         </button>
                       </div>
                     </div>
@@ -1051,7 +1128,14 @@ export default function Home() {
                   {mockTransactions
                     .filter(t => transactionFilter === "all" || t.type === transactionFilter)
                     .map((transaction) => (
-                      <div key={transaction.id} className="bg-gray-700/50 border border-gray-600 rounded-lg p-5 hover:border-purple-500/50 transition">
+                      <div 
+                        key={transaction.id} 
+                        onClick={() => {
+                          setLoadingAction('tx-' + transaction.id);
+                          setTimeout(() => setLoadingAction(''), 200);
+                        }}
+                        className="bg-gray-700/50 border border-gray-600 rounded-lg p-5 hover:border-purple-500/50 transition-all duration-300 transform hover:scale-102 hover:shadow-lg active:scale-98 cursor-pointer"
+                      >
                         <div className="flex items-start justify-between">
                           <div className="flex items-start gap-4 flex-1">
                             <div className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl ${
@@ -1122,7 +1206,14 @@ export default function Home() {
                     { name: "Chamber B", type: "Wellness Pod", availability: "Next: 3:30 PM", price: "$90 / hr", status: "busy", amenities: ["Massage", "Aromatherapy", "Music"] },
                     { name: "Chamber C", type: "Clinical Room", availability: "Available Tomorrow", price: "$75 / hr", status: "available", amenities: ["Medical Equipment", "Sterilized", "Professional"] }
                   ].map((chamber) => (
-                    <div key={chamber.name} className="bg-gray-700/60 border border-purple-500/40 rounded-xl p-5 hover:border-purple-400 transition hover:scale-105 cursor-pointer">
+                    <div 
+                      key={chamber.name} 
+                      onClick={() => {
+                        setLoadingAction('chamber-' + chamber.name);
+                        setTimeout(() => setLoadingAction(''), 200);
+                      }}
+                      className="bg-gray-700/60 border border-purple-500/40 rounded-xl p-5 hover:border-purple-400 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl active:scale-95 cursor-pointer shadow-lg"
+                    >
                       <div className="flex items-start justify-between mb-3">
                         <div>
                           <p className="text-white font-semibold text-lg">{chamber.name}</p>
@@ -1143,11 +1234,30 @@ export default function Home() {
                         <p className="text-gray-300">🕒 {chamber.availability}</p>
                         <p className="text-green-400 font-semibold text-lg">{chamber.price}</p>
                       </div>
-                      <button className="mt-5 w-full bg-purple-600 hover:bg-purple-500 text-white font-semibold py-2 rounded-lg transition">
-                        Book Now
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setLoadingAction('book-' + chamber.name);
+                          setTimeout(() => {
+                            setLoadingAction('');
+                            alert(`Booking ${chamber.name}...`);
+                          }, 300);
+                        }}
+                        className="mt-5 w-full bg-purple-600 hover:bg-purple-500 text-white font-semibold py-2 rounded-lg transition-all transform hover:scale-105 active:scale-95 shadow hover:shadow-xl"
+                      >
+                        {loadingAction === 'book-' + chamber.name ? '⏳ Booking...' : '✓ Book Now'}
                       </button>
-                      <button className="mt-2 w-full border border-purple-500/50 hover:bg-purple-500/10 text-purple-300 font-semibold py-2 rounded-lg transition">
-                        View Details
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setLoadingAction('details-' + chamber.name);
+                          setTimeout(() => {
+                            setLoadingAction('');
+                          }, 200);
+                        }}
+                        className="mt-2 w-full border border-purple-500/50 hover:bg-purple-500/10 text-purple-300 font-semibold py-2 rounded-lg transition-all transform hover:scale-105 active:scale-95"
+                      >
+                        {loadingAction === 'details-' + chamber.name ? '⏳' : 'View Details'}
                       </button>
                     </div>
                   ))}
@@ -1451,7 +1561,14 @@ export default function Home() {
                 
                 <div className="space-y-3">
                   {mockActivities.map((activity) => (
-                    <div key={activity.id} className={`flex items-start gap-4 p-4 bg-${activity.color}-900/20 border border-${activity.color}-500/30 rounded-lg hover:border-${activity.color}-400 transition cursor-pointer`}>
+                    <div 
+                      key={activity.id} 
+                      onClick={() => {
+                        setLoadingAction('activity-' + activity.id);
+                        setTimeout(() => setLoadingAction(''), 200);
+                      }}
+                      className={`flex items-start gap-4 p-4 bg-${activity.color}-900/20 border border-${activity.color}-500/30 rounded-lg hover:border-${activity.color}-400 transition-all duration-300 transform hover:scale-102 hover:shadow-lg active:scale-98 cursor-pointer`}
+                    >
                       <div className="text-3xl">{activity.icon}</div>
                       <div className="flex-1">
                         <h4 className="text-white font-semibold mb-1">{activity.action}</h4>
@@ -1497,10 +1614,16 @@ export default function Home() {
                     <p className="text-gray-400 text-sm">{unreadNotifications} unread notifications</p>
                   </div>
                   <button 
-                    onClick={() => setUnreadNotifications(0)}
-                    className="bg-purple-600 hover:bg-purple-500 text-white font-semibold px-4 py-2 rounded-lg transition cursor-pointer"
+                    onClick={() => {
+                      setLoadingAction('mark-read');
+                      setTimeout(() => {
+                        setUnreadNotifications(0);
+                        setLoadingAction('');
+                      }, 300);
+                    }}
+                    className="bg-purple-600 hover:bg-purple-500 text-white font-semibold px-4 py-2 rounded-lg transition-all transform hover:scale-105 active:scale-95 shadow hover:shadow-lg cursor-pointer"
                   >
-                    Mark All Read
+                    {loadingAction === 'mark-read' ? '⏳ Marking...' : '✓ Mark All Read'}
                   </button>
                 </div>
 
@@ -1584,31 +1707,55 @@ export default function Home() {
                     <span>🔐</span> Security
                   </h4>
                   <div className="space-y-3">
-                    <div className="flex items-center justify-between p-4 bg-gray-700/30 border border-gray-600 rounded-lg">
+                    <div className="flex items-center justify-between p-4 bg-gray-700/30 border border-gray-600 rounded-lg hover:border-purple-500/50 transition-all duration-300 hover:scale-102 cursor-pointer">
                       <div>
                         <h5 className="text-white font-semibold">Two-Factor Authentication</h5>
                         <p className="text-gray-400 text-sm">Add an extra layer of security</p>
                       </div>
-                      <button className="bg-purple-600 hover:bg-purple-500 text-white font-semibold px-4 py-2 rounded-lg transition cursor-pointer">
-                        Enable
+                      <button 
+                        onClick={() => {
+                          setLoadingAction('2fa-enable');
+                          setTimeout(() => {
+                            setShow2FAModal(true);
+                            setLoadingAction('');
+                          }, 200);
+                        }}
+                        className="bg-purple-600 hover:bg-purple-500 text-white font-semibold px-4 py-2 rounded-lg transition-all transform hover:scale-105 active:scale-95 shadow hover:shadow-lg cursor-pointer"
+                      >
+                        {loadingAction === '2fa-enable' ? '⏳' : 'Enable'}
                       </button>
                     </div>
-                    <div className="flex items-center justify-between p-4 bg-gray-700/30 border border-gray-600 rounded-lg">
+                    <div className="flex items-center justify-between p-4 bg-gray-700/30 border border-gray-600 rounded-lg hover:border-purple-500/50 transition-all duration-300 hover:scale-102 cursor-pointer">
                       <div>
                         <h5 className="text-white font-semibold">Change Password</h5>
                         <p className="text-gray-400 text-sm">Update your password regularly</p>
                       </div>
-                      <button className="bg-gray-600 hover:bg-gray-500 text-white font-semibold px-4 py-2 rounded-lg transition cursor-pointer">
-                        Change
+                      <button 
+                        onClick={() => {
+                          setLoadingAction('change-password');
+                          setTimeout(() => setLoadingAction(''), 300);
+                        }}
+                        className="bg-gray-600 hover:bg-gray-500 text-white font-semibold px-4 py-2 rounded-lg transition-all transform hover:scale-105 active:scale-95 cursor-pointer"
+                      >
+                        {loadingAction === 'change-password' ? '⏳' : 'Change'}
                       </button>
                     </div>
-                    <div className="flex items-center justify-between p-4 bg-gray-700/30 border border-gray-600 rounded-lg">
+                    <div className="flex items-center justify-between p-4 bg-gray-700/30 border border-gray-600 rounded-lg hover:border-purple-500/50 transition-all duration-300 hover:scale-102 cursor-pointer">
                       <div>
                         <h5 className="text-white font-semibold">Active Sessions</h5>
                         <p className="text-gray-400 text-sm">Manage your logged-in devices</p>
                       </div>
-                      <button className="bg-gray-600 hover:bg-gray-500 text-white font-semibold px-4 py-2 rounded-lg transition cursor-pointer">
-                        View All
+                      <button 
+                        onClick={() => {
+                          setLoadingAction('sessions');
+                          setTimeout(() => {
+                            setShowSessionsModal(true);
+                            setLoadingAction('');
+                          }, 200);
+                        }}
+                        className="bg-gray-600 hover:bg-gray-500 text-white font-semibold px-4 py-2 rounded-lg transition-all transform hover:scale-105 active:scale-95 cursor-pointer"
+                      >
+                        {loadingAction === 'sessions' ? '⏳' : 'View All'}
                       </button>
                     </div>
                   </div>
@@ -2126,8 +2273,19 @@ export default function Home() {
                     <span className="text-white font-semibold">$0.00</span>
                   </div>
                 </div>
-                <button type="button" className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold py-3 rounded-lg transition cursor-pointer">
-                  Send Transaction
+                <button 
+                  type="button" 
+                  onClick={() => {
+                    setLoadingAction('send-submit');
+                    setTimeout(() => {
+                      setLoadingAction('');
+                      setShowSendModal(false);
+                      alert('Transaction sent successfully!');
+                    }, 500);
+                  }}
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold py-3 rounded-lg transition-all transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl cursor-pointer"
+                >
+                  {loadingAction === 'send-submit' ? '⏳ Sending...' : '✓ Send Transaction'}
                 </button>
               </form>
             </div>
@@ -2160,8 +2318,15 @@ export default function Home() {
                   <label className="block text-gray-300 text-sm mb-2">Wallet Address</label>
                   <div className="flex gap-2">
                     <input type="text" value="0x742d35Cc6634C0532925a3b844Bc9c3a" readOnly className="flex-1 bg-gray-700 border border-purple-500 rounded-lg px-4 py-3 text-white font-mono text-sm" />
-                    <button className="bg-purple-600 hover:bg-purple-500 px-4 py-3 rounded-lg text-white font-semibold transition">
-                      Copy
+                    <button 
+                      onClick={() => {
+                        setLoadingAction('copy-address');
+                        navigator.clipboard.writeText("0x742d35Cc6634C0532925a3b844Bc9c3a");
+                        setTimeout(() => setLoadingAction(''), 300);
+                      }}
+                      className="bg-purple-600 hover:bg-purple-500 px-4 py-3 rounded-lg text-white font-semibold transition-all transform hover:scale-105 active:scale-95 shadow hover:shadow-lg cursor-pointer"
+                    >
+                      {loadingAction === 'copy-address' ? '✓' : 'Copy'}
                     </button>
                   </div>
                 </div>
