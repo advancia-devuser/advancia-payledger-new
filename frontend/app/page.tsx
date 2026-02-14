@@ -94,6 +94,8 @@ export default function Home() {
   const [isNewUser, setIsNewUser] = useState(true);
   const [onboardingStep, setOnboardingStep] = useState(0);
   const [completedTasks, setCompletedTasks] = useState<string[]>([]);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [unreadNotifications, setUnreadNotifications] = useState(3);
 
   // Mock wallet data
   const mockWallets = [
@@ -118,6 +120,23 @@ export default function Home() {
   ];
 
   const totalBalance = mockWallets.reduce((sum, wallet) => sum + wallet.usdValue, 0);
+
+  // Mock notifications
+  const mockNotifications = [
+    { id: 1, type: "success", icon: "✅", title: "Account Created", message: "Welcome to Advancia PayLedger!", time: "Just now", read: false },
+    { id: 2, type: "info", icon: "💰", title: "Wallet Ready", message: "Your wallets are ready to use", time: "2 min ago", read: false },
+    { id: 3, type: "warning", icon: "🔐", title: "Enable 2FA", message: "Secure your account with two-factor authentication", time: "5 min ago", read: false },
+    { id: 4, type: "info", icon: "📊", title: "Market Update", message: "BTC is up 5.2% today", time: "1 hour ago", read: true },
+    { id: 5, type: "success", icon: "🎉", title: "Verification Complete", message: "Your identity has been verified", time: "2 hours ago", read: true }
+  ];
+
+  // Mock activity feed
+  const mockActivities = [
+    { id: 1, type: "login", icon: "🔓", action: "You logged in", details: "From Windows (Chrome)", time: "Just now", color: "blue" },
+    { id: 2, type: "account", icon: "👤", action: "Account created", details: "Welcome to Advancia!", time: "2 min ago", color: "green" },
+    { id: 3, type: "wallet", icon: "👛", action: "Wallet initialized", details: "BTC, ETH, USDC wallets added", time: "2 min ago", color: "purple" },
+    { id: 4, type: "security", icon: "🔐", action: "Security check", details: "All systems secure", time: "5 min ago", color: "green" }
+  ];
 
   if (currentPage === "dashboard" && !isAuthed) {
     return (
@@ -238,6 +257,64 @@ export default function Home() {
               <h1 className="text-2xl font-bold text-white">Advancia</h1>
             </div>
             <div className="flex items-center gap-4">
+              {/* Notifications Bell */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowNotifications(!showNotifications)}
+                  className="relative p-2 hover:bg-gray-700 rounded-lg transition cursor-pointer"
+                >
+                  <span className="text-2xl">🔔</span>
+                  {unreadNotifications > 0 && (
+                    <span className="absolute top-1 right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                      {unreadNotifications}
+                    </span>
+                  )}
+                </button>
+                
+                {/* Notifications Dropdown */}
+                {showNotifications && (
+                  <div className="absolute right-0 mt-2 w-96 bg-gray-800 border border-purple-500 rounded-lg shadow-2xl max-h-96 overflow-y-auto z-50">
+                    <div className="sticky top-0 bg-gray-800 border-b border-purple-500/50 p-4 flex items-center justify-between">
+                      <h3 className="text-white font-bold">Notifications</h3>
+                      <button 
+                        onClick={() => setUnreadNotifications(0)}
+                        className="text-purple-400 hover:text-purple-300 text-sm font-semibold"
+                      >
+                        Mark all read
+                      </button>
+                    </div>
+                    <div className="divide-y divide-gray-700">
+                      {mockNotifications.map((notif) => (
+                        <div 
+                          key={notif.id}
+                          className={`p-4 hover:bg-gray-700/50 cursor-pointer transition ${!notif.read ? 'bg-purple-900/20' : ''}`}
+                        >
+                          <div className="flex gap-3">
+                            <div className="text-2xl">{notif.icon}</div>
+                            <div className="flex-1">
+                              <div className="flex items-center justify-between mb-1">
+                                <h4 className="text-white font-semibold text-sm">{notif.title}</h4>
+                                {!notif.read && <div className="w-2 h-2 bg-blue-500 rounded-full"></div>}
+                              </div>
+                              <p className="text-gray-400 text-sm mb-1">{notif.message}</p>
+                              <p className="text-gray-500 text-xs">{notif.time}</p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="p-4 bg-gray-900/50 text-center border-t border-purple-500/50">
+                      <button 
+                        onClick={() => { setActiveTab("notifications"); setShowNotifications(false); }}
+                        className="text-purple-400 hover:text-purple-300 font-semibold text-sm"
+                      >
+                        View All Notifications →
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+              
               <div className="text-right">
                 <p className="text-gray-300 text-sm">Welcome back</p>
                 <p className="text-white font-semibold">{authName || "User"}</p>
@@ -259,7 +336,7 @@ export default function Home() {
         {/* Navigation Tabs */}
         <nav className="bg-gray-800 border-b border-purple-500 overflow-x-auto">
           <div className="max-w-7xl mx-auto px-6 flex gap-8">
-            {["dashboard", "wallet", "payments", "booking", "healthcare", "analytics", "wireframes", "ecosystem", "admin"].map((tab) => (
+            {["dashboard", "wallet", "payments", "booking", "healthcare", "analytics", "wireframes", "ecosystem", "activity", "notifications", "settings", "admin"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -269,6 +346,9 @@ export default function Home() {
                     : "border-transparent text-gray-400 hover:text-gray-200"
                 }`}
               >
+                {tab === "notifications" && unreadNotifications > 0 && (
+                  <span className="inline-block w-2 h-2 bg-red-500 rounded-full mr-1"></span>
+                )}
                 {tab}
               </button>
             ))}
@@ -1055,6 +1135,231 @@ export default function Home() {
                   </div>
                   <p className="text-3xl font-bold text-purple-400 mb-1">45ms</p>
                   <p className="text-purple-200 text-sm">Average latency</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/*Activity Tab */}
+          {activeTab === "activity" && (
+            <div className="space-y-6">
+              <div className="bg-gray-800 rounded-lg p-6 border border-purple-500 shadow-lg">
+                <h3 className="text-white font-bold text-2xl mb-2">Activity Feed</h3>
+                <p className="text-gray-400 mb-6">Real-time updates and account activity</p>
+                
+                <div className="space-y-3">
+                  {mockActivities.map((activity) => (
+                    <div key={activity.id} className={`flex items-start gap-4 p-4 bg-${activity.color}-900/20 border border-${activity.color}-500/30 rounded-lg hover:border-${activity.color}-400 transition cursor-pointer`}>
+                      <div className="text-3xl">{activity.icon}</div>
+                      <div className="flex-1">
+                        <h4 className="text-white font-semibold mb-1">{activity.action}</h4>
+                        <p className="text-gray-400 text-sm mb-2">{activity.details}</p>
+                        <p className="text-gray-500 text-xs">{activity.time}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Activity Stats */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="bg-gradient-to-br from-blue-900/40 to-cyan-900/40 border border-blue-500/40 rounded-lg p-6">
+                  <div className="text-3xl mb-2">📍</div>
+                  <h4 className="text-white font-bold mb-1">Last Login</h4>
+                  <p className="text-blue-200 text-sm">Windows (Chrome)</p>
+                  <p className="text-gray-400 text-xs mt-1">192.168.1.1</p>
+                </div>
+                <div className="bg-gradient-to-br from-green-900/40 to-emerald-900/40 border border-green-500/40 rounded-lg p-6">
+                  <div className="text-3xl mb-2">🔓</div>
+                  <h4 className="text-white font-bold mb-1">Active Sessions</h4>
+                  <p className="text-green-200 text-sm">1 device</p>
+                  <p className="text-gray-400 text-xs mt-1">This device</p>
+                </div>
+                <div className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border border-purple-500/40 rounded-lg p-6">
+                  <div className="text-3xl mb-2">⏱️</div>
+                  <h4 className="text-white font-bold mb-1">Account Age</h4>
+                  <p className="text-purple-200 text-sm">Just created</p>
+                  <p className="text-gray-400 text-xs mt-1">Feb 14, 2026</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Notifications Tab */}
+          {activeTab === "notifications" && (
+            <div className="space-y-6">
+              <div className="bg-gray-800 rounded-lg p-6 border border-purple-500 shadow-lg">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-white font-bold text-2xl mb-1">All Notifications</h3>
+                    <p className="text-gray-400 text-sm">{unreadNotifications} unread notifications</p>
+                  </div>
+                  <button 
+                    onClick={() => setUnreadNotifications(0)}
+                    className="bg-purple-600 hover:bg-purple-500 text-white font-semibold px-4 py-2 rounded-lg transition cursor-pointer"
+                  >
+                    Mark All Read
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  {mockNotifications.map((notif) => (
+                    <div 
+                      key={notif.id}
+                      className={`flex items-start gap-4 p-5 rounded-lg border cursor-pointer hover:border-purple-400 transition ${
+                        !notif.read ? 'bg-purple-900/20 border-purple-500/30' : 'bg-gray-700/30 border-gray-600'
+                      }`}
+                    >
+                      <div className="text-4xl">{notif.icon}</div>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-1">
+                          <h4 className="text-white font-bold">{notif.title}</h4>
+                          {!notif.read && <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>}
+                        </div>
+                        <p className="text-gray-300 text-sm mb-2">{notif.message}</p>
+                        <p className="text-gray-500 text-xs">{notif.time}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Notification Settings */}
+              <div className="bg-gray-800 rounded-lg p-6 border border-purple-500 shadow-lg">
+                <h4 className="text-white font-bold mb-4">Notification Preferences</h4>
+                <div className="space-y-3">
+                  {[
+                    { id: "email", label: "Email Notifications", desc: "Receive updates via email", enabled: true },
+                    { id: "push", label: "Push Notifications", desc: "Browser push notifications", enabled: true },
+                    { id: "sms", label: "SMS Alerts", desc: "Text message for important updates", enabled: false },
+                    { id: "marketing", label: "Marketing Updates", desc: "News and promotional offers", enabled: false }
+                  ].map((pref) => (
+                    <div key={pref.id} className="flex items-center justify-between p-4 bg-gray-700/30 border border-gray-600 rounded-lg">
+                      <div>
+                        <h5 className="text-white font-semibold">{pref.label}</h5>
+                        <p className="text-gray-400 text-sm">{pref.desc}</p>
+                      </div>
+                      <button className={`px-4 py-2 rounded-lg font-semibold transition ${pref.enabled ? 'bg-green-600 hover:bg-green-500' : 'bg-gray-600 hover:bg-gray-500'} text-white cursor-pointer`}>
+                        {pref.enabled ? 'On' : 'Off'}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Settings Tab */}
+          {activeTab === "settings" && (
+            <div className="space-y-6">
+              <div className="bg-gray-800 rounded-lg p-6 border border-purple-500 shadow-lg">
+                <h3 className="text-white font-bold text-2xl mb-6">Account Settings</h3>
+                
+                {/* Profile Section */}
+                <div className="mb-8">
+                  <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
+                    <span>👤</span> Profile Information
+                  </h4>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-gray-300 text-sm mb-2">Full Name</label>
+                      <input type="text" value={authName || "User"} className="w-full bg-gray-700 border border-purple-500/50 rounded-lg px-4 py-3 text-white" />
+                    </div>
+                    <div>
+                      <label className="block text-gray-300 text-sm mb-2">Email Address</label>
+                      <input type="email" value={authEmail || "user@example.com"} className="w-full bg-gray-700 border border-purple-500/50 rounded-lg px-4 py-3 text-white" />
+                    </div>
+                    <div>
+                      <label className="block text-gray-300 text-sm mb-2">Phone Number</label>
+                      <input type="tel" placeholder="+1 (555) 000-0000" className="w-full bg-gray-700 border border-purple-500/50 rounded-lg px-4 py-3 text-white" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Security Section */}
+                <div className="mb-8">
+                  <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
+                    <span>🔐</span> Security
+                  </h4>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between p-4 bg-gray-700/30 border border-gray-600 rounded-lg">
+                      <div>
+                        <h5 className="text-white font-semibold">Two-Factor Authentication</h5>
+                        <p className="text-gray-400 text-sm">Add an extra layer of security</p>
+                      </div>
+                      <button className="bg-purple-600 hover:bg-purple-500 text-white font-semibold px-4 py-2 rounded-lg transition cursor-pointer">
+                        Enable
+                      </button>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-gray-700/30 border border-gray-600 rounded-lg">
+                      <div>
+                        <h5 className="text-white font-semibold">Change Password</h5>
+                        <p className="text-gray-400 text-sm">Update your password regularly</p>
+                      </div>
+                      <button className="bg-gray-600 hover:bg-gray-500 text-white font-semibold px-4 py-2 rounded-lg transition cursor-pointer">
+                        Change
+                      </button>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-gray-700/30 border border-gray-600 rounded-lg">
+                      <div>
+                        <h5 className="text-white font-semibold">Active Sessions</h5>
+                        <p className="text-gray-400 text-sm">Manage your logged-in devices</p>
+                      </div>
+                      <button className="bg-gray-600 hover:bg-gray-500 text-white font-semibold px-4 py-2 rounded-lg transition cursor-pointer">
+                        View All
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Preferences */}
+                <div>
+                  <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
+                    <span>⚙️</span> Preferences
+                  </h4>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between p-4 bg-gray-700/30 border border-gray-600 rounded-lg">
+                      <div>
+                        <h5 className="text-white font-semibold">Language</h5>
+                        <p className="text-gray-400 text-sm">English (US)</p>
+                      </div>
+                      <button className="bg-gray-600 hover:bg-gray-500 text-white font-semibold px-4 py-2 rounded-lg transition cursor-pointer">
+                        Change
+                      </button>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-gray-700/30 border border-gray-600 rounded-lg">
+                      <div>
+                        <h5 className="text-white font-semibold">Currency</h5>
+                        <p className="text-gray-400 text-sm">USD ($)</p>
+                      </div>
+                      <button className="bg-gray-600 hover:bg-gray-500 text-white font-semibold px-4 py-2 rounded-lg transition cursor-pointer">
+                        Change
+                      </button>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-gray-700/30 border border-gray-600 rounded-lg">
+                      <div>
+                        <h5 className="text-white font-semibold">Theme</h5>
+                        <p className="text-gray-400 text-sm">Dark Mode</p>
+                      </div>
+                      <button className="bg-gray-600 hover:bg-gray-500 text-white font-semibold px-4 py-2 rounded-lg transition cursor-pointer">
+                        Change
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Danger Zone */}
+                <div className="mt-8 p-6 bg-red-900/20 border border-red-500/50 rounded-lg">
+                  <h4 className="text-red-400 font-bold mb-2">Danger Zone</h4>
+                  <p className="text-gray-300 text-sm mb-4">Irreversible actions</p>
+                  <div className="flex gap-3">
+                    <button className="bg-red-600 hover:bg-red-500 text-white font-semibold px-4 py-2 rounded-lg transition cursor-pointer">
+                      Delete Account
+                    </button>
+                    <button className="bg-orange-600 hover:bg-orange-500 text-white font-semibold px-4 py-2 rounded-lg transition cursor-pointer">
+                      Export Data
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
