@@ -102,6 +102,13 @@ export default function Home() {
   const [show2FAModal, setShow2FAModal] = useState(false);
   const [showSessionsModal, setShowSessionsModal] = useState(false);
   const [referralCode] = useState("ADV-" + Math.random().toString(36).substring(2, 8).toUpperCase());
+  const [showLiveChat, setShowLiveChat] = useState(false);
+  const [showKYCModal, setShowKYCModal] = useState(false);
+  const [showDepositModal, setShowDepositModal] = useState(false);
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
+  const [isDarkTheme, setIsDarkTheme] = useState(true);
+  const [kycStatus, setKycStatus] = useState<"unverified" | "pending" | "verified">("unverified");
+  const [transactionFilter, setTransactionFilter] = useState("all");
 
   // Mock wallet data
   const mockWallets = [
@@ -119,7 +126,16 @@ export default function Home() {
     date: string;
     recipient?: string;
     description?: string;
-  }> = [];
+  }> = [
+    { id: 1, type: "deposit", amount: 500.00, status: "completed", date: "2026-02-14", description: "Bank Transfer Deposit" },
+    { id: 2, type: "payment", amount: -25.50, status: "completed", date: "2026-02-13", recipient: "Coffee Shop", description: "Morning Coffee" },
+    { id: 3, type: "deposit", amount: 1000.00, status: "completed", date: "2026-02-12", description: "Credit Card Deposit" },
+    { id: 4, type: "withdrawal", amount: -200.00, status: "pending", date: "2026-02-12", description: "ATM Withdrawal" },
+    { id: 5, type: "payment", amount: -15.99, status: "completed", date: "2026-02-11", recipient: "Streaming Service", description: "Monthly Subscription" },
+    { id: 6, type: "receive", amount: 50.00, status: "completed", date: "2026-02-10", description: "Friend Payment" },
+    { id: 7, type: "payment", amount: -89.99, status: "failed", date: "2026-02-09", recipient: "Online Store", description: "Shopping" },
+    { id: 8, type: "deposit", amount: 300.00, status: "completed", date: "2026-02-08", description: "Direct Deposit" }
+  ];
 
   const mockBalance = [
     { name: "USD Balance", value: 0, usd: 0 }
@@ -432,6 +448,15 @@ export default function Home() {
                   </div>
                 )}
               </div>
+
+              {/* Theme Toggle */}
+              <button
+                onClick={() => setIsDarkTheme(!isDarkTheme)}
+                className="p-2 hover:bg-gray-700 rounded-lg transition cursor-pointer"
+                title={isDarkTheme ? "Switch to Light Mode" : "Switch to Dark Mode"}
+              >
+                <span className="text-2xl">{isDarkTheme ? "☀️" : "🌙"}</span>
+              </button>
               
               <div className="text-right">
                 <p className="text-gray-300 text-sm">Welcome back</p>
@@ -454,7 +479,7 @@ export default function Home() {
         {/* Navigation Tabs */}
         <nav className="bg-gray-800 border-b border-purple-500 overflow-x-auto">
           <div className="max-w-7xl mx-auto px-6 flex gap-8">
-            {["dashboard", "wallet", "payments", "booking", "healthcare", "analytics", "wireframes", "ecosystem", "activity", "notifications", "settings", "security", "referral", "api", "help", "admin"].map((tab) => (
+            {["dashboard", "wallet", "payments", "transactions", "booking", "healthcare", "analytics", "wireframes", "ecosystem", "activity", "notifications", "settings", "security", "referral", "api", "help", "admin"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -792,9 +817,12 @@ export default function Home() {
                   <div className="font-semibold">Swap</div>
                   <div className="text-xs text-purple-200">Exchange crypto</div>
                 </button>
-                <button className="bg-gradient-to-br from-orange-600 to-orange-700 hover:from-orange-500 hover:to-orange-600 rounded-xl p-4 text-white transition-all hover:scale-105 shadow-lg cursor-pointer">
+                <button 
+                  onClick={() => setShowDepositModal(true)}
+                  className="bg-gradient-to-br from-orange-600 to-orange-700 hover:from-orange-500 hover:to-orange-600 rounded-xl p-4 text-white transition-all hover:scale-105 shadow-lg cursor-pointer"
+                >
                   <div className="text-3xl mb-2">💳</div>
-                  <div className="font-semibold">Buy</div>
+                  <div className="font-semibold">Deposit</div>
                   <div className="text-xs text-orange-200">Add funds</div>
                 </button>
               </div>
@@ -808,11 +836,17 @@ export default function Home() {
                     <p className="text-indigo-200 text-sm">≈ $0.00 USD</p>
                   </div>
                   <div className="flex gap-3">
-                    <button className="bg-white/20 hover:bg-white/30 backdrop-blur rounded-lg px-5 py-2 font-semibold transition cursor-pointer">
-                      Add Funds
+                    <button 
+                      onClick={() => setShowDepositModal(true)}
+                      className="bg-white/20 hover:bg-white/30 backdrop-blur rounded-lg px-5 py-2 font-semibold transition cursor-pointer"
+                    >
+                      💰 Deposit
                     </button>
-                    <button className="bg-white/20 hover:bg-white/30 backdrop-blur rounded-lg px-5 py-2 font-semibold transition cursor-pointer">
-                      Portfolio
+                    <button 
+                      onClick={() => setShowWithdrawModal(true)}
+                      className="bg-white/20 hover:bg-white/30 backdrop-blur rounded-lg px-5 py-2 font-semibold transition cursor-pointer"
+                    >
+                      💸 Withdraw
                     </button>
                   </div>
                 </div>
@@ -938,6 +972,133 @@ export default function Home() {
                     Send Payment (MOCK)
                   </button>
                 </form>
+              </div>
+            </div>
+          )}
+
+          {/* Transactions Tab */}
+          {activeTab === "transactions" && (
+            <div className="space-y-6">
+              <div className="bg-gray-800 rounded-lg p-6 border border-purple-500 shadow-lg">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                  <div>
+                    <h3 className="text-white font-bold text-2xl">Transaction History</h3>
+                    <p className="text-gray-400 text-sm">View and manage all your transactions</p>
+                  </div>
+                  <button 
+                    onClick={() => {
+                      const csv = "Date,Type,Amount,Status,Description\\n" + 
+                        mockTransactions.map(t => `${t.date},${t.type},$${t.amount},${t.status},${t.description}`).join("\\n");
+                      const blob = new Blob([csv], { type: 'text/csv' });
+                      const url = window.URL.createObjectURL(blob);
+                      const a = document.createElement('a');
+                      a.href = url;
+                      a.download = `Transactions-${new Date().toISOString().split('T')[0]}.csv`;
+                      document.body.appendChild(a);
+                      a.click();
+                      document.body.removeChild(a);
+                      window.URL.revokeObjectURL(url);
+                    }}
+                    className="bg-green-600 hover:bg-green-500 text-white font-semibold px-6 py-2 rounded-lg transition cursor-pointer flex items-center gap-2"
+                  >
+                    📥 Export CSV
+                  </button>
+                </div>
+
+                {/* Filters */}
+                <div className="flex flex-wrap gap-3 mb-6">
+                  {["all", "deposit", "withdrawal", "payment", "receive"].map((filter) => (
+                    <button
+                      key={filter}
+                      onClick={() => setTransactionFilter(filter)}
+                      className={`px-6 py-2 rounded-lg font-semibold transition cursor-pointer capitalize ${
+                        transactionFilter === filter
+                          ? "bg-purple-600 text-white"
+                          : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                      }`}
+                    >
+                      {filter}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Transaction Stats */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                  <div className="bg-gradient-to-br from-green-900/40 to-emerald-900/40 border border-green-500/40 rounded-lg p-4">
+                    <div className="text-green-400 text-sm mb-1">Total In</div>
+                    <div className="text-white text-2xl font-bold">
+                      ${mockTransactions.filter(t => t.amount > 0).reduce((sum, t) => sum + t.amount, 0).toFixed(2)}
+                    </div>
+                  </div>
+                  <div className="bg-gradient-to-br from-red-900/40 to-orange-900/40 border border-red-500/40 rounded-lg p-4">
+                    <div className="text-red-400 text-sm mb-1">Total Out</div>
+                    <div className="text-white text-2xl font-bold">
+                      ${Math.abs(mockTransactions.filter(t => t.amount < 0).reduce((sum, t) => sum + t.amount, 0)).toFixed(2)}
+                    </div>
+                  </div>
+                  <div className="bg-gradient-to-br from-blue-900/40 to-cyan-900/40 border border-blue-500/40 rounded-lg p-4">
+                    <div className="text-blue-400 text-sm mb-1">Total Transactions</div>
+                    <div className="text-white text-2xl font-bold">{mockTransactions.length}</div>
+                  </div>
+                  <div className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border border-purple-500/40 rounded-lg p-4">
+                    <div className="text-purple-400 text-sm mb-1">This Month</div>
+                    <div className="text-white text-2xl font-bold">{mockTransactions.length}</div>
+                  </div>
+                </div>
+
+                {/* Transactions List */}
+                <div className="space-y-3">
+                  {mockTransactions
+                    .filter(t => transactionFilter === "all" || t.type === transactionFilter)
+                    .map((transaction) => (
+                      <div key={transaction.id} className="bg-gray-700/50 border border-gray-600 rounded-lg p-5 hover:border-purple-500/50 transition">
+                        <div className="flex items-start justify-between">
+                          <div className="flex items-start gap-4 flex-1">
+                            <div className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl ${
+                              transaction.type === 'deposit' ? 'bg-green-900/50' :
+                              transaction.type === 'withdrawal' ? 'bg-red-900/50' :
+                              transaction.type === 'payment' ? 'bg-blue-900/50' :
+                              'bg-purple-900/50'
+                            }`}>
+                              {transaction.type === 'deposit' ? '💰' :
+                               transaction.type === 'withdrawal' ? '💸' :
+                               transaction.type === 'payment' ? '🛒' : '📨'}
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center gap-3 mb-1">
+                                <h4 className="text-white font-bold">{transaction.description}</h4>
+                                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                                  transaction.status === 'completed' ? 'bg-green-900 text-green-200' :
+                                  transaction.status === 'pending' ? 'bg-yellow-900 text-yellow-200' :
+                                  'bg-red-900 text-red-200'
+                                }`}>
+                                  {transaction.status}
+                                </span>
+                              </div>
+                              {transaction.recipient && (
+                                <p className="text-gray-400 text-sm mb-1">To: {transaction.recipient}</p>
+                              )}
+                              <p className="text-gray-500 text-xs">{new Date(transaction.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className={`text-xl font-bold ${transaction.amount > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                              {transaction.amount > 0 ? '+' : ''}${transaction.amount.toFixed(2)}
+                            </p>
+                            <p className="text-gray-500 text-xs mt-1">USD</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+
+                {mockTransactions.filter(t => transactionFilter === "all" || t.type === transactionFilter).length === 0 && (
+                  <div className="text-center py-12 text-gray-400">
+                    <div className="text-6xl mb-4">🔍</div>
+                    <p className="text-lg">No transactions found</p>
+                    <p className="text-sm mt-2">Try adjusting your filters</p>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -2136,6 +2297,334 @@ export default function Home() {
               <div className="mt-6 pt-6 border-t border-gray-700">
                 <button className="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-lg transition cursor-pointer">
                   Sign Out All Other Sessions
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* KYC Verification Modal */}
+        {showKYCModal && (
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowKYCModal(false)}>
+            <div className="bg-gray-800 rounded-2xl p-8 max-w-2xl w-full border border-purple-500 shadow-2xl max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h3 className="text-white font-bold text-2xl">Identity Verification (KYC)</h3>
+                  <p className="text-gray-400 text-sm">Complete your verification to unlock full features</p>
+                </div>
+                <button onClick={() => setShowKYCModal(false)} className="text-gray-400 hover:text-white text-2xl">×</button>
+              </div>
+
+              <div className="space-y-6">
+                {/* Status */}
+                <div className={`p-4 rounded-lg border ${
+                  kycStatus === 'verified' ? 'bg-green-900/20 border-green-500/40' :
+                  kycStatus === 'pending' ? 'bg-yellow-900/20 border-yellow-500/40' :
+                  'bg-gray-700/30 border-gray-600'
+                }`}>
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl">
+                      {kycStatus === 'verified' ? '✅' : kycStatus === 'pending' ? '⏳' : '📋'}
+                    </span>
+                    <div>
+                      <h4 className="text-white font-bold capitalize">{kycStatus}</h4>
+                      <p className="text-gray-400 text-sm">
+                        {kycStatus === 'verified' ? 'Your identity has been verified' :
+                         kycStatus === 'pending' ? 'Verification in progress (24-48 hours)' :
+                         'Complete verification to access all features'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Personal Information */}
+                <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-6">
+                  <h4 className="text-white font-bold mb-4">Personal Information</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-gray-300 text-sm mb-2">First Name</label>
+                      <input type="text" placeholder="John" className="w-full bg-gray-700 border border-purple-500/50 rounded-lg px-4 py-3 text-white placeholder-gray-400" />
+                    </div>
+                    <div>
+                      <label className="block text-gray-300 text-sm mb-2">Last Name</label>
+                      <input type="text" placeholder="Doe" className="w-full bg-gray-700 border border-purple-500/50 rounded-lg px-4 py-3 text-white placeholder-gray-400" />
+                    </div>
+                    <div>
+                      <label className="block text-gray-300 text-sm mb-2">Date of Birth</label>
+                      <input type="date" className="w-full bg-gray-700 border border-purple-500/50 rounded-lg px-4 py-3 text-white" />
+                    </div>
+                    <div>
+                      <label className="block text-gray-300 text-sm mb-2">Nationality</label>
+                      <select className="w-full bg-gray-700 border border-purple-500/50 rounded-lg px-4 py-3 text-white">
+                        <option>United States</option>
+                        <option>Canada</option>
+                        <option>United Kingdom</option>
+                        <option>Other</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Address */}
+                <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-6">
+                  <h4 className="text-white font-bold mb-4">Address</h4>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-gray-300 text-sm mb-2">Street Address</label>
+                      <input type="text" placeholder="123 Main St" className="w-full bg-gray-700 border border-purple-500/50 rounded-lg px-4 py-3 text-white placeholder-gray-400" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-gray-300 text-sm mb-2">City</label>
+                        <input type="text" placeholder="New York" className="w-full bg-gray-700 border border-purple-500/50 rounded-lg px-4 py-3 text-white placeholder-gray-400" />
+                      </div>
+                      <div>
+                        <label className="block text-gray-300 text-sm mb-2">Postal Code</label>
+                        <input type="text" placeholder="10001" className="w-full bg-gray-700 border border-purple-500/50 rounded-lg px-4 py-3 text-white placeholder-gray-400" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Document Upload */}
+                <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-6">
+                  <h4 className="text-white font-bold mb-4">Identity Document</h4>
+                  <div className="border-2 border-dashed border-purple-500/50 rounded-lg p-8 text-center hover:border-purple-400 transition cursor-pointer">
+                    <div className="text-5xl mb-3">📄</div>
+                    <p className="text-white font-semibold mb-2">Upload ID Document</p>
+                    <p className="text-gray-400 text-sm mb-4">Passport, Driver's License, or National ID</p>
+                    <button className="bg-purple-600 hover:bg-purple-500 text-white font-semibold px-6 py-2 rounded-lg transition cursor-pointer">
+                      Choose File
+                    </button>
+                  </div>
+                </div>
+
+                <button 
+                  onClick={() => {
+                    setKycStatus('pending');
+                    setShowKYCModal(false);
+                  }}
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold py-4 rounded-lg transition cursor-pointer"
+                >
+                  Submit Verification
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Deposit Modal */}
+        {showDepositModal && (
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowDepositModal(false)}>
+            <div className="bg-gray-800 rounded-2xl p-8 max-w-lg w-full border border-purple-500 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-white font-bold text-2xl">Deposit Funds</h3>
+                <button onClick={() => setShowDepositModal(false)} className="text-gray-400 hover:text-white text-2xl">×</button>
+              </div>
+
+              <div className="space-y-6">
+                {/* Deposit Method Selection */}
+                <div>
+                  <label className="block text-gray-300 text-sm mb-3">Deposit Method</label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {[
+                      { id: 'bank', name: 'Bank Transfer', icon: '🏦', fee: 'Free' },
+                      { id: 'card', name: 'Credit Card', icon: '💳', fee: '2.9%' },
+                      { id: 'crypto', name: 'Cryptocurrency', icon: '₿', fee: 'Network fees' },
+                      { id: 'wire', name: 'Wire Transfer', icon: '🌐', fee: '$25' }
+                    ].map((method) => (
+                      <div key={method.id} className="bg-gray-700 border border-purple-500/30 rounded-lg p-4 hover:border-purple-400 transition cursor-pointer">
+                        <div className="text-3xl mb-2">{method.icon}</div>
+                        <h5 className="text-white font-semibold text-sm">{method.name}</h5>
+                        <p className="text-gray-400 text-xs mt-1">Fee: {method.fee}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Amount */}
+                <div>
+                  <label className="block text-gray-300 text-sm mb-2">Amount (USD)</label>
+                  <input 
+                    type="number" 
+                    placeholder="100.00" 
+                    className="w-full bg-gray-700 border border-purple-500 rounded-lg px-4 py-4 text-white text-2xl font-bold placeholder-gray-400"
+                  />
+                </div>
+
+                {/* Quick Amounts */}
+                <div className="grid grid-cols-4 gap-2">
+                  {[50, 100, 500, 1000].map((amount) => (
+                    <button 
+                      key={amount}
+                      className="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 rounded-lg transition cursor-pointer"
+                    >
+                      ${amount}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Summary */}
+                <div className="bg-gray-700/50 border border-gray-600 rounded-lg p-4">
+                  <div className="flex justify-between mb-2">
+                    <span className="text-gray-400">Amount</span>
+                    <span className="text-white font-semibold">$0.00</span>
+                  </div>
+                  <div className="flex justify-between mb-2">
+                    <span className="text-gray-400">Fee</span>
+                    <span className="text-white font-semibold">$0.00</span>
+                  </div>
+                  <div className="border-t border-gray-600 pt-2 mt-2 flex justify-between">
+                    <span className="text-white font-bold">Total</span>
+                    <span className="text-white font-bold text-lg">$0.00</span>
+                  </div>
+                </div>
+
+                <button className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-bold py-4 rounded-lg transition cursor-pointer">
+                  Continue to Payment
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Withdraw Modal */}
+        {showWithdrawModal && (
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowWithdrawModal(false)}>
+            <div className="bg-gray-800 rounded-2xl p-8 max-w-lg w-full border border-purple-500 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-white font-bold text-2xl">Withdraw Funds</h3>
+                <button onClick={() => setShowWithdrawModal(false)} className="text-gray-400 hover:text-white text-2xl">×</button>
+              </div>
+
+              <div className="space-y-6">
+                {/* Available Balance */}
+                <div className="bg-gradient-to-br from-purple-900/40 to-blue-900/40 border border-purple-500/40 rounded-lg p-6 text-center">
+                  <p className="text-gray-300 text-sm mb-2">Available Balance</p>
+                  <p className="text-white text-4xl font-bold">${totalBalance.toFixed(2)}</p>
+                </div>
+
+                {/* Withdrawal Method */}
+                <div>
+                  <label className="block text-gray-300 text-sm mb-3">Withdrawal Method</label>
+                  <div className="space-y-3">
+                    {[
+                      { id: 'bank', name: 'Bank Account', icon: '🏦', time: '1-3 business days' },
+                      { id: 'crypto', name: 'Crypto Wallet', icon: '₿', time: '15-30 minutes' },
+                      { id: 'paypal', name: 'PayPal', icon: '💰', time: 'Instant' }
+                    ].map((method) => (
+                      <div key={method.id} className="bg-gray-700 border border-purple-500/30 rounded-lg p-4 hover:border-purple-400 transition cursor-pointer flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="text-3xl">{method.icon}</div>
+                          <div>
+                            <h5 className="text-white font-semibold">{method.name}</h5>
+                            <p className="text-gray-400 text-xs">{method.time}</p>
+                          </div>
+                        </div>
+                        <div className="w-5 h-5 rounded-full border-2 border-purple-500"></div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Amount */}
+                <div>
+                  <label className="block text-gray-300 text-sm mb-2">Withdrawal Amount (USD)</label>
+                  <input 
+                    type="number" 
+                    placeholder="0.00" 
+                    max={totalBalance}
+                    className="w-full bg-gray-700 border border-purple-500 rounded-lg px-4 py-4 text-white text-2xl font-bold placeholder-gray-400"
+                  />
+                  <button className="text-purple-400 hover:text-purple-300 text-sm mt-2 font-semibold">
+                    Max: ${totalBalance.toFixed(2)}
+                  </button>
+                </div>
+
+                {/* Warning */}
+                <div className="bg-yellow-900/30 border border-yellow-500/40 rounded-lg p-4">
+                  <p className="text-yellow-200 text-sm">
+                    <span className="font-bold">⚠️ Note:</span> Withdrawals may take 1-3 business days to process depending on the method selected.
+                  </p>
+                </div>
+
+                <button className="w-full bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white font-bold py-4 rounded-lg transition cursor-pointer">
+                  Request Withdrawal
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Live Chat Widget */}
+        <button
+          onClick={() => setShowLiveChat(!showLiveChat)}
+          className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white rounded-full shadow-2xl flex items-center justify-center text-3xl z-40 transition-transform hover:scale-110 cursor-pointer"
+        >
+          {showLiveChat ? '✕' : '💬'}
+        </button>
+
+        {/* Live Chat Modal */}
+        {showLiveChat && (
+          <div className="fixed bottom-24 right-6 w-96 h-[600px] bg-gray-800 border border-purple-500 rounded-2xl shadow-2xl z-40 flex flex-col">
+            {/* Chat Header */}
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 rounded-t-2xl">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="text-white font-bold">Live Support</h4>
+                  <p className="text-blue-100 text-xs">We typically reply in minutes</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-3 h-3 bg-green-400 rounded-full"></span>
+                  <span className="text-white text-xs font-semibold">Online</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Chat Messages */}
+            <div className="flex-1 p-4 overflow-y-auto bg-gray-900/50">
+              <div className="space-y-4">
+                {/* Bot Message */}
+                <div className="flex gap-3">
+                  <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                    AI
+                  </div>
+                  <div className="bg-gray-700 rounded-lg rounded-tl-none p-3 max-w-[80%]">
+                    <p className="text-white text-sm">Hi! 👋 Welcome to Advancia PayLedger support. How can I help you today?</p>
+                    <p className="text-gray-400 text-xs mt-2">Just now</p>
+                  </div>
+                </div>
+
+                {/* Quick Actions */}
+                <div className="space-y-2">
+                  <p className="text-gray-400 text-xs">Quick actions:</p>
+                  {[
+                    'How do I deposit funds?',
+                    'Verify my account',
+                    'Transaction status',
+                    'Security settings'
+                  ].map((action, idx) => (
+                    <button 
+                      key={idx}
+                      className="w-full bg-gray-700 hover:bg-gray-600 text-white text-sm text-left p-3 rounded-lg transition cursor-pointer"
+                    >
+                      {action}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Chat Input */}
+            <div className="p-4 border-t border-gray-700">
+              <div className="flex gap-2">
+                <input 
+                  type="text" 
+                  placeholder="Type your message..." 
+                  className="flex-1 bg-gray-700 border border-purple-500/50 rounded-lg px-4 py-3 text-white placeholder-gray-400 text-sm focus:outline-none focus:border-purple-400"
+                />
+                <button className="bg-purple-600 hover:bg-purple-500 text-white px-4 rounded-lg transition cursor-pointer">
+                  📤
                 </button>
               </div>
             </div>
