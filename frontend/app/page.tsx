@@ -966,7 +966,7 @@ export default function Home() {
                           {loadingAction === 'send' ? '⏳' : 'Send'}
                         </button>
                         <button 
-                          onClick=(e) => {
+                          onClick={(e) => {
                             e.stopPropagation();
                             setLoadingAction('receive');
                             setTimeout(() => {
