@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
-import User from '../models/User';
 import jwt from 'jsonwebtoken';
+import { store } from '../store';
 
 const router = Router();
 
@@ -27,11 +27,12 @@ router.put('/profile', authMiddleware, async (req: Request, res: Response) => {
     const userId = (req as any).userId;
     const { firstName, lastName, phoneNumber, avatar } = req.body;
 
-    const user = await User.findByIdAndUpdate(
-      userId,
-      { firstName, lastName, phoneNumber, avatar },
-      { new: true }
-    );
+    const user = store.updateUser(userId, { 
+      firstName, 
+      lastName, 
+      phoneNumber, 
+      avatar 
+    });
 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
@@ -40,7 +41,7 @@ router.put('/profile', authMiddleware, async (req: Request, res: Response) => {
     res.json({
       message: 'Profile updated successfully',
       user: {
-        id: user._id,
+        id: user.id,
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,

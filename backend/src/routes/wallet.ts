@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
-import Wallet from '../models/Wallet';
 import jwt from 'jsonwebtoken';
+import { store } from '../store';
 
 const router = Router();
 
@@ -25,7 +25,7 @@ const authMiddleware = (req: Request, res: Response, next: any) => {
 router.get('/', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = (req as any).userId;
-    const wallets = await Wallet.find({ userId });
+    const wallets = store.findWalletsByUser(userId);
     
     res.json({ wallets });
   } catch (error: any) {
@@ -45,20 +45,18 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
     }
 
     // Check if wallet already exists
-    const existingWallet = await Wallet.findOne({ userId, currency, type });
+    const existingWallet = store.findWallet(userId, currency);
     if (existingWallet) {
       return res.status(409).json({ error: 'Wallet already exists for this currency' });
     }
 
-    const wallet = new Wallet({
+    const wallet = store.createWallet({
       userId,
       type,
-      currency,
+      currency: currency.toUpperCase(),
       address,
       balance: 0
     });
-
-    await wallet.save();
 
     res.status(201).json({
       message: 'Wallet created successfully',
@@ -76,7 +74,7 @@ router.get('/:currency', authMiddleware, async (req: Request, res: Response) => 
     const userId = (req as any).userId;
     const { currency } = req.params;
 
-    const wallet = await Wallet.findOne({ userId, currency: currency.toUpperCase() });
+    const wallet = store.findWallet(userId, currency.toUpperCase());
     
     if (!wallet) {
       return res.status(404).json({ error: 'Wallet not found' });

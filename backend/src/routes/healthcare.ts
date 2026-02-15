@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
-import HealthcareSubscription from '../models/HealthcareSubscription';
 import jwt from 'jsonwebtoken';
+import { store } from '../store';
 
 const router = Router();
 
@@ -25,7 +25,7 @@ const authMiddleware = (req: Request, res: Response, next: any) => {
 router.get('/subscriptions', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = (req as any).userId;
-    const subscriptions = await HealthcareSubscription.find({ userId });
+    const subscriptions = store.findHealthcareByUser(userId);
     
     res.json({ subscriptions });
   } catch (error: any) {
@@ -48,7 +48,7 @@ router.post('/subscriptions', authMiddleware, async (req: Request, res: Response
     const renewalDate = new Date();
     renewalDate.setFullYear(renewalDate.getFullYear() + 1);
 
-    const subscription = new HealthcareSubscription({
+    const subscription = store.createHealthcare({
       userId,
       plan,
       provider,
@@ -58,8 +58,6 @@ router.post('/subscriptions', authMiddleware, async (req: Request, res: Response
       renewalDate,
       status: 'active'
     });
-
-    await subscription.save();
 
     res.status(201).json({
       message: 'Healthcare subscription created successfully',

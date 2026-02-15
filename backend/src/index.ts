@@ -4,7 +4,6 @@ import helmet from 'helmet';
 import compression from 'compression';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
-import mongoose from 'mongoose';
 import rateLimit from 'express-rate-limit';
 
 // Load environment variables
@@ -24,7 +23,7 @@ const PORT = process.env.PORT || 4000;
 // Security middleware
 app.use(helmet());
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'https://www.advanciapayledger.com',
+  origin: process.env.CORS_ORIGIN || '*',
   credentials: true
 }));
 
@@ -49,31 +48,15 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('combined'));
 }
 
-// MongoDB Connection
-const connectDB = async () => {
-  try {
-    const mongoUri = process.env.MONGODB_URI;
-    if (!mongoUri) {
-      throw new Error('MONGODB_URI is not defined in environment variables');
-    }
-
-    await mongoose.connect(mongoUri);
-    console.log('✅ MongoDB Atlas connected successfully');
-  } catch (error) {
-    console.error('❌ MongoDB connection error:', error);
-    process.exit(1);
-  }
-};
-
-// Connect to database
-connectDB();
+console.log('✅ Using in-memory storage (no database required)');
 
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.json({ 
     status: 'ok', 
     timestamp: new Date().toISOString(),
-    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
+    storage: 'in-memory',
+    message: 'No database required'
   });
 });
 
@@ -90,8 +73,9 @@ app.get('/', (req, res) => {
   res.json({
     message: 'Advancia PayLedger API',
     version: '1.0.0',
+    storage: 'in-memory',
+    note: 'No database required - data stored in memory',
     endpoints: {
-      health: '/health',
       auth: '/api/auth',
       wallet: '/api/wallet',
       transactions: '/api/transactions',
@@ -124,9 +108,8 @@ app.listen(PORT, () => {
 });
 
 // Graceful shutdown
-process.on('SIGTERM', async () => {
+process.on('SIGTERM', () => {
   console.log('SIGTERM received, closing server...');
-  await mongoose.connection.close();
   process.exit(0);
 });
 

@@ -1,7 +1,6 @@
 import { Router, Request, Response } from 'express';
-import Transaction from '../models/Transaction';
-import Wallet from '../models/Wallet';
 import jwt from 'jsonwebtoken';
+import { store } from '../store';
 
 const router = Router();
 
@@ -28,21 +27,17 @@ router.get('/', authMiddleware, async (req: Request, res: Response) => {
     const userId = (req as any).userId;
     const { limit = 50, offset = 0, status, type } = req.query;
 
-    const query: any = { userId };
-    if (status) query.status = status;
-    if (type) query.type = type;
+    const transactions = store.findTransactionsByUser(userId, {
+      status: status as string,
+      type: type as string
+    });
 
-    const transactions = await Transaction.find(query)
-      .sort({ createdAt: -1 })
-      .limit(Number(limit))
-      .skip(Number(offset));
-
-    const total = await Transaction.countDocuments(query);
+    const paginatedTxs = transactions.slice(Number(offset), Number(offset) + Number(limit));
 
     res.json({
-      transactions,
+      transactions: paginatedTxs,
       pagination: {
-        total,
+        total: transactions.length,
         limit: Number(limit),
         offset: Number(offset)
       }
@@ -65,13 +60,13 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
 
     // Validate sufficient balance for send transactions
     if (type === 'send') {
-      const wallet = await Wallet.findOne({ userId, currency: currency.toUpperCase() });
+      const wallet = store.findWallet(userId, currency);
       if (!wallet || wallet.balance < amount) {
         return res.status(400).json({ error: 'Insufficient balance' });
       }
     }
 
-    const transaction = new Transaction({
+    const transaction = store.createTransaction({
       userId,
       type,
       currency: currency.toUpperCase(),
@@ -82,24 +77,22 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
       metadata
     });
 
-    await transaction.save();
-
-    // Update wallet balance (simplified - in production use transactions)
+    // Update wallet balance (simplified)
     if (type === 'send') {
-      await Wallet.findOneAndUpdate(
-        { userId, currency: currency.toUpperCase() },
-        { $inc: { balance: -(amount + transaction.fee) } }
-      );
+      const wallet = store.findWallet(userId, currency);
+      if (wallet) {
+        store.updateWalletBalance(wallet.id, -(amount + transaction.fee));
+      }
     } else if (type === 'receive') {
-      await Wallet.findOneAndUpdate(
-        { userId, currency: currency.toUpperCase() },
-        { $inc: { balance: amount } }
-      );
+      const wallet = store.findWallet(userId, currency);
+      if (wallet) {
+        store.updateWalletBalance(wallet.id, amount);
+      }
     }
 
     // Simulate transaction completion after 2 seconds
-    setTimeout(async () => {
-      await Transaction.findByIdAndUpdate(transaction._id, { status: 'completed' });
+    setTimeout(() => {
+      store.updateTransaction(transaction.id, { status: 'completed' });
     }, 2000);
 
     res.status(201).json({
@@ -118,7 +111,7 @@ router.get('/:id', authMiddleware, async (req: Request, res: Response) => {
     const userId = (req as any).userId;
     const { id } = req.params;
 
-    const transaction = await Transaction.findOne({ _id: id, userId });
+    const transaction = store.findTransactionById(id, userId);
     
     if (!transaction) {
       return res.status(404).json({ error: 'Transaction not found' });
