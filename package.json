@@ -4,24 +4,31 @@
   "description": "**The complete cryptocurrency payment platform with built-in healthcare management.**",
   "main": "backend-complete-server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "demo": "concurrently -n backend,frontend -c green,blue \"cross-env DEMO_SEED=true npm --prefix backend run dev\" \"npm --prefix frontend run dev\"",
+    "demo:backend": "cross-env DEMO_SEED=true npm --prefix backend run dev",
+    "demo:frontend": "npm --prefix frontend run dev",
+    "test": "echo \"Run backend tests via: cd backend && node test-api.js (server must be running)\" && exit 0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/advancia-devuser/advanciapayledger-1.git"
+    "url": "git+https://github.com/advancia-devuser/advancia-payledger-new.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/advancia-devuser/advanciapayledger-1/issues"
+    "url": "https://github.com/advancia-devuser/advancia-payledger-new/issues"
   },
-  "homepage": "https://github.com/advancia-devuser/advanciapayledger-1#readme",
+  "homepage": "https://github.com/advancia-devuser/advancia-payledger-new#readme",
   "dependencies": {
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "express-rate-limit": "^8.2.1",
     "helmet": "^8.1.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3"
   }
 }
