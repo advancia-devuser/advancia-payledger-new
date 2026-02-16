@@ -153,8 +153,7 @@ function generateSecrets() {
   
   const crypto = require('crypto');
   const secrets = {
-    JWT_ACCESS_SECRET: crypto.randomBytes(64).toString('hex'),
-    JWT_REFRESH_SECRET: crypto.randomBytes(64).toString('hex')
+    JWT_SECRET: crypto.randomBytes(64).toString('hex')
   };
   
   console.log('\nGenerated secure secrets:');
@@ -176,9 +175,7 @@ try {
   console.log('\n✅ Environment validation complete!');
   console.log('\nNext steps:');
   console.log('1. Update your .env file with the generated secrets');
-  console.log('2. Ensure Redis is installed and running');
-  console.log('3. Configure Sentry for error tracking');
-  console.log('4. Set up monitoring dashboards');
+  console.log('2. Start the app (demo mode does not require a database)');
 } catch (error) {
   console.error('\n❌ Error during environment validation:', error);
   process.exit(1);

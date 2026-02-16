@@ -156,12 +156,11 @@ GitHub:                    $0/month
 Cloudflare Email:          $0/month
 Vercel (Frontend):         $0/month
 Railway/Render (Backend):  $0/month (free tier)
-Neon (Database):           $0/month (free tier)
 SendGrid (Email):          $0/month (100/day)
 ─────────────────────────────────
 Total:                     $0/month
 
-**Note:** The demo app does not use Neon/DB at all.
+**Note:** Demo mode uses in-memory storage (no database).
 ```
 
 ### **Production (Recommended)**
@@ -255,7 +254,6 @@ NEXT_PUBLIC_STRIPE_KEY=pk_test_...
 ☐ Create Railway/DigitalOcean account
 ☐ Deploy backend
 ☐ Configure environment variables
-☐ Run database migrations
 ☐ Test API endpoints
 ☐ Check logs for errors
 ```
@@ -300,7 +298,7 @@ NEXT_PUBLIC_STRIPE_KEY=pk_test_...
 
 ### **Backend Won't Start**
 1. Check environment variables
-2. Verify database connection
+2. For demo mode: ensure `backend/.env` has `JWT_SECRET` (no `DATABASE_URL`)
 3. Run `npm install`
 4. Check logs: `npm run dev`
 
@@ -309,12 +307,6 @@ NEXT_PUBLIC_STRIPE_KEY=pk_test_...
 2. Run `npm install`
 3. Verify environment variables
 4. Check build logs
-
-### **Database Connection Failed**
-1. Verify DATABASE_URL format
-2. Check database is running
-3. Test connection: `npx prisma db push`
-4. Review Prisma logs
 
 ### **Payment Not Working**
 1. Verify Stripe keys are correct

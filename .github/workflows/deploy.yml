@@ -2,9 +2,9 @@ name: Deploy Advancia Pay Ledger
 
 on:
   push:
-    branches: [master, main]
+    branches: [main]
   pull_request:
-    branches: [master, main]
+    branches: [main]
 
 jobs:
   test-backend:
@@ -61,7 +61,7 @@ jobs:
     name: Deploy Backend
     needs: [test-backend]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     
     steps:
       - uses: actions/checkout@v6
@@ -74,7 +74,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /var/www/advancia-backend
-            git pull origin master
+            git pull origin main
             npm install
             pm2 restart advancia-backend
 
@@ -82,7 +82,7 @@ jobs:
     name: Deploy Frontend to Vercel
     needs: [test-frontend]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     
     steps:
       - uses: actions/checkout@v6
@@ -99,7 +99,7 @@ jobs:
   deploy-email-worker:
     name: Deploy Cloudflare Email Worker
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     
     steps:
       - uses: actions/checkout@v6
