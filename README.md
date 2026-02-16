@@ -1,6 +1,6 @@
 # 💳 Advancia PayLedger - Full Stack Platform
 
-A complete cryptocurrency payment platform with healthcare management, built with **Next.js 16** and **Express.js** using **in-memory storage** (no database setup required).
+Modern payment and wallet management platform with **clean user dashboards** and **admin-only visibility**. Deploy to Cloudflare Pages + Supabase (no VPS) or run locally with Express.js backend.
 
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/advancia-devuser/advancia-payledger-new)
 [![Node.js](https://img.shields.io/badge/Node.js-24.x-green?logo=node.js)](https://nodejs.org/)
@@ -9,22 +9,49 @@ A complete cryptocurrency payment platform with healthcare management, built wit
 
 ---
 
-## 🚀 Quick Start (2 Steps!)
+## 🚀 Quick Deploy (Production - Recommended)
 
-### Demo Mode (Recommended)
+**Cloudflare Pages + Supabase** — No VPS, no backend server required.
 
-Run backend + frontend together (with optional demo seed data):
+📖 **[Complete Deployment Guide →](./DEPLOY_CLOUDFLARE.md)**
+
+### TL;DR
+
+1. **Supabase**: Create project → run `supabase/REGISTERED_USERS.sql` → copy URL + anon key
+2. **Cloudflare Pages**: Connect GitHub → set root=`frontend` → add env vars → deploy
+3. **Custom Domains**: Add both `advanciapayledger.com` and `advancia.us` → set primary
+
+**Deployment time: ~10 minutes** | **Cost: $0/month (free tiers)**
+
+---
+
+## 🏃 Quick Start (Local Development)
+
+### Option A: Supabase Mode (Recommended)
+
+```bash
+cd frontend
+cp .env.example .env.local
+# Edit .env.local with your Supabase credentials
+npm install
+npm run dev
+```
+
+Visit **http://localhost:3000**
+
+### Option B: Demo Mode (No Database)
+
+Run backend + frontend together with in-memory storage:
 
 ```bash
 npm run setup:demo
 npm run demo
 ```
 
-✅ Backend runs at **http://localhost:4000**
-
+✅ Backend runs at **http://localhost:4000**  
 ✅ Frontend runs at **http://localhost:3000**
 
-Verify the backend API in one command:
+Verify the backend API:
 
 ```bash
 npm run demo:test
