@@ -15,9 +15,9 @@ const authMiddleware = (req: Request, res: Response, next: any) => {
     const token = authHeader.split(' ')[1];
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET || 'default-secret');
     (req as any).userId = decoded.userId;
-    next();
+    return next();
   } catch (error) {
-    res.status(401).json({ error: 'Invalid token' });
+    return res.status(401).json({ error: 'Invalid token' });
   }
 };
 
@@ -34,7 +34,7 @@ router.get('/', authMiddleware, async (req: Request, res: Response) => {
 
     const paginatedTxs = transactions.slice(Number(offset), Number(offset) + Number(limit));
 
-    res.json({
+    return res.json({
       transactions: paginatedTxs,
       pagination: {
         total: transactions.length,
@@ -44,7 +44,7 @@ router.get('/', authMiddleware, async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     console.error('Get transactions error:', error);
-    res.status(500).json({ error: 'Failed to retrieve transactions' });
+    return res.status(500).json({ error: 'Failed to retrieve transactions' });
   }
 });
 
@@ -95,13 +95,13 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
       store.updateTransaction(transaction.id, { status: 'completed' });
     }, 2000);
 
-    res.status(201).json({
+    return res.status(201).json({
       message: 'Transaction created successfully',
       transaction
     });
   } catch (error: any) {
     console.error('Create transaction error:', error);
-    res.status(500).json({ error: 'Failed to create transaction' });
+    return res.status(500).json({ error: 'Failed to create transaction' });
   }
 });
 
@@ -109,7 +109,7 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
 router.get('/:id', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = (req as any).userId;
-    const { id } = req.params;
+    const id = String((req.params as any).id);
 
     const transaction = store.findTransactionById(id, userId);
     
@@ -117,10 +117,10 @@ router.get('/:id', authMiddleware, async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'Transaction not found' });
     }
 
-    res.json({ transaction });
+    return res.json({ transaction });
   } catch (error: any) {
     console.error('Get transaction error:', error);
-    res.status(500).json({ error: 'Failed to retrieve transaction' });
+    return res.status(500).json({ error: 'Failed to retrieve transaction' });
   }
 });
 

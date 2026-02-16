@@ -15,9 +15,9 @@ const authMiddleware = (req: Request, res: Response, next: any) => {
     const token = authHeader.split(' ')[1];
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET || 'default-secret');
     (req as any).userId = decoded.userId;
-    next();
+    return next();
   } catch (error) {
-    res.status(401).json({ error: 'Invalid token' });
+    return res.status(401).json({ error: 'Invalid token' });
   }
 };
 
@@ -38,7 +38,7 @@ router.put('/profile', authMiddleware, async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    res.json({
+    return res.json({
       message: 'Profile updated successfully',
       user: {
         id: user.id,
@@ -51,7 +51,7 @@ router.put('/profile', authMiddleware, async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     console.error('Update profile error:', error);
-    res.status(500).json({ error: 'Failed to update profile' });
+    return res.status(500).json({ error: 'Failed to update profile' });
   }
 });
 

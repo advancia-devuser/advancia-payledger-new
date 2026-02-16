@@ -15,9 +15,9 @@ const authMiddleware = (req: Request, res: Response, next: any) => {
     const token = authHeader.split(' ')[1];
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET || 'default-secret');
     (req as any).userId = decoded.userId;
-    next();
+    return next();
   } catch (error) {
-    res.status(401).json({ error: 'Invalid token' });
+    return res.status(401).json({ error: 'Invalid token' });
   }
 };
 
@@ -27,10 +27,10 @@ router.get('/', authMiddleware, async (req: Request, res: Response) => {
     const userId = (req as any).userId;
     const wallets = store.findWalletsByUser(userId);
     
-    res.json({ wallets });
+    return res.json({ wallets });
   } catch (error: any) {
     console.error('Get wallets error:', error);
-    res.status(500).json({ error: 'Failed to retrieve wallets' });
+    return res.status(500).json({ error: 'Failed to retrieve wallets' });
   }
 });
 
@@ -58,13 +58,13 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
       balance: 0
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       message: 'Wallet created successfully',
       wallet
     });
   } catch (error: any) {
     console.error('Create wallet error:', error);
-    res.status(500).json({ error: 'Failed to create wallet' });
+    return res.status(500).json({ error: 'Failed to create wallet' });
   }
 });
 
@@ -72,7 +72,7 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
 router.get('/:currency', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = (req as any).userId;
-    const { currency } = req.params;
+    const currency = String((req.params as any).currency);
 
     const wallet = store.findWallet(userId, currency.toUpperCase());
     
@@ -80,7 +80,7 @@ router.get('/:currency', authMiddleware, async (req: Request, res: Response) => 
       return res.status(404).json({ error: 'Wallet not found' });
     }
 
-    res.json({ 
+    return res.json({ 
       currency: wallet.currency,
       balance: wallet.balance,
       type: wallet.type,
@@ -88,7 +88,7 @@ router.get('/:currency', authMiddleware, async (req: Request, res: Response) => 
     });
   } catch (error: any) {
     console.error('Get wallet balance error:', error);
-    res.status(500).json({ error: 'Failed to retrieve wallet balance' });
+    return res.status(500).json({ error: 'Failed to retrieve wallet balance' });
   }
 });
 

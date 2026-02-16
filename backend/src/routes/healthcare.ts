@@ -15,9 +15,9 @@ const authMiddleware = (req: Request, res: Response, next: any) => {
     const token = authHeader.split(' ')[1];
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET || 'default-secret');
     (req as any).userId = decoded.userId;
-    next();
+    return next();
   } catch (error) {
-    res.status(401).json({ error: 'Invalid token' });
+    return res.status(401).json({ error: 'Invalid token' });
   }
 };
 
@@ -27,10 +27,10 @@ router.get('/subscriptions', authMiddleware, async (req: Request, res: Response)
     const userId = (req as any).userId;
     const subscriptions = store.findHealthcareByUser(userId);
     
-    res.json({ subscriptions });
+    return res.json({ subscriptions });
   } catch (error: any) {
     console.error('Get subscriptions error:', error);
-    res.status(500).json({ error: 'Failed to retrieve subscriptions' });
+    return res.status(500).json({ error: 'Failed to retrieve subscriptions' });
   }
 });
 
@@ -59,18 +59,18 @@ router.post('/subscriptions', authMiddleware, async (req: Request, res: Response
       status: 'active'
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       message: 'Healthcare subscription created successfully',
       subscription
     });
   } catch (error: any) {
     console.error('Create subscription error:', error);
-    res.status(500).json({ error: 'Failed to create subscription' });
+    return res.status(500).json({ error: 'Failed to create subscription' });
   }
 });
 
 // Get available plans
-router.get('/plans', async (req: Request, res: Response) => {
+router.get('/plans', async (_req: Request, res: Response) => {
   try {
     const plans = [
       {
@@ -103,10 +103,10 @@ router.get('/plans', async (req: Request, res: Response) => {
       }
     ];
 
-    res.json({ plans });
+    return res.json({ plans });
   } catch (error: any) {
     console.error('Get plans error:', error);
-    res.status(500).json({ error: 'Failed to retrieve plans' });
+    return res.status(500).json({ error: 'Failed to retrieve plans' });
   }
 });
 
