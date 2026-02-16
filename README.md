@@ -16,13 +16,19 @@ A complete cryptocurrency payment platform with healthcare management, built wit
 Run backend + frontend together (with optional demo seed data):
 
 ```bash
-npm install
+npm run setup:demo
 npm run demo
 ```
 
 ✅ Backend runs at **http://localhost:4000**
 
 ✅ Frontend runs at **http://localhost:3000**
+
+Verify the backend API in one command:
+
+```bash
+npm run demo:test
+```
 
 ### 1. Start Backend API
 
