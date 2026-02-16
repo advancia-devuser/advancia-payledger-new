@@ -1,14 +1,16 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '../hooks/useAuth';
 
 /**
  * Simple Login/Register Form Component
  * Demonstrates backend API integration
  */
-export default function AuthForm() {
+export default function AuthForm({ redirectTo = '/dashboard' }: { redirectTo?: string | null }) {
   const { user, isLoading, isAuthenticated, login, register, logout } = useAuth();
+  const router = useRouter();
   const [isRegisterMode, setIsRegisterMode] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -34,11 +36,15 @@ export default function AuthForm() {
         );
         if (!result.success) {
           setError(result.error || 'Registration failed');
+        } else if (redirectTo) {
+          router.push(redirectTo);
         }
       } else {
         const result = await login(formData.email, formData.password);
         if (!result.success) {
           setError(result.error || 'Login failed');
+        } else if (redirectTo) {
+          router.push(redirectTo);
         }
       }
     } finally {
@@ -183,9 +189,7 @@ export default function AuthForm() {
       </div>
 
       <div className="mt-6 pt-4 border-t border-gray-200">
-        <p className="text-xs text-gray-500 text-center">
-          🔒 Connected to: {process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}
-        </p>
+        <p className="text-xs text-gray-500 text-center">🔒 Secure sign-in</p>
       </div>
     </div>
   );

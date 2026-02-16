@@ -113,7 +113,7 @@ export default function ApiTestPage() {
 
         {/* Authentication Section */}
         <div className="mb-8">
-          <AuthForm />
+          <AuthForm redirectTo={null} />
         </div>
 
         {/* Authenticated Features */}
