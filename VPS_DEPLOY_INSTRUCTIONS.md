@@ -1,5 +1,48 @@
 # Deploy to Hostinger VPS - Step by Step
 
+## Option 0: Supabase + Cloudflare Pages (No VPS) — Recommended if VPS is unstable
+
+This project supports a **Supabase-first** mode (no backend server required) using:
+- Supabase Auth (signup/login)
+- Supabase table `registered_users` for the admin-only list
+
+### Step A: Create Supabase DB objects
+
+In Supabase → SQL Editor, run:
+- `supabase/REGISTERED_USERS.sql`
+
+### Step B: Supabase Auth settings (demo recommended)
+
+For a simple demo flow:
+- Supabase → Authentication → Settings → disable “Confirm email” (optional but recommended)
+
+### Step C: Deploy frontend to Cloudflare Pages
+
+Cloudflare → Pages → Create project (connect GitHub) and set:
+- **Root directory**: `frontend`
+- **Build command**: `npm run build`
+- **Build output directory**: `.next`
+
+Add these Environment Variables in Cloudflare Pages:
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `NEXT_PUBLIC_ADMIN_EMAILS=admin@advanciapayledger.com`
+
+Optional (recommended): force a single canonical domain so both domains work cleanly:
+- `CANONICAL_HOST=advanciapayledger.com`
+
+### Step D: Attach both domains
+
+In Cloudflare Pages → Custom domains add:
+- `advanciapayledger.com`
+- `www.advanciapayledger.com`
+- `advancia.us`
+- `www.advancia.us`
+
+Set the primary domain to `advanciapayledger.com`.
+
+Important: In Cloudflare DNS, remove any `A/AAAA` records for these hostnames that point to the VPS IP.
+
 ## Your VPS Details
 - **IP:** 76.13.77.8
 - **Password:** *(do not store plaintext passwords in repository files)*
