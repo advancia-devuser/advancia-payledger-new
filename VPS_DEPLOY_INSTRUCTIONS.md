@@ -63,7 +63,7 @@ npm run build
 # Install PM2 and start services
 npm install -g pm2
 pm2 start "npm --prefix /root/advanciapayledger-new/backend start" --name advancia-backend
-pm2 start "npm --prefix /root/advanciapayledger-new/frontend start -- -p 3000" --name advancia-frontend
+BACKEND_URL=http://127.0.0.1:4000 pm2 start "npm --prefix /root/advanciapayledger-new/frontend start -- -p 3000" --name advancia-frontend
 pm2 save
 pm2 startup
 

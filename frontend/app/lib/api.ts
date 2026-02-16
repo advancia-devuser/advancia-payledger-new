@@ -4,7 +4,9 @@
  * Handles authentication, request/response formatting, and error handling
  */
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+// Prefer same-origin requests so deployments don't rely on hard-coded backend URLs.
+// /api/* is proxied to the backend by the Next.js route handler in app/api/[...path]/route.ts
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 export interface ApiResponse<T = any> {
   data?: T;
@@ -225,7 +227,7 @@ export const healthcareApi = {
    * Subscribe to healthcare plan
    */
   async subscribe(plan: string, provider: string, monthlyPremium: number, dependents?: number) {
-    return apiRequest<{ subscription: any; message: string }>('/api/healthcare/subscribe', {
+    return apiRequest<{ subscription: any; message: string }>('/api/healthcare/subscriptions', {
       method: 'POST',
       body: JSON.stringify({ plan, provider, monthlyPremium, dependents }),
     });
