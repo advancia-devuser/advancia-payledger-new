@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { store } from '../store';
+import { isSupabaseEnabled, supabaseUpsertRegisteredUser } from '../supabase';
 
 const router = Router();
 
@@ -44,6 +45,19 @@ router.post('/register', async (req: Request, res: Response) => {
       getJwtSecret(),
       { expiresIn: getJwtExpiresIn() }
     );
+
+    // Optional persistence for admin-only “who registered” view
+    if (isSupabaseEnabled()) {
+      supabaseUpsertRegisteredUser({
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        createdAt: user.createdAt,
+      }).catch((err) => {
+        console.error('Supabase user upsert failed:', err);
+      });
+    }
 
     return res.status(201).json({
       message: 'User created successfully',

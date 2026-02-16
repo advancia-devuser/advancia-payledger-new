@@ -19,7 +19,8 @@
     "express-rate-limit": "^7.0.0",
     "express-validator": "^7.0.0",
     "compression": "^1.7.5",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "@supabase/supabase-js": "^2.49.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
