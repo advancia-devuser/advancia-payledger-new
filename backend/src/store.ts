@@ -11,13 +11,16 @@ interface User {
   avatar?: string;
   kycVerified: boolean;
   twoFactorEnabled: boolean;
+  role: "user" | "admin";
+  loginCount: number;
+  lastLoginAt?: Date;
   createdAt: Date;
 }
 
 interface Wallet {
   id: string;
   userId: string;
-  type: 'crypto' | 'fiat';
+  type: "crypto" | "fiat";
   currency: string;
   address?: string;
   balance: number;
@@ -27,11 +30,11 @@ interface Wallet {
 interface Transaction {
   id: string;
   userId: string;
-  type: 'send' | 'receive' | 'swap' | 'payment' | 'healthcare';
+  type: "send" | "receive" | "swap" | "payment" | "healthcare";
   currency: string;
   amount: number;
   fee: number;
-  status: 'pending' | 'completed' | 'failed' | 'cancelled';
+  status: "pending" | "completed" | "failed" | "cancelled";
   fromAddress?: string;
   toAddress?: string;
   txHash?: string;
@@ -43,8 +46,8 @@ interface Transaction {
 interface HealthcareSubscription {
   id: string;
   userId: string;
-  plan: 'basic' | 'premium' | 'family' | 'enterprise';
-  status: 'active' | 'inactive' | 'cancelled' | 'suspended';
+  plan: "basic" | "premium" | "family" | "enterprise";
+  status: "active" | "inactive" | "cancelled" | "suspended";
   provider: string;
   policyNumber?: string;
   startDate: Date;
@@ -62,22 +65,24 @@ class InMemoryStore {
   private idCounter = 1;
 
   generateId(): string {
-    return (this.idCounter++).toString().padStart(24, '0');
+    return (this.idCounter++).toString().padStart(24, "0");
   }
 
   // User operations
-  createUser(data: Omit<User, 'id' | 'createdAt'>): User {
+  createUser(data: Omit<User, "id" | "createdAt">): User {
     const user: User = {
       ...data,
+      role: data.role || "user",
+      loginCount: data.loginCount || 0,
       id: this.generateId(),
-      createdAt: new Date()
+      createdAt: new Date(),
     };
     this.users.set(user.id, user);
     return user;
   }
 
   findUserByEmail(email: string): User | undefined {
-    return Array.from(this.users.values()).find(u => u.email === email);
+    return Array.from(this.users.values()).find((u) => u.email === email);
   }
 
   findUserById(id: string): User | undefined {
@@ -93,23 +98,25 @@ class InMemoryStore {
   }
 
   // Wallet operations
-  createWallet(data: Omit<Wallet, 'id' | 'createdAt'>): Wallet {
+  createWallet(data: Omit<Wallet, "id" | "createdAt">): Wallet {
     const wallet: Wallet = {
       ...data,
       id: this.generateId(),
-      createdAt: new Date()
+      createdAt: new Date(),
     };
     this.wallets.set(wallet.id, wallet);
     return wallet;
   }
 
   findWalletsByUser(userId: string): Wallet[] {
-    return Array.from(this.wallets.values()).filter(w => w.userId === userId);
+    return Array.from(this.wallets.values()).filter((w) => w.userId === userId);
   }
 
   findWallet(userId: string, currency: string): Wallet | undefined {
     return Array.from(this.wallets.values()).find(
-      w => w.userId === userId && w.currency.toUpperCase() === currency.toUpperCase()
+      (w) =>
+        w.userId === userId &&
+        w.currency.toUpperCase() === currency.toUpperCase(),
     );
   }
 
@@ -122,27 +129,34 @@ class InMemoryStore {
   }
 
   // Transaction operations
-  createTransaction(data: Omit<Transaction, 'id' | 'createdAt' | 'updatedAt'>): Transaction {
+  createTransaction(
+    data: Omit<Transaction, "id" | "createdAt" | "updatedAt">,
+  ): Transaction {
     const transaction: Transaction = {
       ...data,
       id: this.generateId(),
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
     this.transactions.set(transaction.id, transaction);
     return transaction;
   }
 
-  findTransactionsByUser(userId: string, filters?: { status?: string; type?: string }): Transaction[] {
-    let txs = Array.from(this.transactions.values()).filter(t => t.userId === userId);
-    
+  findTransactionsByUser(
+    userId: string,
+    filters?: { status?: string; type?: string },
+  ): Transaction[] {
+    let txs = Array.from(this.transactions.values()).filter(
+      (t) => t.userId === userId,
+    );
+
     if (filters?.status) {
-      txs = txs.filter(t => t.status === filters.status);
+      txs = txs.filter((t) => t.status === filters.status);
     }
     if (filters?.type) {
-      txs = txs.filter(t => t.type === filters.type);
+      txs = txs.filter((t) => t.type === filters.type);
     }
-    
+
     return txs.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
@@ -152,7 +166,10 @@ class InMemoryStore {
     return tx;
   }
 
-  updateTransaction(id: string, data: Partial<Transaction>): Transaction | undefined {
+  updateTransaction(
+    id: string,
+    data: Partial<Transaction>,
+  ): Transaction | undefined {
     const tx = this.transactions.get(id);
     if (!tx) return undefined;
     const updated = { ...tx, ...data, updatedAt: new Date() };
@@ -161,18 +178,22 @@ class InMemoryStore {
   }
 
   // Healthcare operations
-  createHealthcare(data: Omit<HealthcareSubscription, 'id' | 'createdAt'>): HealthcareSubscription {
+  createHealthcare(
+    data: Omit<HealthcareSubscription, "id" | "createdAt">,
+  ): HealthcareSubscription {
     const subscription: HealthcareSubscription = {
       ...data,
       id: this.generateId(),
-      createdAt: new Date()
+      createdAt: new Date(),
     };
     this.healthcare.set(subscription.id, subscription);
     return subscription;
   }
 
   findHealthcareByUser(userId: string): HealthcareSubscription[] {
-    return Array.from(this.healthcare.values()).filter(h => h.userId === userId);
+    return Array.from(this.healthcare.values()).filter(
+      (h) => h.userId === userId,
+    );
   }
 
   // Stats
@@ -181,7 +202,43 @@ class InMemoryStore {
       users: this.users.size,
       wallets: this.wallets.size,
       transactions: this.transactions.size,
-      healthcare: this.healthcare.size
+      healthcare: this.healthcare.size,
+    };
+  }
+
+  // Admin methods
+  getAllUsers(): User[] {
+    return Array.from(this.users.values()).sort(
+      (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+    );
+  }
+
+  incrementUserLogin(userId: string): User | undefined {
+    const user = this.users.get(userId);
+    if (!user) return undefined;
+    const updated = {
+      ...user,
+      loginCount: user.loginCount + 1,
+      lastLoginAt: new Date(),
+    };
+    this.users.set(userId, updated);
+    return updated;
+  }
+
+  getUserStats() {
+    const users = Array.from(this.users.values());
+    return {
+      total: users.length,
+      admins: users.filter((u) => u.role === "admin").length,
+      regularUsers: users.filter((u) => u.role === "user").length,
+      withKyc: users.filter((u) => u.kycVerified).length,
+      with2fa: users.filter((u) => u.twoFactorEnabled).length,
+      totalLogins: users.reduce((sum, u) => sum + u.loginCount, 0),
+      recentLogins: users.filter(
+        (u) =>
+          u.lastLoginAt &&
+          Date.now() - u.lastLoginAt.getTime() < 24 * 60 * 60 * 1000,
+      ).length,
     };
   }
 }
