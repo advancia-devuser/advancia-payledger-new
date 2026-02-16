@@ -14,6 +14,21 @@ This repository’s default demo stack uses **in-memory storage** (no Postgres/M
 
 For a demo, prefer running Node directly with a process manager (PM2) instead of Docker.
 
+### One-command deploy (Recommended)
+
+After extracting the repo to `/root/advanciapayledger-new`:
+
+```bash
+cd /root/advanciapayledger-new
+chmod +x scripts/vps-demo-deploy.sh scripts/vps-demo-verify.sh
+
+# Optional: set PUBLIC_HOST so CORS is strict instead of '*'
+PUBLIC_HOST=76.13.77.8 ./scripts/vps-demo-deploy.sh
+
+# Verify
+./scripts/vps-demo-verify.sh
+```
+
 ### Step 1: Package your project
 Run this on your Windows machine:
 
