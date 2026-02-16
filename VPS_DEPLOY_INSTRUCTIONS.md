@@ -45,6 +45,7 @@ apt-get install -y nodejs
 # Install dependencies
 cd backend
 npm ci
+npm run build
 
 # Create backend env (demo only)
 cat > .env << 'EOF'
@@ -52,6 +53,7 @@ PORT=4000
 NODE_ENV=production
 CORS_ORIGIN=http://76.13.77.8:3000
 JWT_SECRET=change-me-for-demo
+DEMO_SEED=true
 EOF
 
 cd ../frontend
@@ -60,7 +62,7 @@ npm run build
 
 # Install PM2 and start services
 npm install -g pm2
-pm2 start "npm --prefix /root/advanciapayledger-new/backend run dev" --name advancia-backend
+pm2 start "npm --prefix /root/advanciapayledger-new/backend start" --name advancia-backend
 pm2 start "npm --prefix /root/advanciapayledger-new/frontend start -- -p 3000" --name advancia-frontend
 pm2 save
 pm2 startup
