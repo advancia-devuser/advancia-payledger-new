@@ -138,6 +138,13 @@ CORS_ORIGIN=http://localhost:3000
 # Rate Limiting
 RATE_LIMIT_WINDOW_MS=900000
 RATE_LIMIT_MAX_REQUESTS=100
+
+# Demo seed (optional)
+# Seeds in-memory data on startup for demos.
+# Defaults to ON in development, OFF in production unless DEMO_SEED=true.
+DEMO_SEED=true
+DEMO_USER_EMAIL=demo@advancia.local
+DEMO_USER_PASSWORD=Demo12345!
 ```
 
 **Note**: No database connection string needed!

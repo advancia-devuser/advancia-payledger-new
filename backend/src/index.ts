@@ -16,6 +16,7 @@ import transactionRoutes from './routes/transactions';
 import healthcareRoutes from './routes/healthcare';
 import paymentRoutes from './routes/payments';
 import userRoutes from './routes/user';
+import { seedDemoDataIfNeeded } from './demoSeed';
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -49,6 +50,10 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 console.log('✅ Using in-memory storage (no database required)');
+
+seedDemoDataIfNeeded().catch((err) => {
+  console.error('Demo seed failed:', err);
+});
 
 // Health check endpoint
 app.get('/health', (req, res) => {
