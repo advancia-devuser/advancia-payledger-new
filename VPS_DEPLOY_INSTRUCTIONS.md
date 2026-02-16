@@ -98,24 +98,28 @@ For “no real database, just demo”, Option 1 is simpler and aligns with the c
 
 ## Option 3: Setup Nginx for custom domain
 
+### Cloudflare DNS (required)
+
+In Cloudflare → DNS:
+- Add an `A` record:
+	- **Name**: your subdomain (example: `app`)
+	- **IPv4**: your VPS IP
+	- **Proxy**: ON (orange cloud) is fine
+
+Wait for DNS to propagate.
+
 ```bash
-# Install Nginx
-apt-get install -y nginx certbot python3-certbot-nginx
+# From repo root on the VPS:
+cd /root/advanciapayledger-new
+chmod +x scripts/vps-nginx-domain.sh
 
-# Copy nginx config
-cp nginx/advancia.conf /etc/nginx/sites-available/advancia
-ln -s /etc/nginx/sites-available/advancia /etc/nginx/sites-enabled/
+# Configure Nginx to proxy:
+#   /      -> frontend (3000)
+#   /api/* -> backend (4000)
+DOMAIN=app.yourdomain.com ./scripts/vps-nginx-domain.sh
 
-# Edit the config to set your domain
-nano /etc/nginx/sites-available/advancia
-# Change: server_name your.domain.com;
-
-# Test and reload
-nginx -t
-systemctl reload nginx
-
-# Get SSL certificate (replace with your domain)
-certbot --nginx -d yourdomain.com
+# Optional: enable SSL (recommended)
+EMAIL=you@example.com DOMAIN=app.yourdomain.com ./scripts/vps-nginx-domain.sh
 ```
 
 ## Troubleshooting
