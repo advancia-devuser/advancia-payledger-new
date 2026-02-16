@@ -3,6 +3,9 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Large artifacts (do not commit)
+/Advancia-PayLedger-Complete-System.zip
 pnpm-debug.log*
 
 # Build artifacts

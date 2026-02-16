@@ -62,7 +62,7 @@ clone_or_update_repo() {
 
   log "Cloning repo to ${APP_DIR}"
   rm -rf "${APP_DIR}"
-  git clone -b "${BRANCH}" "${REPO_URL}" "${APP_DIR}"
+  git clone -b "${BRANCH}" --depth 1 --single-branch "${REPO_URL}" "${APP_DIR}"
   cd "${APP_DIR}"
 }
 
