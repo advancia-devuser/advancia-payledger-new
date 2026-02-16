@@ -8,11 +8,8 @@ const REQUIRED_NODE_VERSION = '24.x';
 // Required environment variables
 const REQUIRED_ENV_VARS = {
   NODE_ENV: ['development', 'production', 'staging'],
-  DATABASE_URL: 'string',
-  JWT_ACCESS_SECRET: 'string',
-  JWT_REFRESH_SECRET: 'string',
-  REDIS_URL: 'string',
-  SENTRY_DSN: 'string',
+  // Demo mode does not require a database, Redis, Sentry, or separate access/refresh secrets.
+  JWT_SECRET: 'string',
   LOG_LEVEL: ['debug', 'info', 'warn', 'error'],
   PORT: 'number'
 };
@@ -130,11 +127,8 @@ function createEnvExample() {
   const envExample = [
     '# Required Environment Variables',
     'NODE_ENV=development # (development|staging|production)',
-    'DATABASE_URL=postgresql://user:pass@localhost:5432/dbname',
-    'JWT_ACCESS_SECRET=your-access-secret',
-    'JWT_REFRESH_SECRET=your-refresh-secret',
-    'REDIS_URL=redis://localhost:6379',
-    'SENTRY_DSN=your-sentry-dsn',
+    '# Demo mode: no database/redis required',
+    'JWT_SECRET=your-jwt-secret',
     'LOG_LEVEL=info # (debug|info|warn|error)',
     'PORT=3000',
     '',

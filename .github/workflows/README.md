@@ -98,8 +98,9 @@ npm install
 cp .env.example .env
 # Edit .env with production values
 
-# Run migrations
-npx prisma migrate deploy
+
+# No database migrations in demo mode
+# (This repo’s demo backend uses in-memory storage; no PostgreSQL/Prisma required)
 
 # Install PM2
 npm install -g pm2
@@ -238,7 +239,6 @@ ssh user@server
 cd /var/www/advancia-backend
 git pull
 npm install
-npx prisma migrate deploy
 pm2 restart advancia-backend
 ```
 
@@ -288,7 +288,6 @@ cd /var/www/advancia-backend
 git log --oneline -10  # Find previous commit
 git checkout <commit-hash>
 npm install
-npx prisma migrate deploy
 pm2 restart advancia-backend
 ```
 

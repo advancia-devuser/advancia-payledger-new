@@ -76,7 +76,6 @@ jobs:
             cd /var/www/advancia-backend
             git pull origin master
             npm install
-            npx prisma migrate deploy
             pm2 restart advancia-backend
 
   deploy-frontend:

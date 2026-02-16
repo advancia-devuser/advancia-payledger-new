@@ -2,6 +2,8 @@
 
 **Welcome!** This is your complete guide to get Advancia Pay Ledger up and running.
 
+⚠️ **Demo requirement (NO REAL DATABASE):** The deployable demo app in this repo runs with **in-memory storage**. You do **not** need PostgreSQL, MySQL, MongoDB, Prisma, Neon, or Redis.
+
 ---
 
 ## ✅ What's Already Done
@@ -15,6 +17,24 @@
 ---
 
 ## 🎯 Quick Start (Choose Your Path)
+
+### **Path 0: Demo App (No Database) — Recommended**
+
+**Best for:** You want it running fast with **no DB**.
+
+```bash
+cd advanciapayledger-new
+npm run setup:demo
+npm run demo
+```
+
+VPS demo deploy (also no DB): see `VPS_DEPLOY_INSTRUCTIONS.md` (Option 1) or run:
+
+```bash
+PUBLIC_HOST=<YOUR_VPS_IP> ./scripts/vps-demo-deploy.sh
+```
+
+**Important:** For the no-DB demo, you can ignore `backend-clean/` and `frontend-clean/` (they are legacy/full-stack templates and may mention databases).
 
 ### **Path 1: Just Get Emails Working (2 minutes)**
 
@@ -140,6 +160,8 @@ Neon (Database):           $0/month (free tier)
 SendGrid (Email):          $0/month (100/day)
 ─────────────────────────────────
 Total:                     $0/month
+
+**Note:** The demo app does not use Neon/DB at all.
 ```
 
 ### **Production (Recommended)**
@@ -157,15 +179,21 @@ Total:                     $12-73/month
 
 ## 🔧 Environment Variables
 
+### Demo Backend (No DB) — `backend/.env`
+
+```bash
+PORT=4000
+NODE_ENV=production
+JWT_SECRET=change-me-for-demo
+DEMO_SEED=true
+CORS_ORIGIN=http://<YOUR_HOST>:3000
+```
+
+No `DATABASE_URL` required.
+
 ### **Backend (`backend-clean/.env`)**
 
-**Required:**
-```bash
-DATABASE_URL=postgresql://...
-JWT_SECRET=your-secret-key
-EMAIL_FROM=noreply@advanciapayledger.com
-FRONTEND_URL=https://your-frontend.vercel.app
-```
+**Legacy note:** `backend-clean/` is not the demo backend. It may reference Prisma/DB. If your goal is “no real database”, use `backend/` instead.
 
 **Email (choose one):**
 ```bash
