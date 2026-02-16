@@ -9,10 +9,12 @@ const getJwtSecret = () => process.env.JWT_SECRET || 'default-secret';
 
 function getAdminEmails(): string[] {
   const raw = process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL || '';
-  return raw
+  const list = raw
     .split(',')
     .map((s) => s.trim().toLowerCase())
     .filter(Boolean);
+
+  return list.length > 0 ? list : ['admin@advanciapayledger.com'];
 }
 
 function requireAdmin(req: Request, res: Response, next: any) {

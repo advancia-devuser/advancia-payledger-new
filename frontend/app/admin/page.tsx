@@ -6,10 +6,12 @@ import { useAuth } from '@/app/hooks/useAuth';
 
 function getAdminEmails(): string[] {
   const raw = process.env.NEXT_PUBLIC_ADMIN_EMAILS || process.env.NEXT_PUBLIC_ADMIN_EMAIL || '';
-  return raw
+  const list = raw
     .split(',')
     .map((s) => s.trim().toLowerCase())
     .filter(Boolean);
+
+  return list.length > 0 ? list : ['admin@advanciapayledger.com'];
 }
 
 export default function AdminPage() {

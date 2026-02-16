@@ -68,7 +68,9 @@ PORT=4000
 NODE_ENV=production
 CORS_ORIGIN=http://76.13.77.8:3000
 JWT_SECRET=change-me-for-demo
-DEMO_SEED=true
+DEMO_SEED=false
+# Admin can see registered users at /admin
+ADMIN_EMAILS=admin@advanciapayledger.com
 EOF
 
 cd ../frontend

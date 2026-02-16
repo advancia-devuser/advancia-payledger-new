@@ -16,6 +16,7 @@ BACKEND_PORT="${BACKEND_PORT:-4000}"
 PUBLIC_HOST="${PUBLIC_HOST:-}"
 JWT_SECRET="${JWT_SECRET:-change-me-for-demo}"
 DEMO_SEED="${DEMO_SEED:-false}"
+ADMIN_EMAILS="${ADMIN_EMAILS:-admin@advanciapayledger.com}"
 
 log() { echo "[$(date +%H:%M:%S)] $*"; }
 
@@ -81,6 +82,7 @@ NODE_ENV=production
 CORS_ORIGIN=${cors}
 JWT_SECRET=${JWT_SECRET}
 DEMO_SEED=${DEMO_SEED}
+ADMIN_EMAILS=${ADMIN_EMAILS}
 EOF
 }
 
@@ -92,7 +94,7 @@ install_and_build() {
   (cd backend && npm run -s build)
 
   log "Building frontend"
-  (cd frontend && npm run -s build)
+  (cd frontend && NEXT_PUBLIC_ADMIN_EMAILS="${ADMIN_EMAILS}" npm run -s build)
 }
 
 start_pm2() {
@@ -100,7 +102,7 @@ start_pm2() {
   pm2 delete advancia-backend advancia-frontend >/dev/null 2>&1 || true
 
   pm2 start "npm --prefix ${APP_DIR}/backend start" --name advancia-backend
-  BACKEND_URL="http://127.0.0.1:${BACKEND_PORT}" pm2 start "npm --prefix ${APP_DIR}/frontend start -- -p ${FRONTEND_PORT}" --name advancia-frontend
+  BACKEND_URL="http://127.0.0.1:${BACKEND_PORT}" NEXT_PUBLIC_ADMIN_EMAILS="${ADMIN_EMAILS}" pm2 start "npm --prefix ${APP_DIR}/frontend start -- -p ${FRONTEND_PORT}" --name advancia-frontend
 
   pm2 save
   pm2 startup || true
