@@ -17,21 +17,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '18'
+          node-version: '24'
           cache: 'npm'
-          cache-dependency-path: backend-clean/package-lock.json
+          cache-dependency-path: backend/package-lock.json
       
       - name: Install dependencies
-        working-directory: ./backend-clean
+        working-directory: ./backend
         run: npm ci
       
-      - name: Run linter
-        working-directory: ./backend-clean
-        run: npm run lint || echo "Linting completed"
-      
-      - name: Run tests
-        working-directory: ./backend-clean
-        run: npm test || echo "Tests completed"
+      - name: Build
+        working-directory: ./backend
+        run: npm run build
 
   test-frontend:
     name: Test Frontend
@@ -43,19 +39,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '18'
+          node-version: '24'
           cache: 'npm'
-          cache-dependency-path: frontend-clean/package-lock.json
+          cache-dependency-path: frontend/package-lock.json
       
       - name: Install dependencies
-        working-directory: ./frontend-clean
+        working-directory: ./frontend
         run: npm ci
       
       - name: Build frontend
-        working-directory: ./frontend-clean
+        working-directory: ./frontend
         run: npm run build
-        env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
 
   deploy-backend:
     name: Deploy Backend

@@ -140,11 +140,11 @@ Follow `CLOUDFLARE-COMPLETE-SETUP.md`
 - 📖 **`PROJECT_SUMMARY.md`** - Platform overview
 
 ### **Backend**
-- 📖 **`backend-clean/.env.example`** - Environment variables
-- 📖 **`backend-clean/README.md`** - Backend documentation
+- 📖 **`backend/README.md`** - Demo backend (in-memory, no DB)
 
 ### **Frontend**
-- 📖 **`frontend-clean/README.md`** - Frontend documentation
+- 📖 **`frontend/README.md`** - Demo frontend (Next.js)
+- 📖 **`VPS_DEPLOY_INSTRUCTIONS.md`** - Hostinger VPS demo deploy
 
 ---
 
