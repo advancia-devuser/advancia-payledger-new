@@ -184,6 +184,19 @@ class InMemoryStore {
       healthcare: this.healthcare.size
     };
   }
+
+  // Admin-only: list users (safe fields only)
+  listUsers() {
+    return Array.from(this.users.values()).map((u) => ({
+      id: u.id,
+      email: u.email,
+      firstName: u.firstName,
+      lastName: u.lastName,
+      kycVerified: u.kycVerified,
+      twoFactorEnabled: u.twoFactorEnabled,
+      createdAt: u.createdAt
+    }));
+  }
 }
 
 // Export singleton instance

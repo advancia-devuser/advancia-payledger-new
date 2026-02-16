@@ -5,8 +5,8 @@
   "main": "backend-complete-server.js",
   "scripts": {
     "setup:demo": "npm install && npm --prefix backend install && npm --prefix frontend install",
-    "demo": "concurrently -n backend,frontend -c green,blue \"cross-env DEMO_SEED=true npm --prefix backend run dev\" \"npm --prefix frontend run dev\"",
-    "demo:backend": "cross-env DEMO_SEED=true npm --prefix backend run dev",
+    "demo": "concurrently -n backend,frontend -c green,blue \"npm --prefix backend run dev\" \"npm --prefix frontend run dev\"",
+    "demo:backend": "npm --prefix backend run dev",
     "demo:frontend": "npm --prefix frontend run dev",
     "demo:test": "node scripts/demo-test.js",
     "test": "echo \"Run backend tests via: cd backend && node test-api.js (server must be running)\" && exit 0"

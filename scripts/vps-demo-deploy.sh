@@ -15,7 +15,7 @@ BACKEND_PORT="${BACKEND_PORT:-4000}"
 
 PUBLIC_HOST="${PUBLIC_HOST:-}"
 JWT_SECRET="${JWT_SECRET:-change-me-for-demo}"
-DEMO_SEED="${DEMO_SEED:-true}"
+DEMO_SEED="${DEMO_SEED:-false}"
 
 log() { echo "[$(date +%H:%M:%S)] $*"; }
 

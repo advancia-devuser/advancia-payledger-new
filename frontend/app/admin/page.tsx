@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/hooks/useAuth';
 
@@ -15,6 +15,8 @@ function getAdminEmails(): string[] {
 export default function AdminPage() {
   const router = useRouter();
   const { user, isAuthenticated, isLoading } = useAuth();
+  const [users, setUsers] = useState<Array<{ id: string; email: string; firstName: string; lastName: string; createdAt: string }>>([]);
+  const [isLoadingUsers, setIsLoadingUsers] = useState(false);
 
   const isAdmin = useMemo(() => {
     if (!user?.email) return false;
@@ -53,6 +55,30 @@ export default function AdminPage() {
     );
   }
 
+  useEffect(() => {
+    let cancelled = false;
+    setIsLoadingUsers(true);
+    const token = typeof window === 'undefined' ? null : localStorage.getItem('authToken');
+    fetch('/api/admin/users', {
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    })
+      .then((r) => r.json())
+      .then((data: any) => {
+        if (cancelled) return;
+        setUsers(Array.isArray(data?.users) ? data.users : []);
+        setIsLoadingUsers(false);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setUsers([]);
+        setIsLoadingUsers(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4">
       <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-xl p-6">
@@ -69,8 +95,36 @@ export default function AdminPage() {
           </button>
         </div>
 
-        <div className="mt-6 text-gray-700">
-          Admin tools go here.
+        <div className="mt-6">
+          <h2 className="text-lg font-semibold text-gray-900">Registered Users</h2>
+          <p className="text-sm text-gray-600">Only admins can see this list.</p>
+
+          {isLoadingUsers ? (
+            <div className="mt-4 text-gray-700">Loading…</div>
+          ) : users.length === 0 ? (
+            <div className="mt-4 text-gray-700">No users yet.</div>
+          ) : (
+            <div className="mt-4 overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="text-left p-2">Email</th>
+                    <th className="text-left p-2">Name</th>
+                    <th className="text-left p-2">User ID</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map((u) => (
+                    <tr key={u.id} className="border-t">
+                      <td className="p-2 text-gray-900">{u.email}</td>
+                      <td className="p-2 text-gray-700">{(u.firstName || '') + ' ' + (u.lastName || '')}</td>
+                      <td className="p-2 text-gray-700 font-mono">{u.id}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
     </div>

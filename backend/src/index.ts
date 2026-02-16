@@ -16,6 +16,7 @@ import transactionRoutes from './routes/transactions';
 import healthcareRoutes from './routes/healthcare';
 import paymentRoutes from './routes/payments';
 import userRoutes from './routes/user';
+import adminRoutes from './routes/admin';
 import { seedDemoDataIfNeeded } from './demoSeed';
 
 const app = express();
@@ -72,6 +73,7 @@ app.use('/api/transactions', transactionRoutes);
 app.use('/api/healthcare', healthcareRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Root endpoint
 app.get('/', (_req, res) => {

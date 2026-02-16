@@ -4,7 +4,7 @@ import { store } from './store';
 const shouldSeed = () => {
   const flag = (process.env.DEMO_SEED || '').toLowerCase();
   if (flag === '1' || flag === 'true' || flag === 'yes') return true;
-  return process.env.NODE_ENV !== 'production';
+  return false;
 };
 
 export const seedDemoDataIfNeeded = async () => {
