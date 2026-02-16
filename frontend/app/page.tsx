@@ -3016,33 +3016,33 @@ export default function Home() {
             <div>
               <h4 className="font-bold mb-4">Product</h4>
               <ul className="space-y-2 text-gray-400 text-sm">
-                <li><a href="#" className="hover:text-purple-400 cursor-pointer">Features</a></li>
-                <li><a href="#" className="hover:text-purple-400 cursor-pointer">Pricing</a></li>
-                <li><a href="#" className="hover:text-purple-400 cursor-pointer">Security</a></li>
+                <li><a href="#features" className="hover:text-purple-400 cursor-pointer">Features</a></li>
+                <li><a href="#pricing" className="hover:text-purple-400 cursor-pointer">Pricing</a></li>
+                <li><a href="#features" className="hover:text-purple-400 cursor-pointer">Security</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-bold mb-4">Company</h4>
               <ul className="space-y-2 text-gray-400 text-sm">
-                <li><a href="#" className="hover:text-purple-400 cursor-pointer">About</a></li>
-                <li><a href="#" className="hover:text-purple-400 cursor-pointer">Blog</a></li>
-                <li><a href="#" className="hover:text-purple-400 cursor-pointer">Careers</a></li>
+                <li><a href="/about" className="hover:text-purple-400 cursor-pointer">About</a></li>
+                <li><a href="#testimonials" className="hover:text-purple-400 cursor-pointer">Blog</a></li>
+                <li><a href="#contact" className="hover:text-purple-400 cursor-pointer">Careers</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-bold mb-4">Legal</h4>
               <ul className="space-y-2 text-gray-400 text-sm">
-                <li><a href="#" className="hover:text-purple-400 cursor-pointer">Privacy</a></li>
-                <li><a href="#" className="hover:text-purple-400 cursor-pointer">Terms</a></li>
-                <li><a href="#" className="hover:text-purple-400 cursor-pointer">Contact</a></li>
+                <li><a href="/privacy" className="hover:text-purple-400 cursor-pointer">Privacy</a></li>
+                <li><a href="/terms" className="hover:text-purple-400 cursor-pointer">Terms</a></li>
+                <li><a href="#contact" className="hover:text-purple-400 cursor-pointer">Contact</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-bold mb-4">Follow Us</h4>
               <ul className="space-y-2 text-gray-400 text-sm">
-                <li><a href="#" className="hover:text-purple-400 cursor-pointer">Twitter</a></li>
-                <li><a href="#" className="hover:text-purple-400 cursor-pointer">LinkedIn</a></li>
-                <li><a href="#" className="hover:text-purple-400 cursor-pointer">GitHub</a></li>
+                <li><a href="#contact" className="hover:text-purple-400 cursor-pointer">Twitter</a></li>
+                <li><a href="#contact" className="hover:text-purple-400 cursor-pointer">LinkedIn</a></li>
+                <li><a href="#contact" className="hover:text-purple-400 cursor-pointer">GitHub</a></li>
               </ul>
             </div>
           </div>
