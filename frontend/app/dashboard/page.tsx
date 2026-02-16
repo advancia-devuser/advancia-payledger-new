@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/hooks/useAuth';
 import AuthForm from '@/app/components/AuthForm';
 import { walletApi } from '@/app/lib/api';
+import { isSupabaseFrontendEnabled } from '@/app/lib/supabaseClient';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -13,6 +14,12 @@ export default function DashboardPage() {
   const [isLoadingWallets, setIsLoadingWallets] = useState(false);
 
   useEffect(() => {
+    if (isSupabaseFrontendEnabled()) {
+      setIsLoadingWallets(false);
+      setWallets([]);
+      return;
+    }
+
     if (!isAuthenticated) {
       setWallets([]);
       return;

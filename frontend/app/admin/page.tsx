@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/hooks/useAuth';
+import { isSupabaseFrontendEnabled, supabase } from '@/app/lib/supabaseClient';
 
 function getAdminEmails(): string[] {
   const raw = process.env.NEXT_PUBLIC_ADMIN_EMAILS || process.env.NEXT_PUBLIC_ADMIN_EMAIL || '';
@@ -60,21 +61,49 @@ export default function AdminPage() {
   useEffect(() => {
     let cancelled = false;
     setIsLoadingUsers(true);
-    const token = typeof window === 'undefined' ? null : localStorage.getItem('authToken');
-    fetch('/api/admin/users', {
-      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-    })
-      .then((r) => r.json())
-      .then((data: any) => {
+
+    const load = async () => {
+      try {
+        if (isSupabaseFrontendEnabled() && supabase) {
+          const { data, error } = await supabase
+            .from('registered_users')
+            .select('user_id,email,first_name,last_name,created_at')
+            .order('created_at', { ascending: false });
+
+          if (cancelled) return;
+          if (error) {
+            setUsers([]);
+            return;
+          }
+
+          const mapped = (data || []).map((r: any) => ({
+            id: String(r.user_id),
+            email: String(r.email || ''),
+            firstName: String(r.first_name || ''),
+            lastName: String(r.last_name || ''),
+            createdAt: String(r.created_at || ''),
+          }));
+          setUsers(mapped);
+          return;
+        }
+
+        const token = typeof window === 'undefined' ? null : localStorage.getItem('authToken');
+        const res = await fetch('/api/admin/users', {
+          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        });
+        const data = await res.json();
         if (cancelled) return;
         setUsers(Array.isArray(data?.users) ? data.users : []);
-        setIsLoadingUsers(false);
-      })
-      .catch(() => {
+      } catch {
         if (cancelled) return;
         setUsers([]);
+      } finally {
+        if (cancelled) return;
         setIsLoadingUsers(false);
-      });
+      }
+    };
+
+    load();
 
     return () => {
       cancelled = true;

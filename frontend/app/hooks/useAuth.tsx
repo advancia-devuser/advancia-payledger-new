@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
-import { authApi, clearToken } from '../lib/api';
+import { authApi } from '../lib/api';
+import { isSupabaseFrontendEnabled, supabase } from '../lib/supabaseClient';
 
 interface User {
   id: string;
@@ -36,14 +37,55 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const useSupabase = isSupabaseFrontendEnabled();
 
   // Check if user is logged in on mount
   useEffect(() => {
     refreshUser();
+
+    if (useSupabase && supabase) {
+      const {
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange((_event, session) => {
+        const u = session?.user;
+        if (!u) {
+          setUser(null);
+          return;
+        }
+        setUser({
+          id: u.id,
+          email: u.email || '',
+          firstName: (u.user_metadata as any)?.firstName,
+          lastName: (u.user_metadata as any)?.lastName,
+        });
+      });
+
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
   }, []);
 
   async function refreshUser() {
     setIsLoading(true);
+
+    if (useSupabase && supabase) {
+      const { data } = await supabase.auth.getSession();
+      const u = data.session?.user;
+      if (u) {
+        setUser({
+          id: u.id,
+          email: u.email || '',
+          firstName: (u.user_metadata as any)?.firstName,
+          lastName: (u.user_metadata as any)?.lastName,
+        });
+      } else {
+        setUser(null);
+      }
+      setIsLoading(false);
+      return;
+    }
+
     const response = await authApi.getCurrentUser();
     if (response.data?.user) {
       setUser(response.data.user);
@@ -54,6 +96,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function login(email: string, password: string) {
+    if (useSupabase && supabase) {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) return { success: false, error: error.message };
+      const u = data.user;
+      if (!u) return { success: false, error: 'Login failed' };
+      setUser({
+        id: u.id,
+        email: u.email || email,
+        firstName: (u.user_metadata as any)?.firstName,
+        lastName: (u.user_metadata as any)?.lastName,
+      });
+      return { success: true };
+    }
+
     const response = await authApi.login(email, password);
     if (response.data?.user) {
       setUser(response.data.user);
@@ -68,6 +124,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     firstName: string,
     lastName: string
   ) {
+    if (useSupabase && supabase) {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { firstName, lastName } },
+      });
+      if (error) return { success: false, error: error.message };
+      if (data.user) {
+        setUser({
+          id: data.user.id,
+          email: data.user.email || email,
+          firstName,
+          lastName,
+        });
+      }
+      return { success: true };
+    }
+
     const response = await authApi.register(email, password, firstName, lastName);
     if (response.data?.user) {
       setUser(response.data.user);
@@ -77,6 +151,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   function logout() {
+    if (useSupabase && supabase) {
+      supabase.auth.signOut().catch(() => {});
+      setUser(null);
+      return;
+    }
+
     authApi.logout();
     setUser(null);
   }
