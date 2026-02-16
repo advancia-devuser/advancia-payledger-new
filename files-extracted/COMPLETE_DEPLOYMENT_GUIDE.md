@@ -118,7 +118,7 @@ PORT=3001
 ALCHEMY_API_KEY="your_alchemy_key"
 
 # Optional: Stripe
-STRIPE_SECRET_KEY="sk_live_..."
+STRIPE_SECRET_KEY="YOUR_STRIPE_SECRET_KEY"
 ```
 
 **Save and exit:** `Ctrl+X`, then `Y`, then `Enter`

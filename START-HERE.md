@@ -185,7 +185,7 @@ POSTMARK_API_KEY=your-postmark-key
 **Payment:**
 ```bash
 STRIPE_SECRET_KEY=sk_test_...
-STRIPE_WEBHOOK_SECRET=whsec_...
+STRIPE_WEBHOOK_SECRET=YOUR_STRIPE_WEBHOOK_SECRET
 ```
 
 **Optional:**

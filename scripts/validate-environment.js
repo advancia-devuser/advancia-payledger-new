@@ -140,7 +140,7 @@ function createEnvExample() {
     '',
     '# Production-only Environment Variables',
     'STRIPE_SECRET_KEY=sk_test_...',
-    'STRIPE_WEBHOOK_SECRET=whsec_...',
+    'STRIPE_WEBHOOK_SECRET=YOUR_STRIPE_WEBHOOK_SECRET',
     'NOWPAYMENTS_API_KEY=your-api-key',
     'NOWPAYMENTS_WEBHOOK_SECRET=your-webhook-secret',
     'SMTP_HOST=smtp.example.com',
